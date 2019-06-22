@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body th:fragment="bans">
+    <!--/*@thymesVar id="bansModel" type="toker.warbandscripts.panel.model.PlayerBansModel"*/-->
+    <div class="container">
+        <h4 th:text="'Ban ' + ${bansModel.player.name}"></h4>
+        <form action="#" th:action="@{/player/createban}" method="post">
+            <input type="hidden" name="playerId" th:value="${bansModel.player.id}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="date">Date</label>
+                        <input id="date" type="date" name="expiryDate" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="time">Time</label>
+                        <input id="time" type="time" name="expiryTime" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <label for="reason">Reason</label>
+                        <input id="reason" type="text" name="reason" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <input type="submit" value="Ban" class="form-control btn btn-primary" style="margin-top: 10px;">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <h4>Active Bans</h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Admin</th>
+                <th>Creation Time</th>
+                <th>Expiry Time</th>
+                <th>Reason</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr th:each="ban : ${bansModel.activeBans}">
+                    <td th:text="${ban.id}"></td>
+                    <td th:text="${ban.panelUserByAdminId.username}"></td>
+                    <td th:text="${ban.time.toGMTString()}"></td>
+                    <td th:text="${ban.expiryTime.toGMTString()}"></td>
+                    <td th:text="${ban.reason}"></td>
+                    <td>
+                        <form action="#"
+                              th:action="${ban.panelUserByAdminId.username.equals(#authentication.getName())} ? '/player/unbanself' : '/player/unban'"
+                              method="post">
+                            <input type="hidden" name="playerId" th:value="${bansModel.player.id}">
+                            <input type="hidden" name="banId" th:value="${ban.id}">
+                            <input type="submit" value="Unban" class="btn btn-primary">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>Past Bans</h4>
+        <table class="table table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Admin</th>
+            <th>Creation Time</th>
+            <th>Expiry Time</th>
+            <th>Reason</th>
+            <th></th>
+            </thead>
+            <tbody>
+            <tr th:each="ban : ${bansModel.pastBans}">
+                <td th:text="${ban.id}"></td>
+                <td th:text="${ban.panelUserByAdminId.username}"></td>
+                <td th:text="${ban.time.toGMTString()}"></td>
+                <td th:text="${ban.expiryTime.toGMTString()}"></td>
+                <td th:text="${ban.reason}"></td>
+                <td>
+                    <form action="#"
+                          th:action="${ban.panelUserByAdminId.username.equals(#authentication.getName())} ? '/player/deleteselfban' : '/player/deleteban'"
+                          method="post">
+                        <input type="hidden" name="playerId" th:value="${bansModel.player.id}">
+                        <input type="hidden" name="banId" th:value="${ban.id}">
+                        <input type="submit" value="Delete" class="btn btn-primary">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

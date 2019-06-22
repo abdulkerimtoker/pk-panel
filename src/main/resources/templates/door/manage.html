@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title" th:text="${'Manage ' + model.door.name}"></title>
+</head>
+<body id="content">
+<!--/*@thymesVar id="model" type="toker.warbandscripts.panel.model.DoorManageModel"*/-->
+    <form action="#" th:action="@{/door/manage}" method="post" th:object="${model}" class="container bg-light bg-primary">
+        <input type="hidden" th:field="*{door.id}">
+        <h4 th:text="'Manage ' + *{door.name}"></h4>
+        <fieldset>
+            <div class="form-group">
+                <label>ID:</label>
+                <span th:text="*{door.id}"></span>
+            </div>
+            <div class="form-group">
+                <label for="doorName">Name:</label>
+                <input id="doorName" type="text" th:field="*{door.name}" class="form-control" placeholder="Door Name">
+            </div>
+            <div class="form-check">
+                <input id="cbIsLocked" type="checkbox" th:field="*{door.locked}" class="form-check-input">
+                <label for="cbIsLocked" class="form-check-label">Locked</label>
+            </div>
+            <input type="submit" value="Update Door" class="form-control btn btn-primary">
+        </fieldset>
+    </form>
+    <div class="container">
+        <h4 th:text="'Users of ' + ${model.door.name}"></h4>
+        <table class="table table-hover">
+            <thead>
+                <th>User Name</th>
+                <th>User Faction</th>
+                <th>Is Owner</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr th:each="doorKey : ${model.door.doorKeysById}">
+                    <td th:text="${doorKey.playerByUserId.name}"></td>
+                    <td th:text="${doorKey.playerByUserId.factionByFactionId.name}"></td>
+                    <td th:text="${doorKey.isOwner ? 'Yes' : 'No'}"></td>
+                    <td>
+                        <form th:action="@{/door/removedoorkey}" method="post">
+                            <input type="hidden" name="doorId" th:value="${model.door.id}">
+                            <input type="hidden" name="doorKeyId" th:value="${doorKey.id}">
+                            <input type="submit" value="Remove User" class="btn btn-secondary">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

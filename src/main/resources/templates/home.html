@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title">Home</title>
+</head>
+<body id="content">
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        This content is only shown to administrators.
+    </div>
+    <div class="container">
+        <h6>Update Notes </h6>
+        <ol>
+            <li>"Remove" option added for recipes in crafting stations</li>
+            <li>Auto start feature implemented in the Server tab for the game server</li>
+        </ol>
+    </div>
+</body>
+</html>

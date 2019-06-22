@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title">Crafting Stations</title>
+</head>
+<body id="content" th:with="isStationManager = ${#authorization.expr('hasRole(''ROLE_STATION_MANAGER'')')}">
+    <div class="container">
+        <h4>Crafting Station</h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr th:each="station : ${stations}">
+                    <td th:text="${station.id}"></td>
+                    <td th:text="${station.name}"></td>
+                    <td>
+                        <a th:href="'/station/manage/' + ${station.id}" th:if="${isStationManager}">Manage</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <form action="#" th:action="@{/station/create}" method="post" class="container" th:if="${isStationManager}">
+            <div class="row">
+                <input type="text" name="name" class="form-control col-lg-6" placeholder="Station Name">
+                <input type="submit" value="Create Crafting Station" class="form-control btn btn-primary col-lg-12">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

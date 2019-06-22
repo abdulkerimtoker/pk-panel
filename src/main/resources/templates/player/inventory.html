@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body th:fragment="inventory" th:with="isPlayerManager = ${!#authorization.expr('hasRole(''ROLE_PLAYER_MANAGER'')')}">
+<!--/*@thymesVar id="inventoryModel" type="toker.warbandscripts.panel.model.PlayerInventoryModel"*/-->
+    <form action="#" th:action="@{/player/inventory}" method="post" th:object="${inventoryModel}" th:if="${inventoryModel}" class="container">
+        <input type="hidden" th:field="*{playerId}">
+        <h4 th:text="'Inventory of ' + *{playerName}"></h4>
+        <table class="table table-hover">
+            <tr th:each="slot, iter : *{inventorySlots}">
+                <input type="hidden" th:field="*{inventorySlots[__${iter.index}__].slot}">
+                <td th:text="'Slot ' + ${slot.slot} + ':'"></td>
+                <td>
+                    <select th:field="*{inventorySlots[__${iter.index}__].itemByItemId.id}" class="form-control"
+                            th:attrappend="disabled=${isPlayerManager} ? 'true'">
+                        <option th:each="item: ${inventoryModel.items}" th:text="${item.id + ' - ' + item.name}" th:value="${item.id}"></option>
+                    </select>
+                </td>
+                <td>Ammo:</td>
+                <td>
+                    <input type="number" th:field="*{inventorySlots[__${iter.index}__].ammo}" placeholder="Ammo" class="form-control"
+                           th:attrappend="disabled=${isPlayerManager} ? 'true'">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Update Inventory" class="form-control btn btn-primary"
+                           th:attrappend="disabled=${isPlayerManager} ? 'true'">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title">Admins</title>
+</head>
+<body id="content" th:with="isAdminManager = ${#authorization.expr('hasRole(''ROLE_ADMIN_MANAGER'')')}">
+    <!--/*@thymesVar id="model" type="toker.warbandscripts.panel.model.AdminListModel"*/-->
+    <div class="container">
+        <h4>Admins</h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Registration Time</th>
+                <th>Rank</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr th:each="admin : ${model.admins}" >
+                    <td th:text="${admin.id}"></td>
+                    <td th:text="${admin.username}"></td>
+                    <td th:text="${admin.creationTime.toGMTString()}"></td>
+                    <td th:text="${admin.panelUserRankByRankId.rankName}"></td>
+                    <td>
+                        <a th:href="'/admin/manage/' + ${admin.id}" th:if="${isAdminManager}">Manage</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--/*@thymesVar id="createModel" type="toker.warbandscripts.panel.model.AdminCreateModel"*/-->
+        <form action="#" th:action="@{/admin/create}" th:object="${createModel}" method="post" class="container" th:if="${isAdminManager}">
+            <div class="row">
+                <input type="text" th:field="*{username}" class="form-control col-lg-6" placeholder="Username">
+                <input type="password" th:field="*{password}" class="form-control col-lg-6" placeholder="Password">
+            </div>
+            <div class="row">
+                <input type="submit" value="Create Admin" class="form-control btn btn-primary col-lg-12">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title">In-game Permissions</title>
+</head>
+<body id="content">
+<!--/*@thymesVar id="model" type="toker.warbandscripts.panel.model.PermissionsListModel"*/-->
+    <div class="col-lg-12">
+        <h4>Permissions</h4>
+        <form action="#" th:action="@{/permissions/update}" method="post" th:object="${model}">
+            <table class="table table-hover col-lg-12">
+                <thead>
+                    <th>GUID</th>
+                    <th>In-Game Panel</th>
+                    <th>Spawn Gold</th>
+                    <th>Kick</th>
+                    <th>Temp Ban</th>
+                    <th>Perm Ban</th>
+                    <th>Kill/Fade</th>
+                    <th>Freeze</th>
+                    <th>Teleport</th>
+                    <th>Admin Items</th>
+                    <th>All Items</th>
+                    <th>Heal Self</th>
+                    <th>Godlike Hero</th>
+                    <th>Ships</th>
+                    <th>Announce</th>
+                    <th>Override Poll</th>
+                    <th>Mute</th>
+                    <th>Animals</th>
+                    <th>Join Factions</th>
+                    <th>Manage Factions</th>
+                </thead>
+                <tbody>
+                    <tr th:each="perms, permsStat : *{permissions}">
+                        <input type="hidden" th:field="*{permissions[__${permsStat.index}__].uniqueId}">
+                        <td th:text="${perms.uniqueId}"></td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.panel}"
+                                th:field="*{permissions[__${permsStat.index}__].panel}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.gold}"
+                                   th:field="*{permissions[__${permsStat.index}__].gold}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.kick}"
+                                   th:field="*{permissions[__${permsStat.index}__].kick}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.temporaryBan}"
+                                   th:field="*{permissions[__${permsStat.index}__].temporaryBan}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.permanentBan}"
+                                   th:field="*{permissions[__${permsStat.index}__].permanentBan}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.killFade}"
+                                   th:field="*{permissions[__${permsStat.index}__].killFade}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.freeze}"
+                                   th:field="*{permissions[__${permsStat.index}__].freeze}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.teleportSelf}"
+                                   th:field="*{permissions[__${permsStat.index}__].teleportSelf}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.adminItems}"
+                                   th:field="*{permissions[__${permsStat.index}__].adminItems}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.allItems}"
+                                   th:field="*{permissions[__${permsStat.index}__].allItems}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.healSelf}"
+                                   th:field="*{permissions[__${permsStat.index}__].healSelf}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.godlikeTroop}"
+                                   th:field="*{permissions[__${permsStat.index}__].godlikeTroop}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.ships}"
+                                   th:field="*{permissions[__${permsStat.index}__].ships}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.announce}"
+                                   th:field="*{permissions[__${permsStat.index}__].announce}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.overridePoll}"
+                                   th:field="*{permissions[__${permsStat.index}__].overridePoll}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.mute}"
+                                   th:field="*{permissions[__${permsStat.index}__].mute}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.animals}"
+                                   th:field="*{permissions[__${permsStat.index}__].animals}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.joinFactions}"
+                                   th:field="*{permissions[__${permsStat.index}__].joinFactions}">
+                        </td>
+                        <td>
+                            <input type="checkbox" th:checked="${perms.factions}"
+                                   th:field="*{permissions[__${permsStat.index}__].factions}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="submit" value="Save Changes" class="form-control btn btn-primary col-lg-12">
+        </form>
+    </div>
+    <div>
+        <h4>Add Permission</h4>
+        <form action="#" th:action="@{/permissions/add}" method="post" class="col-lg-12">
+            <div class="row">
+                <input type="number" name="uniqueId" placeholder="GUID" class="form-control col-lg-6">
+                <input type="submit" value="Add GUID" class="form-control btn btn-secondary col-lg-6">
+            </div>
+        </form>
+    </div>
+    <div>
+        <h4>Delete Permission</h4>
+        <form action="#" th:action="@{/permissions/delete}" method="post">
+            <div class="row">
+                <input type="number" name="uniqueId" placeholder="GUID" class="form-control col-lg-6">
+                <input type="submit" value="Delete" class="form-control btn btn-secondary col-lg-6">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

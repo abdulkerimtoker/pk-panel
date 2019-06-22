@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<!--/*@thymesVar id="model" type="toker.warbandscripts.panel.model.AdminManageModel"*/-->
+<!--/*@thymesVar id="submit" type="toker.warbandscripts.panel.model.AdminManageSubmitModel"*/-->
+<head>
+    <meta charset="UTF-8">
+    <title id="title" th:text="'Admin ' + ${model.admin.username}"></title>
+</head>
+<body id="content">
+    <div class="container">
+        <form action="#" th:action="@{/admin/manage}" method="post" th:object="${submit}">
+            <input type="hidden" name="adminId" th:value="${model.admin.id}">
+            <h4 th:text="'Manage ' + ${model.admin.username}"></h4>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" th:name="username" th:value="${model.admin.username}" class="form-control">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="rank">Rank</label>
+                        <select type="text" id="rank" name="rankId" class="form-control">
+                            <option th:each="rank : ${model.ranks}" th:text="${rank.rankName}" th:value="${rank.id}"
+                                    th:attrappend="selected=${model.admin.panelUserRankByRankId.id == rank.id} ? 'true'">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <h4 th:text="'Authorities assigned to ' + ${model.admin.username}"></h4>
+            <table class="table table-hover">
+                <thead>
+                <th>Assigned</th>
+                <th>Name</th>
+                <th>Description</th>
+                </thead>
+                <tbody>
+                <tr th:each="authority : ${model.authorities}">
+                    <td>
+                        <input type="checkbox" name="authorities" th:value="${authority.id}"
+                               th:attrappend="checked=${model.admin.hasAuthority(authority)} ? 'true' : null">
+                    </td>
+                    <td th:text="${authority.authorityName}"></td>
+                    <td th:text="${authority.authorityDescription}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <input type="submit" value="Save" class="form-control btn btn-primary">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

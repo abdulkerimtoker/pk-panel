@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::#title}, ~{::#content})">
+<head>
+    <meta charset="UTF-8">
+    <title id="title" th:text="${'Manage ' + station.name}"></title>
+</head>
+<body id="content">
+    <div class="container">
+        <form action="#" th:action="@{/station/manage}" method="post" th:object="${station}">
+            <input type="hidden" th:field="*{id}">
+            <h4 th:text="'Manage ' + *{name}"></h4>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="form-control btn btn-primary">
+            </div>
+        </form>
+        <h6 style="color: red;">WARNING: Removing a recipe also removes the ongoing crafting requests for it</h6>
+        <h4 th:text="'Recipes in ' + ${station.name}"></h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Item</th>
+                <th>Profession</th>
+                <th>Tier</th>
+                <th>Price</th>
+                <th>Crafting Hours</th>
+                <th></th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr th:each="recipe : ${station.craftingRecipesById}">
+                    <td th:text="${recipe.id}"></td>
+                    <td th:text="${recipe.itemByItemId.id + ' - ' + recipe.itemByItemId.name}"></td>
+                    <td th:text="${recipe.professionByProfessionId.name}"></td>
+                    <td th:text="${recipe.professionTier}"></td>
+                    <td th:text="${recipe.price}"></td>
+                    <td th:text="${recipe.hours}"></td>
+                    <td>
+                        <a th:href="${'/station/recipe/manage/' + recipe.id}">Manage</a>
+                    </td>
+                    <td>
+                        <form action="#" th:action="@{/station/recipe/remove}" method="post">
+                            <input type="hidden" name="recipeId" th:value="${recipe.id}">
+                            <input type="submit" value="Remove" class="btn btn-secondary">
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Create Recipe</h4>
+        <form action="#" th:action="@{/station/recipe/create}" method="post" th:object="${createRecipe}">
+            <input type="hidden" name="craftingStationByStationId.id" th:value="${station.id}">
+            <div class="form-group">
+                <label for="item">Item</label>
+                <select id="item" th:field="*{itemByItemId.id}" class="form-control">
+                    <option th:each="itemToSelect : ${itemList}" th:value="${itemToSelect.id}"
+                            th:text="${itemToSelect.id + ' ' + itemToSelect.name}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="profession">Profession</label>
+                <select id="profession" th:field="*{professionByProfessionId.id}" class="form-control">
+                    <option th:each="professionToSelect : ${professionList}" th:value="${professionToSelect.id}"
+                            th:text="${professionToSelect.id + ' ' + professionToSelect.name}"></option>
+                </select>
+                <label for="tier">Tier</label>
+                <input id="tier" type="number" min="1" th:field="*{professionTier}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input id="price" type="number" min="0" th:field="*{price}" class="form-control">
+                <label for="hours">Crafting Hours</label>
+                <input id="hours" type="number" min="0" th:field="*{hours}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create Recipe" class="form-control btn btn-primary">
+            </div>
+        </form>
+        <h4>Station Instances</h4>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+            </thead>
+            <tbody>
+                <tr th:each="instance : ${station.craftingStationInstances}">
+                    <td th:text="${instance.id}"></td>
+                    <td th:text="${instance.name}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <h4>Add Instance</h4>
+        <form action="#" th:action="@{/station/addinstance}" method="post" th:object="${addInstance}">
+            <input type="hidden" name="craftingStationByStationId.id" th:value="${station.id}">
+            <div class="form-group">
+                <label for="instanceName">Name</label>
+                <input id="instanceName" type="text" th:field="*{name}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Station Instance" class="form-control">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

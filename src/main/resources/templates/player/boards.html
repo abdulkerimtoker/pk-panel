@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body th:fragment="boards">
+    <!--/*@thymesVar id="boardAccessesModel" type="toker.warbandscripts.panel.model.PlayerBoardAccessesModel"*/-->
+    <div class="container">
+        <h4 th:text="'Board accesses of ' + ${boardAccessesModel.player.name}"></h4>
+        <form action="#" th:action="@{/player/addboardaccess}" method="post">
+            <input type="hidden" name="playerId" th:value="${boardAccessesModel.player.id}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <select name="boardId" id="boardList" class="form-control">
+                            <!--/*@thymesVar id="boardList" type="java.util.List<toker.warbandscripts.panel.entity.NoticeBoard>"*/-->
+                            <option th:each="board : ${boardList}" th:text="${board.name}" th:value="${board.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-lg-1">
+                        <input type="checkbox" name="isOwner" id="cbIsOwner" class="form-check-input">
+                        <label for="cbIsOwner" class="form-check-label">Is Owner</label>
+                    </div>
+                    <input type="submit" value="Add Access" class="form-control btn btn-primary col-lg-4">
+                </div>
+            </div>
+        </form>
+        <table class="table table-hover">
+            <thead>
+            <th>ID</th>
+            <th>Board Name</th>
+            <th>Board ID</th>
+            <th>Is Owner</th>
+            <th></th>
+            </thead>
+            <tbody>
+            <tr th:each="boardAccess : ${boardAccessesModel.boardAccesses}">
+                <td th:text="${boardAccess.id}"></td>
+                <td th:text="${boardAccess.noticeBoardByBoardId.name}"></td>
+                <td th:text="${boardAccess.noticeBoardByBoardId.id}"></td>
+                <td th:text="${boardAccess.isOwner ? 'Yes' : 'No'}"></td>
+                <td>
+                    <form action="#" th:action="@{/player/removeboardaccess}" method="post">
+                        <input type="hidden" name="boardAccessId" th:value="${boardAccess.id}">
+                        <input type="submit" value="Remove" class="btn btn-secondary">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

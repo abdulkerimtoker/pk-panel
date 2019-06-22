@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar fixed-top navbar-expand-md navbar-dark navbar-expand-md bg-dark">
+            <span class="navbar-brand" href="#" th:text="${@environment.getProperty('PANEL_TITLE')}">New Age Roleplay Panel</span>
+            <a href="/player/lookup" class="nav-link">Players</a>
+            <a href="/door/list" class="nav-link" sec:authorize="hasRole('ROLE_DOOR_MANAGER')">Doors</a>
+            <a href="/board/list" class="nav-link" sec:authorize="hasRole('ROLE_BOARD_MANAGER')">Boards</a>
+            <a href="/admin/list" class="nav-link">Admins</a>
+            <a href="/log/layout" class="nav-link" sec:authorize="hasRole('ROLE_LOG_FETCHER')">Logs</a>
+            <a href="/permissions/list" class="nav-link"
+               sec:authorize="hasRole('ROLE_PERMISSION_MANAGER')">Permissions</a>
+            <a href="/station/list" class="nav-link"
+               sec:authorize="hasRole('ROLE_STATION_MANAGER')">Crafting Stations</a>
+            <a href="/server" class="nav-link"
+               sec:authorize="hasRole('ROLE_SERVER_MANAGER')">Server</a>
+            <a href="/account/layout" class="nav-link">Account</a>
+        </nav>
+    </header>
+    <main style="margin-top: 60px;">
+        <div th:replace="${content}"></div>
+    </main>
+</body>
+</html>

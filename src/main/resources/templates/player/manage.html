@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body th:fragment="manage" th:with="isNotPlayerManager = ${!#authorization.expr('hasRole(''ROLE_PLAYER_MANAGER'')')}">
+<!--/*@thymesVar id="manageModel" type="toker.warbandscripts.panel.model.PlayerManageModel"*/-->
+    <form action="#" th:action="@{/player/manage}" method="post" th:object="${manageModel}" class="container">
+        <h4 th:text="'Manage ' + *{player.name}"></h4>
+        <input type="hidden" th:field="*{player.id}">
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <td>ID:</td>
+                    <td>
+                        <span th:text="*{player.id}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>GUID</td>
+                    <td>
+                        <input type="number" th:field="*{player.uniqueId}" class="form-control"
+                               th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input type="text" th:field="*{player.name}" class="form-control"
+                               th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gold</td>
+                    <td>
+                        <input type="number" th:field="*{player.gold}" class="form-control"
+                               th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Troop</td>
+                    <td>
+                        <select th:field="*{player.troopByTroopId.id}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="troop : ${manageModel.troops}" th:text="${troop.id + ' - ' + troop.name}" th:value="${troop.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Faction</td>
+                    <td>
+                        <select th:field="*{player.factionByFactionId.id}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="faction : ${manageModel.factions}" th:text="${faction.id + ' - ' + faction.name}" th:value="${faction.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Head Armor</td>
+                    <td>
+                        <select th:field="*{player.headArmor}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="headArmor : ${manageModel.headArmors}" th:text="${headArmor.id + ' - ' + headArmor.name}" th:value="${headArmor.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Body Armor</td>
+                    <td>
+                        <select th:field="*{player.bodyArmor}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="bodyArmor : ${manageModel.bodyArmors}" th:text="${bodyArmor.id + ' - ' + bodyArmor.name}" th:value="${bodyArmor.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Foot Armor</td>
+                    <td>
+                        <select th:field="*{player.footArmor}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="footArmor : ${manageModel.footArmors}" th:text="${footArmor.id + ' - ' + footArmor.name}" th:value="${footArmor.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Hand Armor</td>
+                    <td>
+                        <select th:field="*{player.glovesArmor}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="handArmor : ${manageModel.handArmors}" th:text="${handArmor.id + ' - ' + handArmor.name}" th:value="${handArmor.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Item 1</td>
+                    <td>
+                        <select th:field="*{player.item0}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="item : ${manageModel.handItems}" th:text="${item.id + ' - ' + item.name}" th:value="${item.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Item 2</td>
+                    <td>
+                        <select th:field="*{player.item1}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="item : ${manageModel.handItems}" th:text="${item.id + ' - ' + item.name}" th:value="${item.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Item 3</td>
+                    <td>
+                        <select th:field="*{player.item2}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="item : ${manageModel.handItems}" th:text="${item.id + ' - ' + item.name}" th:value="${item.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Item 4</td>
+                    <td>
+                        <select th:field="*{player.item3}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="item : ${manageModel.handItems}" th:text="${item.id + ' - ' + item.name}" th:value="${item.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Horse 1</td>
+                    <td>
+                        <select th:field="*{player.horse1}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="horse : ${manageModel.horses}" th:text="${horse.id + ' - ' + horse.name}" th:value="${horse.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Horse 2</td>
+                    <td>
+                        <select th:field="*{player.horse2}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="horse : ${manageModel.horses}" th:text="${horse.id + ' - ' + horse.name}" th:value="${horse.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Horse 3</td>
+                    <td>
+                        <select th:field="*{player.horse3}" class="form-control"
+                                th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                            <option th:each="horse : ${manageModel.horses}" th:text="${horse.id + ' - ' + horse.name}" th:value="${horse.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Riding Tier</td>
+                    <td>
+                        <input type="number" th:field="*{player.ridingTier}" class="form-control"
+                               th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Update Player" class="form-control btn btn-primary"
+                               th:attrappend="disabled=${isNotPlayerManager} ? 'true'">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</body>
+</html>

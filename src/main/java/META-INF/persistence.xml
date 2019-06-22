@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>toker.warbandscripts.panel.entity.InventorySlot</class>
+        <class>toker.warbandscripts.panel.entity.Item</class>
+        <class>toker.warbandscripts.panel.entity.ItemType</class>
+        <class>toker.warbandscripts.panel.entity.Book</class>
+        <class>toker.warbandscripts.panel.entity.BookPage</class>
+        <class>toker.warbandscripts.panel.entity.Chest</class>
+        <class>toker.warbandscripts.panel.entity.ChestSlot</class>
+        <class>toker.warbandscripts.panel.entity.Door</class>
+        <class>toker.warbandscripts.panel.entity.DoorKey</class>
+        <class>toker.warbandscripts.panel.entity.Faction</class>
+        <class>toker.warbandscripts.panel.entity.Inventory</class>
+        <class>toker.warbandscripts.panel.entity.NoticeBoard</class>
+        <class>toker.warbandscripts.panel.entity.NoticeBoardAccess</class>
+        <class>toker.warbandscripts.panel.entity.NoticeBoardEntry</class>
+        <class>toker.warbandscripts.panel.entity.Player</class>
+        <class>toker.warbandscripts.panel.entity.Troop</class>
+        <class>toker.warbandscripts.panel.entity.Profession</class>
+        <class>toker.warbandscripts.panel.entity.ProfessionAssignment</class>
+        <class>toker.warbandscripts.panel.entity.CraftingRecipe</class>
+        <class>toker.warbandscripts.panel.entity.CraftingRecipeItemRequirement</class>
+        <class>toker.warbandscripts.panel.entity.CraftingStation</class>
+        <class>toker.warbandscripts.panel.entity.IpRecord</class>
+        <class>toker.warbandscripts.panel.entity.ServerConfiguration</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/pax"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value=""/>
+            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>
