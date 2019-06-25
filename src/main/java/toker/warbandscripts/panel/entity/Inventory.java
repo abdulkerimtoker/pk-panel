@@ -57,7 +57,7 @@ public class Inventory {
         this.playerByPlayerId = playerByPlayerId;
     }
 
-    @OneToMany(mappedBy = "inventoryByInventoryId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "inventoryByInventoryId")
     public Collection<InventorySlot> getInventorySlotsById() {
         return inventorySlotsById;
     }

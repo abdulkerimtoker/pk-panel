@@ -59,7 +59,7 @@ public class InventorySlot {
         this.inventoryByInventoryId = inventoryByInventoryId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     public Item getItemByItemId() {
         return itemByItemId;

@@ -14,14 +14,14 @@ public class PanelUserDetailsService implements UserDetailsService {
 
     private PanelUserRepository panelUserRepository;
 
-    @Autowired(required = true)
+    @Autowired
     public PanelUserDetailsService(PanelUserRepository panelUserRepository) {
         this.panelUserRepository = panelUserRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        PanelUser panelUser = panelUserRepository.findPanelUserByUsername(username);
+        PanelUser panelUser = panelUserRepository.findByUsername(username);
         if (panelUser == null)
             throw new UsernameNotFoundException("No such user");
         return new PanelUserDetails(panelUser);

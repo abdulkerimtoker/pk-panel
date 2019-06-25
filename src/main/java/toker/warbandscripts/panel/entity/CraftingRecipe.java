@@ -72,7 +72,7 @@ public class CraftingRecipe {
         this.craftingStationByStationId = craftingStationByStationId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
     public Profession getProfessionByProfessionId() {
         return professionByProfessionId;
@@ -82,7 +82,7 @@ public class CraftingRecipe {
         this.professionByProfessionId = professionByProfessionId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
     public Item getItemByItemId() {
         return itemByItemId;
@@ -102,7 +102,7 @@ public class CraftingRecipe {
         this.hours = hours;
     }
 
-    @OneToMany(mappedBy = "craftingRecipeByRecipeId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "craftingRecipeByRecipeId")
     public Collection<CraftingRecipeItemRequirement> getCraftingRecipeItemRequirementsById() {
         return craftingRecipeItemRequirementsById;
     }

@@ -43,7 +43,7 @@ public class BanRepository {
     public void createBan(Player player, PanelUser panelUser, Date expiry, String reason) {
         Ban ban = new Ban();
         ban.setPlayerUniqueId(player.getUniqueId());
-        ban.setPanelUserByAdminId(em.getReference(PanelUser.class, panelUser.getId()));
+        ban.setPanelUser(em.getReference(PanelUser.class, panelUser.getId()));
         ban.setTime(Timestamp.from(Instant.now()));
         ban.setExpiryTime(new Timestamp(expiry.getTime()));
         ban.setUndone(false);
@@ -56,7 +56,7 @@ public class BanRepository {
         if (ban != null) {
             PanelUser currentUser = ((PanelUserDetails)SecurityContextHolder.getContext()
                     .getAuthentication().getPrincipal()).getPanelUser();
-            if (ban.getPanelUserByAdminId().equals(currentUser)) {
+            if (ban.getPanelUser().equals(currentUser)) {
                 undoBanEntity(ban);
                 return true;
             }
@@ -91,7 +91,7 @@ public class BanRepository {
         if (ban != null) {
             PanelUser currentUser = ((PanelUserDetails)SecurityContextHolder.getContext()
                     .getAuthentication().getPrincipal()).getPanelUser();
-            if (ban.getPanelUserByAdminId().equals(currentUser)) {
+            if (ban.getPanelUser().equals(currentUser)) {
                 deleteBanEntity(ban);
                 return true;
             }

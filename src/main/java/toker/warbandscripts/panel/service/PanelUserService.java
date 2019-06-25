@@ -21,7 +21,9 @@ public class PanelUserService {
     }
 
     public void logUserOut(PanelUser panelUser) {
-        usersToLogOut.offer(panelUser);
+        if (!usersToLogOut.contains(panelUser)) {
+            usersToLogOut.offer(panelUser);
+        }
         rememberMeTokenRepository.removeUserTokens(panelUser.getUsername());
     }
 

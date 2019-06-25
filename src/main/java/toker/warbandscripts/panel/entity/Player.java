@@ -581,7 +581,7 @@ public class Player {
         this.craftingRequests = craftingRequests;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "faction_id", referencedColumnName = "id", nullable = false)
     public Faction getFactionByFactionId() {
         return factionByFactionId;
@@ -591,7 +591,7 @@ public class Player {
         this.factionByFactionId = factionByFactionId;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "troop_id", referencedColumnName = "id", nullable = false)
     public Troop getTroopByTroopId() {
         return troopByTroopId;

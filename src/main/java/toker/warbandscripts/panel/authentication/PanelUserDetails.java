@@ -17,8 +17,8 @@ public class PanelUserDetails implements UserDetails {
     public PanelUserDetails(PanelUser panelUser) {
         this.panelUser = panelUser;
         this.authorities = new ArrayList<>();
-        this.panelUser.getPanelUserAuthorityAssignmentsById()
-                .forEach(panelUserAuthorityAssignment -> this.authorities.add(panelUserAuthorityAssignment.getPanelUserAuthorityByAuthorityId()));
+        this.panelUser.getAuthorityAssignments()
+                .forEach(panelUserAuthorityAssignment -> this.authorities.add(panelUserAuthorityAssignment.getAuthority()));
     }
 
     public PanelUser getPanelUser() {

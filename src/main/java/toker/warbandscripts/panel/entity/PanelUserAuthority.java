@@ -12,7 +12,7 @@ public class PanelUserAuthority implements GrantedAuthority {
     private Integer id;
     private String authorityName;
     private String authorityDescription;
-    private Collection<PanelUserAuthorityAssignment> panelUserAuthorityAssignmentsById;
+    private Collection<PanelUserAuthorityAssignment> authorityAssignments;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,13 +60,13 @@ public class PanelUserAuthority implements GrantedAuthority {
         return Objects.hash(id, authorityName, authorityDescription);
     }
 
-    @OneToMany(mappedBy = "panelUserAuthorityByAuthorityId")
-    public Collection<PanelUserAuthorityAssignment> getPanelUserAuthorityAssignmentsById() {
-        return panelUserAuthorityAssignmentsById;
+    @OneToMany(mappedBy = "authority")
+    public Collection<PanelUserAuthorityAssignment> getAuthorityAssignments() {
+        return authorityAssignments;
     }
 
-    public void setPanelUserAuthorityAssignmentsById(Collection<PanelUserAuthorityAssignment> panelUserAuthorityAssignmentsById) {
-        this.panelUserAuthorityAssignmentsById = panelUserAuthorityAssignmentsById;
+    public void setAuthorityAssignments(Collection<PanelUserAuthorityAssignment> authorityAssignments) {
+        this.authorityAssignments = authorityAssignments;
     }
 
     @Transient

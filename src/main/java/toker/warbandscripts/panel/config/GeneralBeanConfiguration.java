@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import java.io.File;
 
 @Configuration
-@ImportResource("classpath:aspect-config.xml")
 @EnableScheduling
 public class GeneralBeanConfiguration {
 

@@ -44,7 +44,7 @@ public class CraftingRequest {
         isTaken = taken;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false)
     public CraftingRecipe getCraftingRecipe() {
         return craftingRecipe;
@@ -64,7 +64,7 @@ public class CraftingRequest {
         this.player = player;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "station_instance_id", referencedColumnName = "id", nullable = false)
     public CraftingStationInstance getCraftingStationInstance() {
         return craftingStationInstance;

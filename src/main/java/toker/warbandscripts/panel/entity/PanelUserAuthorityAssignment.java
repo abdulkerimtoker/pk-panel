@@ -7,8 +7,8 @@ import java.util.Objects;
 @Table(name = "panel_user_authority_assignment", schema = "pax", catalog = "")
 public class PanelUserAuthorityAssignment {
     private Integer id;
-    private PanelUser panelUserByPanelUserId;
-    private PanelUserAuthority panelUserAuthorityByAuthorityId;
+    private PanelUser panelUser;
+    private PanelUserAuthority authority;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,21 +36,21 @@ public class PanelUserAuthorityAssignment {
 
     @ManyToOne
     @JoinColumn(name = "panel_user_id", referencedColumnName = "id", nullable = false)
-    public PanelUser getPanelUserByPanelUserId() {
-        return panelUserByPanelUserId;
+    public PanelUser getPanelUser() {
+        return panelUser;
     }
 
-    public void setPanelUserByPanelUserId(PanelUser panelUserByPanelUserId) {
-        this.panelUserByPanelUserId = panelUserByPanelUserId;
+    public void setPanelUser(PanelUser panelUser) {
+        this.panelUser = panelUser;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false)
-    public PanelUserAuthority getPanelUserAuthorityByAuthorityId() {
-        return panelUserAuthorityByAuthorityId;
+    public PanelUserAuthority getAuthority() {
+        return authority;
     }
 
-    public void setPanelUserAuthorityByAuthorityId(PanelUserAuthority panelUserAuthorityByAuthorityId) {
-        this.panelUserAuthorityByAuthorityId = panelUserAuthorityByAuthorityId;
+    public void setAuthority(PanelUserAuthority authority) {
+        this.authority = authority;
     }
 }

@@ -7,15 +7,16 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "panel_user", schema = "pax", catalog = "")
+@NamedEntityGraph(name = "PanelUser.detail", attributeNodes = @NamedAttributeNode("authorityAssignments"))
 public class PanelUser {
     private Integer id;
     private String username;
     private String password;
     private Timestamp creationTime;
     private Boolean isLocked;
-    private Collection<Ban> bansById;
-    private PanelUserRank panelUserRankByRankId;
-    private Collection<PanelUserAuthorityAssignment> panelUserAuthorityAssignmentsById;
+    private Collection<Ban> bans;
+    private PanelUserRank rank;
+    private Collection<PanelUserAuthorityAssignment> authorityAssignments;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,38 +86,38 @@ public class PanelUser {
         return Objects.hash(id, username, password, creationTime, isLocked);
     }
 
-    @OneToMany(mappedBy = "panelUserByAdminId")
-    public Collection<Ban> getBansById() {
-        return bansById;
+    @OneToMany(mappedBy = "panelUser")
+    public Collection<Ban> getBans() {
+        return bans;
     }
 
-    public void setBansById(Collection<Ban> bansById) {
-        this.bansById = bansById;
+    public void setBans(Collection<Ban> bans) {
+        this.bans = bans;
     }
 
     @ManyToOne
     @JoinColumn(name = "rank_id", referencedColumnName = "id", nullable = false)
-    public PanelUserRank getPanelUserRankByRankId() {
-        return panelUserRankByRankId;
+    public PanelUserRank getRank() {
+        return rank;
     }
 
-    public void setPanelUserRankByRankId(PanelUserRank panelUserRankByRankId) {
-        this.panelUserRankByRankId = panelUserRankByRankId;
+    public void setRank(PanelUserRank rank) {
+        this.rank = rank;
     }
 
-    @OneToMany(mappedBy = "panelUserByPanelUserId", fetch = FetchType.EAGER)
-    public Collection<PanelUserAuthorityAssignment> getPanelUserAuthorityAssignmentsById() {
-        return panelUserAuthorityAssignmentsById;
+    @OneToMany(mappedBy = "panelUser")
+    public Collection<PanelUserAuthorityAssignment> getAuthorityAssignments() {
+        return authorityAssignments;
     }
 
-    public void setPanelUserAuthorityAssignmentsById(Collection<PanelUserAuthorityAssignment> panelUserAuthorityAssignmentsById) {
-        this.panelUserAuthorityAssignmentsById = panelUserAuthorityAssignmentsById;
+    public void setAuthorityAssignments(Collection<PanelUserAuthorityAssignment> authorityAssignments) {
+        this.authorityAssignments = authorityAssignments;
     }
 
     @Transient
     public boolean hasAuthority(PanelUserAuthority authority) {
-        for (PanelUserAuthorityAssignment assignment : getPanelUserAuthorityAssignmentsById()) {
-            if (assignment.getPanelUserAuthorityByAuthorityId().getId() == authority.getId()) {
+        for (PanelUserAuthorityAssignment assignment : getAuthorityAssignments()) {
+            if (assignment.getAuthority().getId() == authority.getId()) {
                 return true;
             }
         }

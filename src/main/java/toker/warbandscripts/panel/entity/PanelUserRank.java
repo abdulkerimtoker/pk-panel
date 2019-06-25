@@ -10,7 +10,7 @@ public class PanelUserRank {
     private Integer id;
     private String rankName;
     private String description;
-    private Collection<PanelUser> panelUsersById;
+    private Collection<PanelUser> panelUsers;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -57,12 +57,12 @@ public class PanelUserRank {
         return Objects.hash(id, rankName, description);
     }
 
-    @OneToMany(mappedBy = "panelUserRankByRankId")
-    public Collection<PanelUser> getPanelUsersById() {
-        return panelUsersById;
+    @OneToMany(mappedBy = "rank")
+    public Collection<PanelUser> getPanelUsers() {
+        return panelUsers;
     }
 
-    public void setPanelUsersById(Collection<PanelUser> panelUsersById) {
-        this.panelUsersById = panelUsersById;
+    public void setPanelUsers(Collection<PanelUser> panelUsers) {
+        this.panelUsers = panelUsers;
     }
 }

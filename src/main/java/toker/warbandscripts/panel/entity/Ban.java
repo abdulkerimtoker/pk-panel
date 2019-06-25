@@ -13,7 +13,7 @@ public class Ban {
     private Timestamp expiryTime;
     private Boolean undone;
     private String reason;
-    private PanelUser panelUserByAdminId;
+    private PanelUser panelUser;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,13 +94,13 @@ public class Ban {
         return Objects.hash(id, playerUniqueId, time, expiryTime, undone, reason);
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id", nullable = false)
-    public PanelUser getPanelUserByAdminId() {
-        return panelUserByAdminId;
+    public PanelUser getPanelUser() {
+        return panelUser;
     }
 
-    public void setPanelUserByAdminId(PanelUser panelUserByAdminId) {
-        this.panelUserByAdminId = panelUserByAdminId;
+    public void setPanelUser(PanelUser panelUser) {
+        this.panelUser = panelUser;
     }
 }

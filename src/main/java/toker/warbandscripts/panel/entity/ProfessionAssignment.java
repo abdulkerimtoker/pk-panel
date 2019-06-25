@@ -13,7 +13,7 @@ public class ProfessionAssignment {
     private Integer tier;
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
     public Profession getProfessionByProfessionId() {
         return professionByProfessionId;

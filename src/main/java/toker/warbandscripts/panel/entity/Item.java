@@ -57,7 +57,7 @@ public class Item {
         return Objects.hash(id, codeName, name);
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "type", referencedColumnName = "id", nullable = false)
     public ItemType getItemTypeByType() {
         return itemTypeByType;
