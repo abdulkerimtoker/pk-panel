@@ -72,10 +72,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .securityContext()
-                .securityContextRepository(this.contextRepository);
+                .permitAll();
+                //.authenticated()
+                //.and()
+                //.securityContext()
+                //.securityContextRepository(this.contextRepository);
     }
 
     @Override

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.criteria.Predicate;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +34,6 @@ public class FilterSpecificationArgumentResolver implements HandlerMethodArgumen
             List<String> attributeNames = new LinkedList<>();
             root.getModel().getAttributes().forEach((attr) -> attributeNames.add(((Attribute)attr).getName()));
 
-
             List<Predicate> predicates = new LinkedList<>();
 
             nativeWebRequest.getParameterNames().forEachRemaining((param) -> {
@@ -48,6 +48,8 @@ public class FilterSpecificationArgumentResolver implements HandlerMethodArgumen
                         } else if (fieldGetter.isAnnotationPresent(OneToOne.class) ||
                                 fieldGetter.isAnnotationPresent(ManyToOne.class)) {
                             predicates.add(criteriaBuilder.equal(root.get(param).get("id"), nativeWebRequest.getParameter(param)));
+                        } else if (fieldType.isInstance(Date.class)) {
+                            predicates.add(criteriaBuilder.equal(root.get(param), Date.parse(nativeWebRequest.getParameter(param))));
                         } else {
                             predicates.add(criteriaBuilder.equal(root.get(param), nativeWebRequest.getParameter(param)));
                         }
