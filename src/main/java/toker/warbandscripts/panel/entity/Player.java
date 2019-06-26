@@ -1,5 +1,8 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -527,6 +530,7 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "playerByOwnerId")
+    @JsonIgnore
     public Collection<Book> getBooksById() {
         return booksById;
     }
@@ -536,6 +540,7 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "playerByUserId")
+    @JsonIgnore
     public Collection<DoorKey> getDoorKeysById() {
         return doorKeysById;
     }
@@ -545,6 +550,7 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "playerByPlayerId")
+    @JsonIgnore
     public Collection<Inventory> getInventoriesById() {
         return inventoriesById;
     }
@@ -554,6 +560,7 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "playerByUserId")
+    @JsonIgnore
     public Collection<NoticeBoardAccess> getNoticeBoardAccessesById() {
         return noticeBoardAccessesById;
     }
@@ -563,6 +570,7 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "playerByPlayerId")
+    @JsonIgnore
     public Collection<ProfessionAssignment> getProfessionAssignmentsById() {
         return professionAssignmentsById;
     }
@@ -573,6 +581,7 @@ public class Player {
 
     @OneToMany(mappedBy = "player")
     @OrderBy("creationTime ASC")
+    @JsonIgnore
     public Collection<CraftingRequest> getCraftingRequests() {
         return craftingRequests;
     }
@@ -583,6 +592,7 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "faction_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     public Faction getFactionByFactionId() {
         return factionByFactionId;
     }
@@ -593,6 +603,7 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "troop_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     public Troop getTroopByTroopId() {
         return troopByTroopId;
     }

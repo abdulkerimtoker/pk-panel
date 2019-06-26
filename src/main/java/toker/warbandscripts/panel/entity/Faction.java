@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -58,6 +60,7 @@ public class Faction {
     }
 
     @OneToMany(mappedBy = "factionByFactionId")
+    @JsonManagedReference
     public Collection<Player> getPlayersById() {
         return playersById;
     }
