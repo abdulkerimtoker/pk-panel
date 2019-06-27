@@ -1,6 +1,6 @@
 package toker.warbandscripts.panel.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Troop {
     private Integer id;
     private String name;
-    private Collection<Player> playersById;
+    private Collection<Player> players;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,13 +48,13 @@ public class Troop {
         return Objects.hash(id, name);
     }
 
-    @OneToMany(mappedBy = "troopByTroopId")
-    @JsonManagedReference
-    public Collection<Player> getPlayersById() {
-        return playersById;
+    @OneToMany(mappedBy = "troop")
+    @JsonBackReference
+    public Collection<Player> getPlayers() {
+        return players;
     }
 
-    public void setPlayersById(Collection<Player> playersById) {
-        this.playersById = playersById;
+    public void setPlayers(Collection<Player> players) {
+        this.players = players;
     }
 }

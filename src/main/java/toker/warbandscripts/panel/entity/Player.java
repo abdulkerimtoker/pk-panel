@@ -1,7 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -21,8 +21,8 @@ public class Player {
     private Integer posX;
     private Integer posY;
     private Integer posZ;
-    private Faction factionByFactionId;
-    private Troop troopByTroopId;
+    private Faction faction;
+    private Troop troop;
     private String sceneName;
     private String description1;
     private String description2;
@@ -592,23 +592,23 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "faction_id", referencedColumnName = "id", nullable = false)
-    @JsonBackReference
-    public Faction getFactionByFactionId() {
-        return factionByFactionId;
+    @JsonManagedReference
+    public Faction getFaction() {
+        return faction;
     }
 
-    public void setFactionByFactionId(Faction factionByFactionId) {
-        this.factionByFactionId = factionByFactionId;
+    public void setFaction(Faction faction) {
+        this.faction = faction;
     }
 
     @ManyToOne
     @JoinColumn(name = "troop_id", referencedColumnName = "id", nullable = false)
-    @JsonBackReference
-    public Troop getTroopByTroopId() {
-        return troopByTroopId;
+    @JsonManagedReference
+    public Troop getTroop() {
+        return troop;
     }
 
-    public void setTroopByTroopId(Troop troopByTroopId) {
-        this.troopByTroopId = troopByTroopId;
+    public void setTroop(Troop troop) {
+        this.troop = troop;
     }
 }
