@@ -36,4 +36,10 @@ public class PlayerRestController {
     public Player player(@PathVariable int id) {
         return playerRepository.findById(id).orElse(null);
     }
+
+    @GetMapping("/api/player/search")
+    public List<Player> search(@RequestParam String search) {
+        return playerRepository.likeSearch(search);
+    }
+
 }
