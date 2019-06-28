@@ -22,11 +22,6 @@ public class PlayerRestController {
         this.playerRepository = playerRepository;
     }
 
-    @GetMapping("/api/player")
-    public List<Player> players(@FilterSpecification Specification spec) {
-        return playerRepository.findAll(spec);
-    }
-
     @GetMapping("/api/player/{id}")
     public Player player(@PathVariable int id) {
         return playerRepository.findById(id).orElse(null);

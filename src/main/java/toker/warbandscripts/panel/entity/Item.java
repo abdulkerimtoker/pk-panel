@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ public class Item {
     private Integer id;
     private String codeName;
     private String name;
-    private ItemType itemTypeByType;
+    private ItemType type;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,11 +61,12 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "type", referencedColumnName = "id", nullable = false)
-    public ItemType getItemTypeByType() {
-        return itemTypeByType;
+    @JsonManagedReference
+    public ItemType getType() {
+        return type;
     }
 
-    public void setItemTypeByType(ItemType itemTypeByType) {
-        this.itemTypeByType = itemTypeByType;
+    public void setType(ItemType type) {
+        this.type = type;
     }
 }
