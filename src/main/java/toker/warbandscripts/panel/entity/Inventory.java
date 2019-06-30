@@ -1,5 +1,8 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -9,8 +12,8 @@ import java.util.Objects;
 public class Inventory {
     private Integer id;
     private Integer size;
-    private Player playerByPlayerId;
-    private Collection<InventorySlot> inventorySlotsById;
+    private Player player;
+    private Collection<InventorySlot> slots;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,20 +52,21 @@ public class Inventory {
 
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false)
-    public Player getPlayerByPlayerId() {
-        return playerByPlayerId;
+    @JsonIgnore
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setPlayerByPlayerId(Player playerByPlayerId) {
-        this.playerByPlayerId = playerByPlayerId;
+    public void setPlayer(Player playerByPlayerId) {
+        this.player = playerByPlayerId;
     }
 
-    @OneToMany(mappedBy = "inventoryByInventoryId")
-    public Collection<InventorySlot> getInventorySlotsById() {
-        return inventorySlotsById;
+    @OneToMany(mappedBy = "inventory")
+    public Collection<InventorySlot> getSlots() {
+        return slots;
     }
 
-    public void setInventorySlotsById(Collection<InventorySlot> inventorySlotsById) {
-        this.inventorySlotsById = inventorySlotsById;
+    public void setSlots(Collection<InventorySlot> inventorySlotsById) {
+        this.slots = inventorySlotsById;
     }
 }

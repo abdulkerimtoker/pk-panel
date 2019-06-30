@@ -1,7 +1,6 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -549,7 +548,7 @@ public class Player {
         this.doorKeysById = doorKeysById;
     }
 
-    @OneToMany(mappedBy = "playerByPlayerId")
+    @OneToMany(mappedBy = "player")
     @JsonIgnore
     public Collection<Inventory> getInventoriesById() {
         return inventoriesById;
@@ -592,7 +591,6 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "faction_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     public Faction getFaction() {
         return faction;
     }
@@ -603,7 +601,6 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "troop_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     public Troop getTroop() {
         return troop;
     }

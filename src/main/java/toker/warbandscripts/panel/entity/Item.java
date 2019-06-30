@@ -61,7 +61,6 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "type", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     public ItemType getType() {
         return type;
     }

@@ -1,5 +1,8 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,8 +13,8 @@ import java.util.Objects;
 public class InventorySlot {
     private Integer slot;
     private Integer ammo;
-    private Inventory inventoryByInventoryId;
-    private Item itemByItemId;
+    private Inventory inventory;
+    private Item item;
 
     @Id
     @Column(name = "slot", nullable = false)
@@ -38,7 +41,7 @@ public class InventorySlot {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InventorySlot that = (InventorySlot) o;
-        return Objects.equals(itemByItemId, that.itemByItemId) &&
+        return Objects.equals(item, that.item) &&
                 Objects.equals(slot, that.slot) &&
                 Objects.equals(ammo, that.ammo);
     }
@@ -51,22 +54,23 @@ public class InventorySlot {
     @Id
     @ManyToOne
     @JoinColumn(name = "inventory_id", referencedColumnName = "id", nullable = false)
-    public Inventory getInventoryByInventoryId() {
-        return inventoryByInventoryId;
+    @JsonBackReference
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public void setInventoryByInventoryId(Inventory inventoryByInventoryId) {
-        this.inventoryByInventoryId = inventoryByInventoryId;
+    public void setInventory(Inventory inventoryByInventoryId) {
+        this.inventory = inventoryByInventoryId;
     }
 
     @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
-    public Item getItemByItemId() {
-        return itemByItemId;
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemByItemId(Item itemByItemId) {
-        this.itemByItemId = itemByItemId;
+    public void setItem(Item itemByItemId) {
+        this.item = itemByItemId;
     }
 }
 
@@ -78,7 +82,7 @@ class InventorySlotPK implements Serializable {
         return slot;
     }
 
-    public Inventory getInventoryByInventoryId() {
+    public Inventory getInventory() {
         return inventoryByInventoryId;
     }
 
@@ -86,7 +90,7 @@ class InventorySlotPK implements Serializable {
         this.slot = slot;
     }
 
-    public void setInventoryByInventoryId(Inventory inventoryByInventoryId) {
+    public void setInventory(Inventory inventoryByInventoryId) {
         this.inventoryByInventoryId = inventoryByInventoryId;
     }
 
