@@ -27,7 +27,7 @@ public class JPAConfiguration {
     @Qualifier("dataSource")
     public BasicDataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl(String.format("jdbc:mysql://%s:%s/%s?zeroDateTimeBehavior=convertToNull",
                 configurationService.getProperty("PANEL_DB_HOST"),
                 configurationService.getProperty("PANEL_DB_PORT"),
@@ -54,8 +54,8 @@ public class JPAConfiguration {
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.MYSQL);
-        adapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
-        adapter.setShowSql(false);
+        adapter.setDatabasePlatform("org.hibernate.dialect.MySQL57Dialect");
+        adapter.setShowSql(true);
         adapter.setGenerateDdl(false);
         return adapter;
     }

@@ -57,11 +57,11 @@ public class Player {
     private Integer servedWoundTime;
     private Timestamp treatmentTime;
     private Timestamp lastLogTime;
-    private Collection<Book> booksById;
-    private Collection<DoorKey> doorKeysById;
-    private Collection<Inventory> inventoriesById;
-    private Collection<NoticeBoardAccess> noticeBoardAccessesById;
-    private Collection<ProfessionAssignment> professionAssignmentsById;
+    private Collection<Book> books;
+    private Collection<DoorKey> doorKeys;
+    private Collection<Inventory> inventories;
+    private Collection<NoticeBoardAccess> noticeBoardAccesses;
+    private Collection<ProfessionAssignment> professionAssignments;
     private Collection<CraftingRequest> craftingRequests;
 
     @Id
@@ -530,52 +530,52 @@ public class Player {
 
     @OneToMany(mappedBy = "playerByOwnerId")
     @JsonIgnore
-    public Collection<Book> getBooksById() {
-        return booksById;
+    public Collection<Book> getBooks() {
+        return books;
     }
 
-    public void setBooksById(Collection<Book> booksById) {
-        this.booksById = booksById;
+    public void setBooks(Collection<Book> books) {
+        this.books = books;
     }
 
     @OneToMany(mappedBy = "playerByUserId")
     @JsonIgnore
-    public Collection<DoorKey> getDoorKeysById() {
-        return doorKeysById;
+    public Collection<DoorKey> getDoorKeys() {
+        return doorKeys;
     }
 
-    public void setDoorKeysById(Collection<DoorKey> doorKeysById) {
-        this.doorKeysById = doorKeysById;
+    public void setDoorKeys(Collection<DoorKey> doorKeys) {
+        this.doorKeys = doorKeys;
     }
 
     @OneToMany(mappedBy = "player")
     @JsonIgnore
-    public Collection<Inventory> getInventoriesById() {
-        return inventoriesById;
+    public Collection<Inventory> getInventories() {
+        return inventories;
     }
 
-    public void setInventoriesById(Collection<Inventory> inventoriesById) {
-        this.inventoriesById = inventoriesById;
+    public void setInventories(Collection<Inventory> inventories) {
+        this.inventories = inventories;
     }
 
     @OneToMany(mappedBy = "playerByUserId")
     @JsonIgnore
-    public Collection<NoticeBoardAccess> getNoticeBoardAccessesById() {
-        return noticeBoardAccessesById;
+    public Collection<NoticeBoardAccess> getNoticeBoardAccesses() {
+        return noticeBoardAccesses;
     }
 
-    public void setNoticeBoardAccessesById(Collection<NoticeBoardAccess> noticeBoardAccessesById) {
-        this.noticeBoardAccessesById = noticeBoardAccessesById;
+    public void setNoticeBoardAccesses(Collection<NoticeBoardAccess> noticeBoardAccesses) {
+        this.noticeBoardAccesses = noticeBoardAccesses;
     }
 
     @OneToMany(mappedBy = "playerByPlayerId")
     @JsonIgnore
-    public Collection<ProfessionAssignment> getProfessionAssignmentsById() {
-        return professionAssignmentsById;
+    public Collection<ProfessionAssignment> getProfessionAssignments() {
+        return professionAssignments;
     }
 
-    public void setProfessionAssignmentsById(Collection<ProfessionAssignment> professionAssignmentsById) {
-        this.professionAssignmentsById = professionAssignmentsById;
+    public void setProfessionAssignments(Collection<ProfessionAssignment> professionAssignments) {
+        this.professionAssignments = professionAssignments;
     }
 
     @OneToMany(mappedBy = "player")

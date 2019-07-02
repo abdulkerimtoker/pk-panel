@@ -9,12 +9,12 @@ import toker.warbandscripts.panel.repository.ItemRepository;
 import java.util.List;
 
 @RestController
-public class ItemRestController {
+public class ItemController {
 
     @Autowired
     private ItemRepository itemRepository;
 
-    public ItemRestController(ItemRepository itemRepository) {
+    public ItemController(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
 

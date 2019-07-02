@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -9,6 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "inventory", schema = "pax", catalog = "")
+@NamedEntityGraph(name = "Inventory.slots", attributeNodes = @NamedAttributeNode("slots"),
+subgraphs = @NamedSubgraph(name = "slots", attributeNodes = @NamedAttributeNode("item")))
 public class Inventory {
     private Integer id;
     private Integer size;
