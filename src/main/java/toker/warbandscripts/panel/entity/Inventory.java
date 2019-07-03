@@ -9,9 +9,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "inventory", schema = "pax", catalog = "")
-@NamedEntityGraph(name = "Inventory.slots", attributeNodes = @NamedAttributeNode("slots"),
-subgraphs = @NamedSubgraph(name = "slots", attributeNodes = @NamedAttributeNode("item")))
+@Table(name = "inventory", catalog = "")
 public class Inventory {
     private Integer id;
     private Integer size;

@@ -6,8 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "item", schema = "pax", catalog = "")
-@NamedEntityGraph(name = "Item.type", attributeNodes = @NamedAttributeNode("type"))
+@Table(name = "item", catalog = "")
 public class Item {
     private Integer id;
     private String codeName;

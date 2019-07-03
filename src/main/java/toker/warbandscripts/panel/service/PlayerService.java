@@ -48,9 +48,17 @@ public class PlayerService {
             try {
                 Player.class.getDeclaredMethod(setterName, value.getClass())
                     .invoke(player, value);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            } catch (NoSuchMethodException e) {
+                return false;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                return false;
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
                 return false;
             }
+            playerRepository.save(player);
+            return true;
         }
         return false;
     }

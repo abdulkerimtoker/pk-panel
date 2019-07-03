@@ -8,10 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "inventory_slot", schema = "pax")
+@Table(name = "inventory_slot")
 @IdClass(InventorySlotPK.class)
-@NamedEntityGraph(name = "InventorySlot.item", attributeNodes = @NamedAttributeNode("item"),
-subgraphs = @NamedSubgraph(name = "Item.type", attributeNodes = @NamedAttributeNode("item")))
 public class InventorySlot {
     private Integer slot;
     private Integer ammo;
