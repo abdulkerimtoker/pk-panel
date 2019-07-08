@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.util.Properties;
 
 @SpringBootApplication
-@EnableCaching
 public class PanelApplication {
 
     public static void main(String[] args) throws Exception {
