@@ -67,11 +67,15 @@ public class PlayerService {
         return inventoryRepository.findFirstByPlayerId(playerId);
     }
 
-    public boolean updatePlayerInventorySlot(int playerId, InventorySlot inventorySlot) {
-        Inventory inventory = getPlayerInventory(playerId);
-        if (inventory != null) {
-
+    public InventorySlot updatePlayerInventorySlot(int inventoryId, InventorySlot inventorySlot) {
+        InventorySlot current = inventorySlotRepository.findByInventoryIdAndSlot(inventoryId, inventorySlot.getSlot())
+                .orElse(null);
+        if (current != null) {
+            current.setItem(inventorySlot.getItem());
+            current.setAmmo(inventorySlot.getAmmo());
+            inventorySlotRepository.save(current);
+            return current;
         }
-        return false;
+        return null;
     }
 }

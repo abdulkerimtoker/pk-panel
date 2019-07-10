@@ -47,10 +47,9 @@ public class PlayerController {
         return playerService.getPlayerInventory(playerId);
     }
 
-    @PutMapping("/api/player/{playerId}/inventory/slot/{slot}")
-    public InventorySlot inventorySlot(@PathVariable int playerId, @PathVariable int slot,
-                                       @RequestBody InventorySlot inventorySlot) {
-        return null;
+    @PutMapping("/api/player/inventory/{inventoryId}/slot")
+    public InventorySlot inventorySlot(@PathVariable int inventoryId, @RequestBody InventorySlot inventorySlot) {
+        return playerService.updatePlayerInventorySlot(inventoryId, inventorySlot);
     }
 
 }
