@@ -55,7 +55,7 @@ public class JPAConfiguration {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.MYSQL);
         adapter.setDatabasePlatform("org.hibernate.dialect.MySQL57Dialect");
-        adapter.setShowSql(true);
+        adapter.setShowSql(false);
         adapter.setGenerateDdl(false);
         return adapter;
     }

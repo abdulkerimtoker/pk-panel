@@ -1,11 +1,14 @@
 package toker.warbandscripts.panel.repository;
 
+import org.hibernate.annotations.OptimisticLock;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import toker.warbandscripts.panel.entity.Player;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 
 
@@ -16,4 +19,8 @@ public interface PlayerRepository extends JpaRepository<Player, Integer>, JpaSpe
             "OR CAST(unique_id as char) LIKE CONCAT('%',?1,'%') " +
             "OR CAST(id as char) LIKE CONCAT('%',?1,'%')")
     List<Player> likeSearch(String likeString);
+
+    @Override
+    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+    <S extends Player> S save(S s);
 }

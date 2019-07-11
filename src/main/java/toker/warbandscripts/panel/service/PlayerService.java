@@ -7,6 +7,7 @@ import toker.warbandscripts.panel.entity.InventorySlot;
 import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.repository.InventoryRepository;
 import toker.warbandscripts.panel.repository.InventorySlotRepository;
+import toker.warbandscripts.panel.repository.ItemRepository;
 import toker.warbandscripts.panel.repository.PlayerRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +36,10 @@ public class PlayerService {
 
     public Optional<Player> getPlayer(int id) {
         return playerRepository.findById(id);
+    }
+
+    public Player savePlayer(Player player) {
+        return playerRepository.save(player);
     }
 
     public List<Player> searchPlayers(String searchTerm) {
@@ -67,15 +72,14 @@ public class PlayerService {
         return inventoryRepository.findFirstByPlayerId(playerId);
     }
 
-    public InventorySlot updatePlayerInventorySlot(int inventoryId, InventorySlot inventorySlot) {
+    public boolean updatePlayerInventorySlot(int inventoryId, InventorySlot inventorySlot) {
         InventorySlot current = inventorySlotRepository.findByInventoryIdAndSlot(inventoryId, inventorySlot.getSlot())
                 .orElse(null);
         if (current != null) {
-            current.setItem(inventorySlot.getItem());
-            current.setAmmo(inventorySlot.getAmmo());
-            inventorySlotRepository.save(current);
-            return current;
+            return inventorySlotRepository.updateSlot(inventorySlot.getInventory(), inventorySlot.getSlot(),
+                    inventorySlot.getItem(), inventorySlot.getAmmo())
+                    == 1;
         }
-        return null;
+        return false;
     }
 }

@@ -59,36 +59,36 @@ public class ProfessionAssignment {
 }
 
 class ProfessionAssignmentPK implements Serializable {
-    private Profession professionByProfessionId;
-    private Player playerByPlayerId;
+    private Integer professionByProfessionId;
+    private Integer playerByPlayerId;
 
-    public Profession getProfessionByProfessionId() {
+    public Integer getProfessionByProfessionId() {
         return professionByProfessionId;
     }
 
-    public void setProfessionByProfessionId(Profession professionByProfessionId) {
+    public void setProfessionByProfessionId(Integer professionByProfessionId) {
         this.professionByProfessionId = professionByProfessionId;
     }
 
-    public Player getPlayerByPlayerId() {
+    public Integer getPlayerByPlayerId() {
         return playerByPlayerId;
     }
 
-    public void setPlayerByPlayerId(Player playerByPlayerId) {
+    public void setPlayerByPlayerId(Integer playerByPlayerId) {
         this.playerByPlayerId = playerByPlayerId;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(professionByProfessionId, playerByPlayerId);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ProfessionAssignmentPK that = (ProfessionAssignmentPK)obj;
+        return Objects.equals(this.professionByProfessionId, that.professionByProfessionId)
+                && Objects.equals(this.playerByPlayerId, that.playerByPlayerId);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProfessionAssignment that = (ProfessionAssignment) o;
-        return Objects.equals(professionByProfessionId, that.getProfessionByProfessionId()) &&
-                Objects.equals(playerByPlayerId, that.getProfessionByProfessionId());
+    public int hashCode() {
+        return Objects.hash(this.professionByProfessionId, this.playerByPlayerId);
     }
 }

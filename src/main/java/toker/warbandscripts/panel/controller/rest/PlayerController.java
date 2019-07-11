@@ -1,7 +1,9 @@
 package toker.warbandscripts.panel.controller.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.annotation.FilterSpecification;
 import toker.warbandscripts.panel.entity.Inventory;
@@ -12,6 +14,7 @@ import toker.warbandscripts.panel.repository.InventorySlotRepository;
 import toker.warbandscripts.panel.repository.PlayerRepository;
 import toker.warbandscripts.panel.service.PlayerService;
 
+import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
@@ -27,8 +30,9 @@ public class PlayerController {
     }
 
     @GetMapping("/api/player/{playerId}")
-    public Player player(@PathVariable int playerId) {
-        return playerService.getPlayer(playerId).orElse(null);
+    public Player player(@PathVariable int playerId) throws ChangeSetPersister.NotFoundException {
+        return playerService.getPlayer(playerId)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
     @GetMapping("/api/player/search")
@@ -36,8 +40,17 @@ public class PlayerController {
         return playerService.searchPlayers(search);
     }
 
+    @PutMapping("/api/player")
+    public Player updatePlayer(@RequestBody Player player) {
+        return playerService.savePlayer(player);
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Wrong version")
+    public void versionConflict() {}
+
     @PutMapping("/api/player/{playerId}/{field}")
-    public boolean player(@PathVariable int playerId, @PathVariable String field,
+    public boolean updatePlayerField(@PathVariable int playerId, @PathVariable String field,
                           @RequestBody Object value) {
         return playerService.setPlayerField(playerId, field, value);
     }
@@ -48,7 +61,7 @@ public class PlayerController {
     }
 
     @PutMapping("/api/player/inventory/{inventoryId}/slot")
-    public InventorySlot inventorySlot(@PathVariable int inventoryId, @RequestBody InventorySlot inventorySlot) {
+    public boolean inventorySlot(@PathVariable int inventoryId, @RequestBody InventorySlot inventorySlot) {
         return playerService.updatePlayerInventorySlot(inventoryId, inventorySlot);
     }
 

@@ -57,6 +57,7 @@ public class Player {
     private Integer servedWoundTime;
     private Timestamp treatmentTime;
     private Timestamp lastLogTime;
+    private Integer version;
     private Collection<Book> books;
     private Collection<DoorKey> doorKeys;
     private Collection<Inventory> inventories;
@@ -513,6 +514,17 @@ public class Player {
 
     public void setLastLogTime(Timestamp lastLogTime) {
         this.lastLogTime = lastLogTime;
+    }
+
+    @Basic
+    @Column(name = "version", nullable = false)
+    @Version
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

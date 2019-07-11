@@ -76,13 +76,13 @@ public class InventorySlot {
 
 class InventorySlotPK implements Serializable {
     private Integer slot;
-    private Inventory inventoryByInventoryId;
+    private Integer inventoryByInventoryId;
 
     public Integer getSlot() {
         return slot;
     }
 
-    public Inventory getInventory() {
+    public Integer getInventory() {
         return inventoryByInventoryId;
     }
 
@@ -90,26 +90,20 @@ class InventorySlotPK implements Serializable {
         this.slot = slot;
     }
 
-    public void setInventory(Inventory inventoryByInventoryId) {
+    public void setInventory(Integer inventoryByInventoryId) {
         this.inventoryByInventoryId = inventoryByInventoryId;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(slot, inventoryByInventoryId);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        InventorySlotPK that = (InventorySlotPK)obj;
+        return Objects.equals(this.slot, that.slot) && Objects.equals(this.inventoryByInventoryId, that.inventoryByInventoryId);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-
-        InventorySlotPK other = (InventorySlotPK)obj;
-        return this.slot.equals(other.slot) &&
-                this.inventoryByInventoryId.equals(other.inventoryByInventoryId);
+    public int hashCode() {
+        return Objects.hash(this.slot, this.inventoryByInventoryId);
     }
 }
