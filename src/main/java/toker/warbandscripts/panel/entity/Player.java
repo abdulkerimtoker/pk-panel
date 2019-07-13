@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "player", schema = "pax", catalog = "")
+@Table(name = "player")
 public class Player {
     private Integer id;
     private Integer uniqueId;
@@ -58,7 +58,6 @@ public class Player {
     private Timestamp treatmentTime;
     private Timestamp lastLogTime;
     private Integer version;
-    private Collection<Book> books;
     private Collection<DoorKey> doorKeys;
     private Collection<Inventory> inventories;
     private Collection<NoticeBoardAccess> noticeBoardAccesses;
@@ -516,7 +515,6 @@ public class Player {
         this.lastLogTime = lastLogTime;
     }
 
-    @Basic
     @Column(name = "version", nullable = false)
     @Version
     public Integer getVersion() {
@@ -538,16 +536,6 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @OneToMany(mappedBy = "playerByOwnerId")
-    @JsonIgnore
-    public Collection<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Collection<Book> books) {
-        this.books = books;
     }
 
     @OneToMany(mappedBy = "playerByUserId")

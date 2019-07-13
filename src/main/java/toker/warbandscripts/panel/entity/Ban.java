@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "ban", schema = "pax", catalog = "")
+@Table(name = "ban")
 public class Ban {
     private Integer id;
     private Integer playerUniqueId;

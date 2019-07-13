@@ -45,7 +45,7 @@ public class PlayerController {
         return playerService.savePlayer(player);
     }
 
-    @ExceptionHandler(OptimisticLockException.class)
+    @ExceptionHandler({OptimisticLockException.class})
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Wrong version")
     public void versionConflict() {}
 

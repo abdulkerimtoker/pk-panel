@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "notice_board_access", schema = "pax", catalog = "")
+@Table(name = "notice_board_access")
 public class NoticeBoardAccess {
     private Integer id;
     private Boolean isOwner;

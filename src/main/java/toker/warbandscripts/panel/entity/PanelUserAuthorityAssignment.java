@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "panel_user_authority_assignment", schema = "pax", catalog = "")
+@Table(name = "panel_user_authority_assignment")
 public class PanelUserAuthorityAssignment {
     private Integer id;
     private PanelUser panelUser;

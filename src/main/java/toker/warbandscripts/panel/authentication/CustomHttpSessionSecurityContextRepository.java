@@ -1,6 +1,5 @@
 package toker.warbandscripts.panel.authentication;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

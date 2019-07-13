@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "panel_user", schema = "pax", catalog = "")
+@Table(name = "panel_user")
 @NamedEntityGraph(name = "PanelUser.detail", attributeNodes = @NamedAttributeNode("authorityAssignments"))
 public class PanelUser {
     private Integer id;

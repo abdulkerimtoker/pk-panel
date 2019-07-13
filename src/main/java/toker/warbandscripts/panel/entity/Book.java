@@ -5,11 +5,10 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "book", schema = "pax", catalog = "")
+@Table(name = "book")
 public class Book {
     private Integer id;
     private String name;
-    private Player playerByOwnerId;
     private Collection<BookPage> bookPagesById;
 
     @Id
@@ -45,16 +44,6 @@ public class Book {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
-    public Player getPlayerByOwnerId() {
-        return playerByOwnerId;
-    }
-
-    public void setPlayerByOwnerId(Player playerByOwnerId) {
-        this.playerByOwnerId = playerByOwnerId;
     }
 
     @OneToMany(mappedBy = "bookByBookId")

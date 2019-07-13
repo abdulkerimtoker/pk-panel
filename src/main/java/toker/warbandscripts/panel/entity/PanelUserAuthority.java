@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "panel_user_authority", schema = "pax", catalog = "")
+@Table(name = "panel_user_authority")
 public class PanelUserAuthority implements GrantedAuthority {
     private Integer id;
     private String authorityName;

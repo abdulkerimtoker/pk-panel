@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "panel_user_rank", schema = "pax", catalog = "")
+@Table(name = "panel_user_rank")
 public class PanelUserRank {
     private Integer id;
     private String rankName;

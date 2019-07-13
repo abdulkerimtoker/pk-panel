@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "admin_permissions", schema = "pax", catalog = "")
+@Table(name = "admin_permissions")
 public class AdminPermissions {
     private Integer id;
     private Integer uniqueId;

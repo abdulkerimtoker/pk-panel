@@ -39,7 +39,7 @@ public class PlayerService {
     }
 
     public Player savePlayer(Player player) {
-        return playerRepository.save(player);
+        return playerRepository.saveAndFlush(player);
     }
 
     public List<Player> searchPlayers(String searchTerm) {

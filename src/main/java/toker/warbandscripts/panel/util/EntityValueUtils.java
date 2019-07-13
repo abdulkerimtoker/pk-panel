@@ -1,6 +1,5 @@
 package toker.warbandscripts.panel.util;
 
-import org.hibernate.collection.internal.PersistentBag;
 
 import javax.persistence.Entity;
 import java.lang.reflect.Method;

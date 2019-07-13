@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "inventory", catalog = "")
+@Table(name = "inventory")
 public class Inventory {
     private Integer id;
     private Integer size;

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "crafting_recipe_item_requirement", schema = "pax", catalog = "")
+@Table(name = "crafting_recipe_item_requirement")
 public class CraftingRecipeItemRequirement {
     private Integer id;
     private Integer amount;

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "crafting_recipe", schema = "pax", catalog = "")
+@Table(name = "crafting_recipe")
 public class CraftingRecipe {
     private Integer id;
     private Integer professionTier;

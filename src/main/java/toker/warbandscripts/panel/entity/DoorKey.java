@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "door_key", schema = "pax", catalog = "")
+@Table(name = "door_key")
 public class DoorKey {
     private Integer id;
     private Boolean isOwner;
