@@ -2,15 +2,14 @@ package toker.warbandscripts.panel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import toker.warbandscripts.panel.entity.DoorKey;
 import toker.warbandscripts.panel.entity.Inventory;
 import toker.warbandscripts.panel.entity.InventorySlot;
 import toker.warbandscripts.panel.entity.Player;
-import toker.warbandscripts.panel.repository.InventoryRepository;
-import toker.warbandscripts.panel.repository.InventorySlotRepository;
-import toker.warbandscripts.panel.repository.ItemRepository;
-import toker.warbandscripts.panel.repository.PlayerRepository;
+import toker.warbandscripts.panel.repository.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +25,17 @@ public class PlayerService {
     @Autowired
     private InventorySlotRepository inventorySlotRepository;
 
+    @Autowired
+    private DoorKeyRepository doorKeyRepository;
+
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
-                         InventorySlotRepository inventorySlotRepository) {
+                         InventorySlotRepository inventorySlotRepository,
+                         DoorKeyRepository doorKeyRepository) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
+        this.doorKeyRepository = doorKeyRepository;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -55,10 +59,7 @@ public class PlayerService {
                     .invoke(player, value);
             } catch (NoSuchMethodException e) {
                 return false;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                return false;
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -81,5 +82,9 @@ public class PlayerService {
                     == 1;
         }
         return false;
+    }
+
+    public List<DoorKey> getPlayerDoorKeys(int playerId) {
+        return doorKeyRepository.findAllByPlayerId(playerId);
     }
 }

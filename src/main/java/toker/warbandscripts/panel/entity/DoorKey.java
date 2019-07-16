@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,8 +10,8 @@ import java.util.Objects;
 public class DoorKey {
     private Integer id;
     private Boolean isOwner;
-    private Door doorByDoorId;
-    private Player playerByUserId;
+    private Door door;
+    private Player player;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,21 +50,28 @@ public class DoorKey {
 
     @ManyToOne
     @JoinColumn(name = "door_id", referencedColumnName = "id", nullable = false)
-    public Door getDoorByDoorId() {
-        return doorByDoorId;
+    @JsonView(View.Door.class)
+    public Door getDoor() {
+        return door;
     }
 
-    public void setDoorByDoorId(Door doorByDoorId) {
-        this.doorByDoorId = doorByDoorId;
+    public void setDoor(Door door) {
+        this.door = door;
     }
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public Player getPlayerByUserId() {
-        return playerByUserId;
+    @JsonView(View.Player.class)
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setPlayerByUserId(Player playerByUserId) {
-        this.playerByUserId = playerByUserId;
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public static class View {
+        public static class Player extends toker.warbandscripts.panel.entity.Door.View.DoorKeys {}
+        public static class Door {}
     }
 }

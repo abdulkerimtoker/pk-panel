@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -10,7 +12,7 @@ public class Door {
     private Integer id;
     private String name;
     private Boolean locked;
-    private Collection<DoorKey> doorKeysById;
+    private Collection<DoorKey> doorKeys;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,12 +60,17 @@ public class Door {
         return Objects.hash(id, name, locked);
     }
 
-    @OneToMany(mappedBy = "doorByDoorId")
-    public Collection<DoorKey> getDoorKeysById() {
-        return doorKeysById;
+    @OneToMany(mappedBy = "door")
+    @JsonView(View.DoorKeys.class)
+    public Collection<DoorKey> getDoorKeys() {
+        return doorKeys;
     }
 
-    public void setDoorKeysById(Collection<DoorKey> doorKeysById) {
-        this.doorKeysById = doorKeysById;
+    public void setDoorKeys(Collection<DoorKey> doorKeys) {
+        this.doorKeys = doorKeys;
+    }
+
+    public static class View {
+        public static class DoorKeys {}
     }
 }

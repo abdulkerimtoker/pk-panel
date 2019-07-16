@@ -538,7 +538,7 @@ public class Player {
         return Objects.hash(id);
     }
 
-    @OneToMany(mappedBy = "playerByUserId")
+    @OneToMany(mappedBy = "player")
     @JsonIgnore
     public Collection<DoorKey> getDoorKeys() {
         return doorKeys;

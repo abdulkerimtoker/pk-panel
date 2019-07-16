@@ -1,11 +1,13 @@
 package toker.warbandscripts.panel.controller.rest;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.annotation.FilterSpecification;
+import toker.warbandscripts.panel.entity.DoorKey;
 import toker.warbandscripts.panel.entity.Inventory;
 import toker.warbandscripts.panel.entity.InventorySlot;
 import toker.warbandscripts.panel.entity.Player;
@@ -45,7 +47,7 @@ public class PlayerController {
         return playerService.savePlayer(player);
     }
 
-    @ExceptionHandler({OptimisticLockException.class})
+    @ExceptionHandler(OptimisticLockException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Wrong version")
     public void versionConflict() {}
 
@@ -65,4 +67,9 @@ public class PlayerController {
         return playerService.updatePlayerInventorySlot(inventoryId, inventorySlot);
     }
 
+    @GetMapping("/api/player/{playerId}/doorKeys")
+    @JsonView(DoorKey.View.Door.class)
+    public List<DoorKey> doorKeys(@PathVariable int playerId) {
+        return playerService.getPlayerDoorKeys(playerId);
+    }
 }
