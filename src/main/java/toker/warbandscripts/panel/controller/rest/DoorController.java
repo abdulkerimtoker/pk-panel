@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import toker.warbandscripts.panel.entity.Door;
 import toker.warbandscripts.panel.entity.DoorKey;
-import toker.warbandscripts.panel.repository.DoorRepository;
 import toker.warbandscripts.panel.service.DoorService;
+
+import java.util.List;
 
 @RestController
 public class DoorController {
@@ -24,5 +25,11 @@ public class DoorController {
     @JsonView(DoorKey.View.Player.class)
     public Door door(@PathVariable int doorId) {
         return doorService.getDoor(doorId).orElse(null);
+    }
+
+    @GetMapping("/api/door")
+    @JsonView(Door.View.class)
+    public List<Door> door() {
+        return doorService.getAllDoors();
     }
 }

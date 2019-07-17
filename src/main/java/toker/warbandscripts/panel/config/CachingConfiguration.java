@@ -10,6 +10,5 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
-@EnableCaching
 public class CachingConfiguration {
 }

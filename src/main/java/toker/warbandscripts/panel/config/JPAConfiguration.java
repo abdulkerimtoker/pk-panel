@@ -44,6 +44,7 @@ public class JPAConfiguration extends JpaBaseConfiguration {
     protected Map<String, Object> getVendorProperties() {
         HashMap<String, Object> map = new HashMap<>();
         map.put(PersistenceUnitProperties.WEAVING, "false");
+        map.put(PersistenceUnitProperties.CACHE_SHARED_DEFAULT, "false");
         map.put(PersistenceUnitProperties.ALLOW_ZERO_ID, "true");
         return map;
     }
