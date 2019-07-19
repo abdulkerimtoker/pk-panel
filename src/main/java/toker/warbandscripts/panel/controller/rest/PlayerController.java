@@ -62,9 +62,9 @@ public class PlayerController {
         return playerService.getPlayerInventory(playerId);
     }
 
-    @PutMapping("/api/player/inventory/{inventoryId}/slot")
-    public boolean inventorySlot(@PathVariable int inventoryId, @RequestBody InventorySlot inventorySlot) {
-        return playerService.updatePlayerInventorySlot(inventoryId, inventorySlot);
+    @PutMapping("/api/player/inventory/slot")
+    public InventorySlot inventorySlot(@RequestBody InventorySlot inventorySlot) {
+        return playerService.saveInventorySlot(inventorySlot);
     }
 
     @GetMapping("/api/player/{playerId}/doorKeys")
