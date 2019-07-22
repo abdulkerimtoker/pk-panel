@@ -9,7 +9,7 @@ public class NoticeBoardEntry {
     private Integer id;
     private String entryText;
     private Integer entryNo;
-    private NoticeBoard noticeBoardByBoardId;
+    private NoticeBoard board;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,11 +59,11 @@ public class NoticeBoardEntry {
 
     @ManyToOne
     @JoinColumn(name = "board_id", referencedColumnName = "id", nullable = false)
-    public NoticeBoard getNoticeBoardByBoardId() {
-        return noticeBoardByBoardId;
+    public NoticeBoard getBoard() {
+        return board;
     }
 
-    public void setNoticeBoardByBoardId(NoticeBoard noticeBoardByBoardId) {
-        this.noticeBoardByBoardId = noticeBoardByBoardId;
+    public void setBoard(NoticeBoard board) {
+        this.board = board;
     }
 }

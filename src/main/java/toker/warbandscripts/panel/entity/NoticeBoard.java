@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -9,8 +11,8 @@ import java.util.Objects;
 public class NoticeBoard {
     private Integer id;
     private String name;
-    private Collection<NoticeBoardAccess> noticeBoardAccessesById;
-    private Collection<NoticeBoardEntry> noticeBoardEntriesById;
+    private Collection<NoticeBoardAccess> accesses;
+    private Collection<NoticeBoardEntry> entries;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,21 +49,28 @@ public class NoticeBoard {
         return Objects.hash(id, name);
     }
 
-    @OneToMany(mappedBy = "noticeBoardByBoardId")
-    public Collection<NoticeBoardAccess> getNoticeBoardAccessesById() {
-        return noticeBoardAccessesById;
+    @OneToMany(mappedBy = "board")
+    @JsonView(View.Accesses.class)
+    public Collection<NoticeBoardAccess> getAccesses() {
+        return accesses;
     }
 
-    public void setNoticeBoardAccessesById(Collection<NoticeBoardAccess> noticeBoardAccessesById) {
-        this.noticeBoardAccessesById = noticeBoardAccessesById;
+    public void setAccesses(Collection<NoticeBoardAccess> accesses) {
+        this.accesses = accesses;
     }
 
-    @OneToMany(mappedBy = "noticeBoardByBoardId")
-    public Collection<NoticeBoardEntry> getNoticeBoardEntriesById() {
-        return noticeBoardEntriesById;
+    @OneToMany(mappedBy = "board")
+    @JsonView(View.Entries.class)
+    public Collection<NoticeBoardEntry> getEntries() {
+        return entries;
     }
 
-    public void setNoticeBoardEntriesById(Collection<NoticeBoardEntry> noticeBoardEntriesById) {
-        this.noticeBoardEntriesById = noticeBoardEntriesById;
+    public void setEntries(Collection<NoticeBoardEntry> entries) {
+        this.entries = entries;
+    }
+
+    public static class View {
+        public static class Accesses {}
+        public static class Entries {}
     }
 }

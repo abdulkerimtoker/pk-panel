@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,8 +10,8 @@ import java.util.Objects;
 public class NoticeBoardAccess {
     private Integer id;
     private Boolean isOwner;
-    private NoticeBoard noticeBoardByBoardId;
-    private Player playerByUserId;
+    private NoticeBoard board;
+    private Player player;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,21 +50,28 @@ public class NoticeBoardAccess {
 
     @ManyToOne
     @JoinColumn(name = "board_id", referencedColumnName = "id", nullable = false)
-    public NoticeBoard getNoticeBoardByBoardId() {
-        return noticeBoardByBoardId;
+    @JsonView(View.Board.class)
+    public NoticeBoard getBoard() {
+        return board;
     }
 
-    public void setNoticeBoardByBoardId(NoticeBoard noticeBoardByBoardId) {
-        this.noticeBoardByBoardId = noticeBoardByBoardId;
+    public void setBoard(NoticeBoard board) {
+        this.board = board;
     }
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public Player getPlayerByUserId() {
-        return playerByUserId;
+    @JsonView(View.Player.class)
+    public Player getPlayer() {
+        return player;
     }
 
-    public void setPlayerByUserId(Player playerByUserId) {
-        this.playerByUserId = playerByUserId;
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public static class View {
+        public static class Board {}
+        public static class Player {}
     }
 }

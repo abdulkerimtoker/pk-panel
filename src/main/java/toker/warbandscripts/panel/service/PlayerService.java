@@ -2,10 +2,7 @@ package toker.warbandscripts.panel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import toker.warbandscripts.panel.entity.DoorKey;
-import toker.warbandscripts.panel.entity.Inventory;
-import toker.warbandscripts.panel.entity.InventorySlot;
-import toker.warbandscripts.panel.entity.Player;
+import toker.warbandscripts.panel.entity.*;
 import toker.warbandscripts.panel.repository.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,14 +25,19 @@ public class PlayerService {
     @Autowired
     private DoorKeyRepository doorKeyRepository;
 
+    @Autowired
+    private NoticeBoadAccessRepository noticeBoadAccessRepository;
+
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
                          InventorySlotRepository inventorySlotRepository,
-                         DoorKeyRepository doorKeyRepository) {
+                         DoorKeyRepository doorKeyRepository,
+                         NoticeBoadAccessRepository noticeBoadAccessRepository) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
         this.doorKeyRepository = doorKeyRepository;
+        this.noticeBoadAccessRepository = noticeBoadAccessRepository;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -79,5 +81,9 @@ public class PlayerService {
 
     public List<DoorKey> getPlayerDoorKeys(int playerId) {
         return doorKeyRepository.findAllByPlayerId(playerId);
+    }
+
+    public List<NoticeBoardAccess> getPlayerBoardAccesses(int playerId) {
+        return noticeBoadAccessRepository.findAllByPlayerId(playerId);
     }
 }

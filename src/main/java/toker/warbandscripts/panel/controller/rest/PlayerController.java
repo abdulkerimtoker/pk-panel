@@ -3,22 +3,12 @@ package toker.warbandscripts.panel.controller.rest;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import toker.warbandscripts.panel.annotation.FilterSpecification;
-import toker.warbandscripts.panel.entity.DoorKey;
-import toker.warbandscripts.panel.entity.Inventory;
-import toker.warbandscripts.panel.entity.InventorySlot;
-import toker.warbandscripts.panel.entity.Player;
-import toker.warbandscripts.panel.repository.InventoryRepository;
-import toker.warbandscripts.panel.repository.InventorySlotRepository;
-import toker.warbandscripts.panel.repository.PlayerRepository;
+import toker.warbandscripts.panel.entity.*;
 import toker.warbandscripts.panel.service.PlayerService;
 
 import javax.persistence.OptimisticLockException;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -52,8 +42,9 @@ public class PlayerController {
     public void versionConflict() {}
 
     @PutMapping("/api/player/{playerId}/{field}")
-    public boolean updatePlayerField(@PathVariable int playerId, @PathVariable String field,
-                          @RequestBody Object value) {
+    public boolean updatePlayerField(@PathVariable int playerId,
+                                     @PathVariable String field,
+                                     @RequestBody Object value) {
         return playerService.setPlayerField(playerId, field, value);
     }
 
@@ -71,5 +62,11 @@ public class PlayerController {
     @JsonView(DoorKey.View.Door.class)
     public List<DoorKey> doorKeys(@PathVariable int playerId) {
         return playerService.getPlayerDoorKeys(playerId);
+    }
+
+    @GetMapping("/api/player/{playerId}/boardAccesses")
+    @JsonView(NoticeBoardAccess.View.Board.class)
+    public List<NoticeBoardAccess> boardAccesses(@PathVariable int playerId) {
+        return playerService.getPlayerBoardAccesses(playerId);
     }
 }

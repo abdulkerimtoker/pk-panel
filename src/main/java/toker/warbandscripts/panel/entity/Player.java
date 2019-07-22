@@ -558,7 +558,7 @@ public class Player {
         this.inventories = inventories;
     }
 
-    @OneToMany(mappedBy = "playerByUserId")
+    @OneToMany(mappedBy = "player")
     @JsonIgnore
     public Collection<NoticeBoardAccess> getNoticeBoardAccesses() {
         return noticeBoardAccesses;
@@ -579,7 +579,6 @@ public class Player {
     }
 
     @OneToMany(mappedBy = "player")
-    @OrderBy("creationTime ASC")
     @JsonIgnore
     public Collection<CraftingRequest> getCraftingRequests() {
         return craftingRequests;
