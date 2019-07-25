@@ -72,5 +72,6 @@ public class NoticeBoard {
     public static class View {
         public static class Accesses {}
         public static class Entries {}
+        public static class None {}
     }
 }
