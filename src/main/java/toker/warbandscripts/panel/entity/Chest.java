@@ -10,6 +10,8 @@ public class Chest {
     private Integer id;
     private String name;
     private Integer size;
+    private Integer type;
+
     private Collection<ChestSlot> chestSlotsById;
 
     @Id
@@ -41,6 +43,16 @@ public class Chest {
 
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    @Basic
+    @Column(name = "chest_type", nullable = true)
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     @Override
