@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -10,7 +12,7 @@ public class Profession {
     private Integer id;
     private String name;
     private Integer max_tier;
-    private Collection<ProfessionAssignment> professionAssignmentsById;
+    private Collection<ProfessionAssignment> professionAssignments;
     private Integer maxTier;
 
     @Id
@@ -44,13 +46,14 @@ public class Profession {
         this.max_tier = max_tier;
     }
 
-    @OneToMany(mappedBy = "professionByProfessionId")
-    public Collection<ProfessionAssignment> getProfessionAssignmentsById() {
-        return professionAssignmentsById;
+    @OneToMany(mappedBy = "profession")
+    @JsonIgnore
+    public Collection<ProfessionAssignment> getProfessionAssignments() {
+        return professionAssignments;
     }
 
-    public void setProfessionAssignmentsById(Collection<ProfessionAssignment> professionAssignmentsById) {
-        this.professionAssignmentsById = professionAssignmentsById;
+    public void setProfessionAssignments(Collection<ProfessionAssignment> professionAssignments) {
+        this.professionAssignments = professionAssignments;
     }
 
     @Override

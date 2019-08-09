@@ -15,29 +15,29 @@ public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
-
     @Autowired
     private InventoryRepository inventoryRepository;
-
     @Autowired
     private InventorySlotRepository inventorySlotRepository;
-
     @Autowired
     private DoorKeyRepository doorKeyRepository;
-
     @Autowired
     private NoticeBoadAccessRepository noticeBoadAccessRepository;
+    @Autowired
+    private ProfessionAssignmentRepository professionAssignmentRepository;
 
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
                          InventorySlotRepository inventorySlotRepository,
                          DoorKeyRepository doorKeyRepository,
-                         NoticeBoadAccessRepository noticeBoadAccessRepository) {
+                         NoticeBoadAccessRepository noticeBoadAccessRepository,
+                         ProfessionAssignmentRepository professionAssignmentRepository) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
         this.doorKeyRepository = doorKeyRepository;
         this.noticeBoadAccessRepository = noticeBoadAccessRepository;
+        this.professionAssignmentRepository = professionAssignmentRepository;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -85,5 +85,9 @@ public class PlayerService {
 
     public List<NoticeBoardAccess> getPlayerBoardAccesses(int playerId) {
         return noticeBoadAccessRepository.findAllByPlayerId(playerId);
+    }
+
+    public List<ProfessionAssignment> getPlayerProfessions(int playerId) {
+        return professionAssignmentRepository.findAllByPlayerId(playerId);
     }
 }

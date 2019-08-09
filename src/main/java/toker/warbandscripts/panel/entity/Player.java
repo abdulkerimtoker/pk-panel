@@ -568,7 +568,7 @@ public class Player {
         this.noticeBoardAccesses = noticeBoardAccesses;
     }
 
-    @OneToMany(mappedBy = "playerByPlayerId")
+    @OneToMany(mappedBy = "player")
     @JsonIgnore
     public Collection<ProfessionAssignment> getProfessionAssignments() {
         return professionAssignments;

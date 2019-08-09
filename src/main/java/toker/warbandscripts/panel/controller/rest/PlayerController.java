@@ -69,4 +69,10 @@ public class PlayerController {
     public List<NoticeBoardAccess> boardAccesses(@PathVariable int playerId) {
         return playerService.getPlayerBoardAccesses(playerId);
     }
+
+    @GetMapping("/api/player/{playerId}/professions")
+    @JsonView(ProfessionAssignment.View.Profession.class)
+    public List<ProfessionAssignment> professions(@PathVariable int playerId) {
+        return playerService.getPlayerProfessions(playerId);
+    }
 }

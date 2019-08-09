@@ -2,9 +2,7 @@ package toker.warbandscripts.panel.controller.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.entity.Door;
 import toker.warbandscripts.panel.entity.DoorKey;
 import toker.warbandscripts.panel.service.DoorService;
@@ -31,5 +29,11 @@ public class DoorController {
     @JsonView(Door.View.class)
     public List<Door> door() {
         return doorService.getAllDoors();
+    }
+
+    @PutMapping("/api/player/doorKey")
+    @JsonView(DoorKey.View.Door.class)
+    public DoorKey saveDoorKey(@RequestBody DoorKey doorKey) {
+        return doorService.saveDoorKey(doorKey);
     }
 }
