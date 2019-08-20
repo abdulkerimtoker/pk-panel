@@ -70,7 +70,7 @@ public class PlayerController {
         return playerService.getPlayerBoardAccesses(playerId);
     }
 
-    @GetMapping("/api/player/{playerId}/professions")
+    @GetMapping("/api/player/{playerId}/professionAssignments")
     @JsonView(ProfessionAssignment.View.Profession.class)
     public List<ProfessionAssignment> professions(@PathVariable int playerId) {
         return playerService.getPlayerProfessions(playerId);

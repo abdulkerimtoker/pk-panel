@@ -26,7 +26,7 @@ public class ProfessionController {
         return professionService.getAllProfessions();
     }
 
-    @PutMapping("/api/player/profession")
+    @PutMapping("/api/player/professionAssignment")
     @JsonView(ProfessionAssignment.View.Profession.class)
     public ProfessionAssignment saveProfessionAssignment(ProfessionAssignment professionAssignment) {
         return professionService.saveProfessionAssignment(professionAssignment);
