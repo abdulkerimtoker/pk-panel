@@ -25,19 +25,23 @@ public class PlayerService {
     private NoticeBoadAccessRepository noticeBoadAccessRepository;
     @Autowired
     private ProfessionAssignmentRepository professionAssignmentRepository;
+    @Autowired
+    private BanRepository banRepository;
 
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
                          InventorySlotRepository inventorySlotRepository,
                          DoorKeyRepository doorKeyRepository,
                          NoticeBoadAccessRepository noticeBoadAccessRepository,
-                         ProfessionAssignmentRepository professionAssignmentRepository) {
+                         ProfessionAssignmentRepository professionAssignmentRepository,
+                         BanRepository banRepository) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
         this.doorKeyRepository = doorKeyRepository;
         this.noticeBoadAccessRepository = noticeBoadAccessRepository;
         this.professionAssignmentRepository = professionAssignmentRepository;
+        this.banRepository = banRepository;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -89,5 +93,17 @@ public class PlayerService {
 
     public List<ProfessionAssignment> getPlayerProfessions(int playerId) {
         return professionAssignmentRepository.findAllByPlayerId(playerId);
+    }
+
+    public List<Ban> getPlayerBans(int playerUniqueId) {
+        return banRepository.findAllByPlayerUniqueId(playerUniqueId);
+    }
+
+    public Ban banPlayer(int playerId, int minutes, boolean isPermanent) {
+        Player player = getPlayer(playerId).orElse(null);
+        if (player != null) {
+            Ban ban = new Ban();
+        }
+        return null;
     }
 }

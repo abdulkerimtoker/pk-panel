@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import toker.warbandscripts.panel.entity.Profession;
 import toker.warbandscripts.panel.entity.ProfessionAssignment;
@@ -28,7 +29,7 @@ public class ProfessionController {
 
     @PutMapping("/api/player/professionAssignment")
     @JsonView(ProfessionAssignment.View.Profession.class)
-    public ProfessionAssignment saveProfessionAssignment(ProfessionAssignment professionAssignment) {
+    public ProfessionAssignment saveProfessionAssignment(@RequestBody ProfessionAssignment professionAssignment) {
         return professionService.saveProfessionAssignment(professionAssignment);
     }
 }
