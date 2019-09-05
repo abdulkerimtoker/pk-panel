@@ -40,7 +40,7 @@ public class PanelUser {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 32)
+    @Column(name = "password", nullable = false, length = 128)
     public String getPassword() {
         return password;
     }
