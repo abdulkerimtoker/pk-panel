@@ -30,6 +30,7 @@ public class ProfessionController {
     @PutMapping("/api/player/professionAssignment")
     @JsonView(ProfessionAssignment.View.Profession.class)
     public ProfessionAssignment saveProfessionAssignment(@RequestBody ProfessionAssignment professionAssignment) {
+
         return professionService.saveProfessionAssignment(professionAssignment);
     }
 }

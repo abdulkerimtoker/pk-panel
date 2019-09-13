@@ -1,5 +1,6 @@
 package toker.warbandscripts.panel.config;
 
+import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,10 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.openid.OpenID4JavaConsumer;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
-import org.springframework.security.openid.OpenIDConsumer;
-import org.springframework.security.openid.OpenIDConsumerException;
+import org.springframework.security.openid.*;
 import toker.warbandscripts.panel.authentication.PanelUserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .anyRequest()
-                .authenticated()
+                .permitAll()
             .and()
                 .openidLogin()
                 .permitAll()

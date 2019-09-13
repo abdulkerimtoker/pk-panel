@@ -1,6 +1,8 @@
 package toker.warbandscripts.panel.config;
 
 import org.apache.log4j.Logger;
+import org.openid4java.consumer.ConsumerException;
+import org.openid4java.consumer.ConsumerManager;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,9 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.openid.NullAxFetchListFactory;
+import org.springframework.security.openid.OpenID4JavaConsumer;
+import org.springframework.security.openid.OpenIDConsumer;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -40,5 +45,10 @@ public class GeneralBeanConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public OpenIDConsumer openIDConsumer() throws ConsumerException {
+        return new OpenID4JavaConsumer(new ConsumerManager(), new NullAxFetchListFactory());
     }
 }
