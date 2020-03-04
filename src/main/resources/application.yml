@@ -1,0 +1,4 @@
+spring:
+  jackson:
+    mapper:
+      default-view-inclusion: true
