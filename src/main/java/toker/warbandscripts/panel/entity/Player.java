@@ -20,6 +20,7 @@ public class Player {
     private Integer posX;
     private Integer posY;
     private Integer posZ;
+    private Server server;
     private Faction faction;
     private Troop troop;
     private String sceneName;
@@ -586,6 +587,16 @@ public class Player {
 
     public void setCraftingRequests(Collection<CraftingRequest> craftingRequests) {
         this.craftingRequests = craftingRequests;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 
     @ManyToOne

@@ -1,5 +1,8 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -7,11 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "panel_user")
-@NamedEntityGraph(name = "PanelUser.detail", attributeNodes = @NamedAttributeNode("authorityAssignments"))
 public class PanelUser {
     private Integer id;
     private String username;
-    private String password;
+    private String claimedIdentity;
     private Timestamp creationTime;
     private Boolean isLocked;
     private Collection<Ban> bans;
@@ -40,13 +42,13 @@ public class PanelUser {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 128)
-    public String getPassword() {
-        return password;
+    @Column(name = "claimed_identity", nullable = true, length = 128)
+    public String getClaimedIdentity() {
+        return claimedIdentity;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setClaimedIdentity(String claimedIdentity) {
+        this.claimedIdentity = claimedIdentity;
     }
 
     @Basic
@@ -74,19 +76,16 @@ public class PanelUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PanelUser panelUser = (PanelUser) o;
-        return Objects.equals(id, panelUser.id) &&
-                Objects.equals(username, panelUser.username) &&
-                Objects.equals(password, panelUser.password) &&
-                Objects.equals(creationTime, panelUser.creationTime) &&
-                Objects.equals(isLocked, panelUser.isLocked);
+        return Objects.equals(id, panelUser.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, creationTime, isLocked);
+        return Objects.hash(id, username, claimedIdentity, creationTime, isLocked);
     }
 
     @OneToMany(mappedBy = "panelUser")
+    @JsonView(View.Bans.class)
     public Collection<Ban> getBans() {
         return bans;
     }
@@ -106,6 +105,7 @@ public class PanelUser {
     }
 
     @OneToMany(mappedBy = "panelUser")
+    @JsonView(View.AuthorityAssignments.class)
     public Collection<PanelUserAuthorityAssignment> getAuthorityAssignments() {
         return authorityAssignments;
     }
@@ -114,13 +114,8 @@ public class PanelUser {
         this.authorityAssignments = authorityAssignments;
     }
 
-    @Transient
-    public boolean hasAuthority(PanelUserAuthority authority) {
-        for (PanelUserAuthorityAssignment assignment : getAuthorityAssignments()) {
-            if (assignment.getAuthority().getId() == authority.getId()) {
-                return true;
-            }
-        }
-        return false;
+    public interface View {
+        interface Bans {}
+        interface AuthorityAssignments {}
     }
 }

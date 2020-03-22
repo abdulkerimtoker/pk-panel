@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,7 +9,7 @@ import javax.persistence.*;
 public class CraftingStationInstance {
     private Integer id;
     private String name;
-    private CraftingStation craftingStationByStationId;
+    private CraftingStation craftingStation;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +34,16 @@ public class CraftingStationInstance {
 
     @ManyToOne
     @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
-    public CraftingStation getCraftingStationByStationId() {
-        return craftingStationByStationId;
+    @JsonView(View.CraftingStation.class)
+    public CraftingStation getCraftingStation() {
+        return craftingStation;
     }
 
-    public void setCraftingStationByStationId(CraftingStation craftingStationByStationId) {
-        this.craftingStationByStationId = craftingStationByStationId;
+    public void setCraftingStation(CraftingStation craftingStationByStationId) {
+        this.craftingStation = craftingStationByStationId;
+    }
+
+    public interface View {
+        interface CraftingStation {}
     }
 }

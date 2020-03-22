@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.entity.*;
+import toker.warbandscripts.panel.service.BanService;
 import toker.warbandscripts.panel.service.PlayerService;
 
 import javax.persistence.OptimisticLockException;
@@ -14,7 +16,6 @@ import java.util.List;
 @RestController
 public class PlayerController {
 
-    @Autowired
     private PlayerService playerService;
 
     public PlayerController(PlayerService playerService) {
@@ -33,6 +34,7 @@ public class PlayerController {
     }
 
     @PutMapping("/api/player")
+    @PreAuthorize("hasRole(@serverService.getServerRoleName('PLAYER_MANAGER', #player))")
     public Player updatePlayer(@RequestBody Player player) {
         return playerService.savePlayer(player);
     }
@@ -75,4 +77,15 @@ public class PlayerController {
     public List<ProfessionAssignment> professions(@PathVariable int playerId) {
         return playerService.getPlayerProfessions(playerId);
     }
+
+    @GetMapping("/api/player/{playerId}/craftingRequests")
+    @JsonView(PlayerCraftingRequestView.class)
+    public List<CraftingRequest> craftingRequests(@PathVariable int playerId) {
+        return playerService.getPlayerCraftingRequests(playerId);
+    }
+
+    public interface PlayerCraftingRequestView extends
+            CraftingRequest.View.CraftingRecipe,
+            CraftingRequest.View.CraftingStationInstance,
+            CraftingRecipe.View.Item {}
 }

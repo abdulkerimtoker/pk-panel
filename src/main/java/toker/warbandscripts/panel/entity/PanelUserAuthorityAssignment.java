@@ -8,6 +8,7 @@ import java.util.Objects;
 public class PanelUserAuthorityAssignment {
     private Integer id;
     private PanelUser panelUser;
+    private Server server;
     private PanelUserAuthority authority;
 
     @Id
@@ -21,19 +22,6 @@ public class PanelUserAuthorityAssignment {
         this.id = id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PanelUserAuthorityAssignment that = (PanelUserAuthorityAssignment) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
     @ManyToOne
     @JoinColumn(name = "panel_user_id", referencedColumnName = "id", nullable = false)
     public PanelUser getPanelUser() {
@@ -45,6 +33,16 @@ public class PanelUserAuthorityAssignment {
     }
 
     @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    @ManyToOne
     @JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false)
     public PanelUserAuthority getAuthority() {
         return authority;
@@ -52,5 +50,18 @@ public class PanelUserAuthorityAssignment {
 
     public void setAuthority(PanelUserAuthority authority) {
         this.authority = authority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PanelUserAuthorityAssignment that = (PanelUserAuthorityAssignment) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

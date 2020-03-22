@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "door_key")
 public class DoorKey {
     private Integer id;
-    private Boolean isOwner;
+    private Boolean isOwner = false;
     private Door door;
     private Player player;
 

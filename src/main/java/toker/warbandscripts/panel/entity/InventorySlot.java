@@ -1,7 +1,6 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -76,22 +75,22 @@ public class InventorySlot {
 
 class InventorySlotPK implements Serializable {
     private Integer slot;
-    private Integer inventoryByInventoryId;
+    private Integer inventory;
 
     public Integer getSlot() {
         return slot;
     }
 
     public Integer getInventory() {
-        return inventoryByInventoryId;
+        return inventory;
     }
 
     public void setSlot(Integer slot) {
         this.slot = slot;
     }
 
-    public void setInventory(Integer inventoryByInventoryId) {
-        this.inventoryByInventoryId = inventoryByInventoryId;
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
     }
 
     @Override
@@ -99,11 +98,11 @@ class InventorySlotPK implements Serializable {
         if (obj == this) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         InventorySlotPK that = (InventorySlotPK)obj;
-        return Objects.equals(this.slot, that.slot) && Objects.equals(this.inventoryByInventoryId, that.inventoryByInventoryId);
+        return Objects.equals(this.slot, that.slot) && Objects.equals(this.inventory, that.inventory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.slot, this.inventoryByInventoryId);
+        return Objects.hash(this.slot, this.inventory);
     }
 }

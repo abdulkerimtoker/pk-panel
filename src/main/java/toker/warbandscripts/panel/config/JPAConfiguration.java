@@ -1,12 +1,8 @@
 package toker.warbandscripts.panel.config;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
@@ -30,8 +26,6 @@ public class JPAConfiguration extends JpaBaseConfiguration {
         super(dataSource, properties, jtaTransactionManager, transactionManagerCustomizers);
     }
 
-
-
     @Override
     protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
         EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
@@ -44,7 +38,8 @@ public class JPAConfiguration extends JpaBaseConfiguration {
     protected Map<String, Object> getVendorProperties() {
         HashMap<String, Object> map = new HashMap<>();
         map.put(PersistenceUnitProperties.WEAVING, "false");
-        map.put(PersistenceUnitProperties.CACHE_SHARED_DEFAULT, "false");
+        map.put(PersistenceUnitProperties.CACHE_SHARED_DEFAULT, "true");
+        map.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
         map.put(PersistenceUnitProperties.ALLOW_ZERO_ID, "true");
         return map;
     }

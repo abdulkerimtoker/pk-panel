@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -46,6 +48,7 @@ public class CraftingRequest {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false)
+    @JsonView(View.CraftingRecipe.class)
     public CraftingRecipe getCraftingRecipe() {
         return craftingRecipe;
     }
@@ -56,6 +59,7 @@ public class CraftingRequest {
 
     @ManyToOne
     @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false)
+    @JsonView(View.Player.class)
     public Player getPlayer() {
         return player;
     }
@@ -66,11 +70,18 @@ public class CraftingRequest {
 
     @ManyToOne
     @JoinColumn(name = "station_instance_id", referencedColumnName = "id", nullable = false)
+    @JsonView(View.CraftingStationInstance.class)
     public CraftingStationInstance getCraftingStationInstance() {
         return craftingStationInstance;
     }
 
     public void setCraftingStationInstance(CraftingStationInstance craftingStationInstance) {
         this.craftingStationInstance = craftingStationInstance;
+    }
+
+    public interface View {
+        interface CraftingStationInstance {}
+        interface Player {}
+        interface CraftingRecipe {}
     }
 }

@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -10,11 +12,11 @@ public class CraftingRecipe {
     private Integer id;
     private Integer professionTier;
     private Integer price;
-    private CraftingStation craftingStationByStationId;
-    private Profession professionByProfessionId;
-    private Item itemByItemId;
+    private CraftingStation craftingStation;
+    private Profession profession;
+    private Item item;
     private Integer hours;
-    private Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirementsById;
+    private Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirements;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,32 +66,35 @@ public class CraftingRecipe {
 
     @ManyToOne
     @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
-    public CraftingStation getCraftingStationByStationId() {
-        return craftingStationByStationId;
+    @JsonView(View.CraftingStation.class)
+    public CraftingStation getCraftingStation() {
+        return craftingStation;
     }
 
-    public void setCraftingStationByStationId(CraftingStation craftingStationByStationId) {
-        this.craftingStationByStationId = craftingStationByStationId;
+    public void setCraftingStation(CraftingStation craftingStationByStationId) {
+        this.craftingStation = craftingStationByStationId;
     }
 
     @ManyToOne
     @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
-    public Profession getProfessionByProfessionId() {
-        return professionByProfessionId;
+    @JsonView(View.Profession.class)
+    public Profession getProfession() {
+        return profession;
     }
 
-    public void setProfessionByProfessionId(Profession professionByProfessionId) {
-        this.professionByProfessionId = professionByProfessionId;
+    public void setProfession(Profession professionByProfessionId) {
+        this.profession = professionByProfessionId;
     }
 
     @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
-    public Item getItemByItemId() {
-        return itemByItemId;
+    @JsonView(View.Item.class)
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemByItemId(Item itemByItemId) {
-        this.itemByItemId = itemByItemId;
+    public void setItem(Item itemByItemId) {
+        this.item = itemByItemId;
     }
 
     @Basic
@@ -103,11 +108,19 @@ public class CraftingRecipe {
     }
 
     @OneToMany(mappedBy = "craftingRecipeByRecipeId")
-    public Collection<CraftingRecipeItemRequirement> getCraftingRecipeItemRequirementsById() {
-        return craftingRecipeItemRequirementsById;
+    @JsonView(View.ItemRequirements.class)
+    public Collection<CraftingRecipeItemRequirement> getCraftingRecipeItemRequirements() {
+        return craftingRecipeItemRequirements;
     }
 
-    public void setCraftingRecipeItemRequirementsById(Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirementsById) {
-        this.craftingRecipeItemRequirementsById = craftingRecipeItemRequirementsById;
+    public void setCraftingRecipeItemRequirements(Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirementsById) {
+        this.craftingRecipeItemRequirements = craftingRecipeItemRequirementsById;
+    }
+
+    public interface View {
+        interface Item {}
+        interface Profession {}
+        interface CraftingStation {}
+        interface ItemRequirements {}
     }
 }

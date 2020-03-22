@@ -8,11 +8,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "panel_user_authority")
-public class PanelUserAuthority implements GrantedAuthority {
+public class PanelUserAuthority {
     private Integer id;
     private String authorityName;
     private String authorityDescription;
-    private Collection<PanelUserAuthorityAssignment> authorityAssignments;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class PanelUserAuthority implements GrantedAuthority {
     }
 
     @Basic
-    @Column(name = "authority_name", nullable = false, length = 32)
+    @Column(name = "authority_name", nullable = false, unique = true, length = 64)
     public String getAuthorityName() {
         return authorityName;
     }
@@ -36,7 +35,7 @@ public class PanelUserAuthority implements GrantedAuthority {
     }
 
     @Basic
-    @Column(name = "authority_description", nullable = false, length = 64)
+    @Column(name = "authority_description", nullable = false, length = 128)
     public String getAuthorityDescription() {
         return authorityDescription;
     }
@@ -58,20 +57,5 @@ public class PanelUserAuthority implements GrantedAuthority {
     @Override
     public int hashCode() {
         return Objects.hash(id, authorityName, authorityDescription);
-    }
-
-    @OneToMany(mappedBy = "authority")
-    public Collection<PanelUserAuthorityAssignment> getAuthorityAssignments() {
-        return authorityAssignments;
-    }
-
-    public void setAuthorityAssignments(Collection<PanelUserAuthorityAssignment> authorityAssignments) {
-        this.authorityAssignments = authorityAssignments;
-    }
-
-    @Transient
-    @Override
-    public String getAuthority() {
-        return getAuthorityName();
     }
 }

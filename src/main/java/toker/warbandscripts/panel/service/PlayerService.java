@@ -13,20 +13,14 @@ import java.util.Optional;
 @Service
 public class PlayerService {
 
-    @Autowired
+
     private PlayerRepository playerRepository;
-    @Autowired
     private InventoryRepository inventoryRepository;
-    @Autowired
     private InventorySlotRepository inventorySlotRepository;
-    @Autowired
     private DoorKeyRepository doorKeyRepository;
-    @Autowired
     private NoticeBoadAccessRepository noticeBoadAccessRepository;
-    @Autowired
     private ProfessionAssignmentRepository professionAssignmentRepository;
-    @Autowired
-    private BanRepository banRepository;
+    private CraftingRequestRepository craftingRequestRepository;
 
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
@@ -34,14 +28,14 @@ public class PlayerService {
                          DoorKeyRepository doorKeyRepository,
                          NoticeBoadAccessRepository noticeBoadAccessRepository,
                          ProfessionAssignmentRepository professionAssignmentRepository,
-                         BanRepository banRepository) {
+                         CraftingRequestRepository craftingRequestRepository) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
         this.doorKeyRepository = doorKeyRepository;
         this.noticeBoadAccessRepository = noticeBoadAccessRepository;
         this.professionAssignmentRepository = professionAssignmentRepository;
-        this.banRepository = banRepository;
+        this.craftingRequestRepository = craftingRequestRepository;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -95,15 +89,7 @@ public class PlayerService {
         return professionAssignmentRepository.findAllByPlayerId(playerId);
     }
 
-    public List<Ban> getPlayerBans(int playerUniqueId) {
-        return banRepository.findAllByPlayerUniqueId(playerUniqueId);
-    }
-
-    public Ban banPlayer(int playerId, int minutes, boolean isPermanent) {
-        Player player = getPlayer(playerId).orElse(null);
-        if (player != null) {
-            Ban ban = new Ban();
-        }
-        return null;
+    public List<CraftingRequest> getPlayerCraftingRequests(int playerId) {
+        return craftingRequestRepository.findAllByPlayerId(playerId);
     }
 }

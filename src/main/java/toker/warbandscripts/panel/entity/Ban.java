@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -10,8 +12,8 @@ public class Ban {
     private Integer id;
     private Integer playerUniqueId;
     private Timestamp time;
-    private Timestamp expiryTime;
-    private Boolean undone;
+    private Boolean isUndone;
+    private Boolean isPermanent;
     private String reason;
     private PanelUser panelUser;
 
@@ -26,7 +28,6 @@ public class Ban {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "player_unique_id", nullable = false)
     public Integer getPlayerUniqueId() {
         return playerUniqueId;
@@ -36,7 +37,6 @@ public class Ban {
         this.playerUniqueId = playerUniqueId;
     }
 
-    @Basic
     @Column(name = "time", nullable = false)
     public Timestamp getTime() {
         return time;
@@ -46,28 +46,25 @@ public class Ban {
         this.time = time;
     }
 
-    @Basic
-    @Column(name = "expiry_time", nullable = true)
-    public Timestamp getExpiryTime() {
-        return expiryTime;
-    }
-
-    public void setExpiryTime(Timestamp expiryTime) {
-        this.expiryTime = expiryTime;
-    }
-
-    @Basic
-    @Column(name = "undone", nullable = false)
+    @Column(name = "is_undone", nullable = false)
     public Boolean getUndone() {
-        return undone;
+        return isUndone;
     }
 
     public void setUndone(Boolean undone) {
-        this.undone = undone;
+        isUndone = undone;
     }
 
-    @Basic
-    @Column(name = "reason", nullable = false, length = 256)
+    @Column(name = "is_permanent", nullable = false)
+    public Boolean getPermanent() {
+        return isPermanent;
+    }
+
+    public void setPermanent(Boolean permanent) {
+        isPermanent = permanent;
+    }
+
+    @Column(name = "reason", nullable = false, length = 512)
     public String getReason() {
         return reason;
     }
@@ -81,26 +78,27 @@ public class Ban {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ban ban = (Ban) o;
-        return Objects.equals(id, ban.id) &&
-                Objects.equals(playerUniqueId, ban.playerUniqueId) &&
-                Objects.equals(time, ban.time) &&
-                Objects.equals(expiryTime, ban.expiryTime) &&
-                Objects.equals(undone, ban.undone) &&
-                Objects.equals(reason, ban.reason);
+        return Objects.equals(id, ban.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, playerUniqueId, time, expiryTime, undone, reason);
+        return Objects.hash(id, playerUniqueId, time, isUndone, isPermanent, reason);
     }
 
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id", nullable = false)
+    @JsonView(Ban.View.PanelUser.class)
     public PanelUser getPanelUser() {
         return panelUser;
     }
 
     public void setPanelUser(PanelUser panelUser) {
         this.panelUser = panelUser;
+    }
+
+    public class View {
+        public class PanelUser {}
+        public class None {}
     }
 }

@@ -110,7 +110,7 @@ public class AdminPermissions {
     }
 
     @Basic
-    @Column(name = "freeze", nullable = true)
+    @Column(name = "can_freeze", nullable = true)
     public Boolean getFreeze() {
         return freeze;
     }

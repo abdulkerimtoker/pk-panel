@@ -70,7 +70,7 @@ public class Chest {
         return Objects.hash(id, name, size);
     }
 
-    @OneToMany(mappedBy = "chestByChestId")
+    @OneToMany(mappedBy = "chest")
     public Collection<ChestSlot> getChestSlotsById() {
         return chestSlotsById;
     }

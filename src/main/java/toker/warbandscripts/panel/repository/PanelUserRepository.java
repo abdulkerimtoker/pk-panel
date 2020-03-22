@@ -6,4 +6,5 @@ import toker.warbandscripts.panel.entity.PanelUser;
 
 public interface PanelUserRepository extends JpaRepository<PanelUser, Integer> {
     PanelUser findByUsername(String username);
+    PanelUser findByClaimedIdentity(String claimedIdentity);
 }

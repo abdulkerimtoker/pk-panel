@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
@@ -58,11 +60,16 @@ public class PanelUserRank {
     }
 
     @OneToMany(mappedBy = "rank")
+    @JsonView(View.PanelUsers.class)
     public Collection<PanelUser> getPanelUsers() {
         return panelUsers;
     }
 
     public void setPanelUsers(Collection<PanelUser> panelUsers) {
         this.panelUsers = panelUsers;
+    }
+
+    public class View {
+        public class PanelUsers {}
     }
 }

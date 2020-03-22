@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 public class FactionController {
 
-    @Autowired
     private FactionRepository factionRepository;
 
     public FactionController(FactionRepository factionRepository) {

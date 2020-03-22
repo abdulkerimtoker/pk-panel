@@ -10,7 +10,6 @@ import toker.warbandscripts.panel.service.PanelConfigurationService;
 @Configuration
 public class DataSourceConfiguration {
 
-    @Autowired
     private PanelConfigurationService configurationService;
 
     public DataSourceConfiguration(PanelConfigurationService configurationService) {
@@ -21,8 +20,8 @@ public class DataSourceConfiguration {
     @Qualifier("dataSource")
     public BasicDataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl(String.format("jdbc:mysql://%s:%s/%s?zeroDateTimeBehavior=convertToNull",
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl(String.format("jdbc:postgresql://%s:%s/%s",
                 configurationService.getProperty("PANEL_DB_HOST"),
                 configurationService.getProperty("PANEL_DB_PORT"),
                 configurationService.getProperty("PANEL_DB_NAME")));

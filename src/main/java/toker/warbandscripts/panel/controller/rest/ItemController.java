@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 public class ItemController {
 
-    @Autowired
     private ItemRepository itemRepository;
 
     public ItemController(ItemRepository itemRepository) {

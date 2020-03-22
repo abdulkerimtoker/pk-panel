@@ -1,6 +1,5 @@
 package toker.warbandscripts.panel.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import toker.warbandscripts.panel.entity.Profession;
 import toker.warbandscripts.panel.entity.ProfessionAssignment;
@@ -12,9 +11,7 @@ import java.util.List;
 @Service
 public class ProfessionService {
 
-    @Autowired
     private ProfessionRepository professionRepository;
-    @Autowired
     private ProfessionAssignmentRepository professionAssignmentRepository;
 
     public ProfessionService(ProfessionRepository professionRepository,

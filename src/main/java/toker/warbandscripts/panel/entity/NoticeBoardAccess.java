@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "notice_board_access")
 public class NoticeBoardAccess {
     private Integer id;
-    private Boolean isOwner;
+    private Boolean isOwner = false;
     private NoticeBoard board;
     private Player player;
 

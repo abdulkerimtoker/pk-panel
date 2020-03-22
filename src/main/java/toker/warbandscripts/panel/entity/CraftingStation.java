@@ -47,7 +47,7 @@ public class CraftingStation {
         return Objects.hash(id, name);
     }
 
-    @OneToMany(mappedBy = "craftingStationByStationId")
+    @OneToMany(mappedBy = "craftingStation")
     public Collection<CraftingRecipe> getCraftingRecipesById() {
         return craftingRecipesById;
     }
@@ -56,7 +56,7 @@ public class CraftingStation {
         this.craftingRecipesById = craftingRecipesById;
     }
 
-    @OneToMany(mappedBy = "craftingStationByStationId")
+    @OneToMany(mappedBy = "craftingStation")
     public Collection<CraftingStationInstance> getCraftingStationInstances() {
         return craftingStationInstances;
     }
