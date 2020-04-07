@@ -15,6 +15,6 @@ public interface BanRepository extends JpaRepository<Ban, Integer>, JpaSpecifica
 
     @Modifying
     @Transactional
-    @Query("UPDATE Ban SET isUndone = true WHERE playerUniqueId = ?1")
+    @Query("UPDATE Ban SET undone = true WHERE playerUniqueId = ?1")
     void undoAllByPlayerUniqueId(Integer playerUniqueId);
 }

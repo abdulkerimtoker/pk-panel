@@ -9,11 +9,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FactionRepository extends JpaRepository<Faction, Integer>, JpaSpecificationExecutor<Faction> {
-    @Override
-    @Cacheable("all-factions")
-    List<Faction> findAll();
-
-    @Override
-    @Cacheable("faction-by-id")
-    Optional<Faction> findById(Integer integer);
 }

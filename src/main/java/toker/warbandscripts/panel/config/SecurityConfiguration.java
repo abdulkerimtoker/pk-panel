@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/login", "/api/processLogin")
+                .antMatchers("/api/login", "/api/processLogin", "/api/vonPigIsARetard")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

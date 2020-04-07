@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.controller.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 public class BoardController {
 
-    @Autowired
     private BoardService boardService;
 
     public BoardController(BoardService boardService) {
@@ -29,6 +29,7 @@ public class BoardController {
     }
 
     @PutMapping("/api/player/boardAccess")
+    @PreAuthorize("hasRole(@serverService.getServerRoleName('BOARD_MANAGER', #boardAccess.player))")
     @JsonView(NoticeBoardAccess.View.Board.class)
     public NoticeBoardAccess saveBoardAccess(@RequestBody NoticeBoardAccess boardAccess) {
         return boardService.saveBoardAccess(boardAccess);

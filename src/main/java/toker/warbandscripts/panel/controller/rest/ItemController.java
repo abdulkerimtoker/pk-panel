@@ -19,6 +19,7 @@ public class ItemController {
     }
 
     @GetMapping("/api/item")
+    @Cacheable("items")
     public List<Item> items() {
         return itemRepository.findAll();
     }

@@ -10,8 +10,4 @@ import toker.warbandscripts.panel.entity.Item;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Integer>, JpaSpecificationExecutor<Item> {
-
-    @Override
-    @Cacheable("all-items")
-    List<Item> findAll();
 }

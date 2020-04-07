@@ -16,6 +16,7 @@ public class Ban {
     private Boolean isPermanent;
     private String reason;
     private PanelUser panelUser;
+    private Server server;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +74,28 @@ public class Ban {
         this.reason = reason;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "admin_id", referencedColumnName = "id", nullable = false)
+    @JsonView(Ban.View.PanelUser.class)
+    public PanelUser getPanelUser() {
+        return panelUser;
+    }
+
+    public void setPanelUser(PanelUser panelUser) {
+        this.panelUser = panelUser;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    @JsonView(Ban.View.Server.class)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,19 +109,9 @@ public class Ban {
         return Objects.hash(id, playerUniqueId, time, isUndone, isPermanent, reason);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id", referencedColumnName = "id", nullable = false)
-    @JsonView(Ban.View.PanelUser.class)
-    public PanelUser getPanelUser() {
-        return panelUser;
-    }
-
-    public void setPanelUser(PanelUser panelUser) {
-        this.panelUser = panelUser;
-    }
-
-    public class View {
-        public class PanelUser {}
-        public class None {}
+    public interface View {
+        interface PanelUser {}
+        interface None {}
+        interface Server {}
     }
 }

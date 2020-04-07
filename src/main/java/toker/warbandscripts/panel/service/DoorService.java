@@ -13,9 +13,7 @@ import java.util.Optional;
 @Service
 public class DoorService {
 
-    @Autowired
     private DoorRepository doorRepository;
-    @Autowired
     private DoorKeyRepository doorKeyRepository;
 
     public DoorService(DoorRepository doorRepository, DoorKeyRepository doorKeyRepository) {

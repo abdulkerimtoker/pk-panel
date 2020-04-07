@@ -10,11 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TroopRepository extends JpaRepository<Troop, Integer>, JpaSpecificationExecutor<Troop> {
-    @Override
-    @Cacheable("all-troops")
-    List<Troop> findAll();
-
-    @Override
-    @Cacheable("troop-by-id")
-    Optional<Troop> findById(Integer integer);
 }

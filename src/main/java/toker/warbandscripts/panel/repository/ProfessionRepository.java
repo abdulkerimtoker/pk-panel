@@ -9,8 +9,4 @@ import java.util.List;
 
 public interface ProfessionRepository extends JpaRepository<Profession, Integer>,
         JpaSpecificationExecutor<Profession> {
-
-    @Override
-    @Cacheable("all-professions")
-    List<Profession> findAll();
 }

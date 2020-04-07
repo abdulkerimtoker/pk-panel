@@ -27,31 +27,31 @@ public class Player {
     private String description1;
     private String description2;
     private String description3;
-    private Integer bodyArmor;
-    private Integer headArmor;
-    private Integer footArmor;
-    private Integer glovesArmor;
-    private Integer item0;
-    private Integer item1;
-    private Integer item2;
-    private Integer item3;
-    private Integer ammo0;
-    private Integer ammo1;
-    private Integer ammo2;
-    private Integer ammo3;
-    private Integer horseId;
-    private Integer horse1;
-    private Integer horse2;
-    private Integer horse3;
-    private Timestamp horse1WoundTime;
-    private Timestamp horse2WoundTime;
-    private Timestamp horse3WoundTime;
-    private Integer horse1WoundDuration;
-    private Integer horse2WoundDuration;
-    private Integer horse3WoundDuration;
-    private Integer horse1StableId;
-    private Integer horse2StableId;
-    private Integer horse3StableId;
+    private Item bodyArmor;
+    private Item headArmor;
+    private Item footArmor;
+    private Item handArmor;
+    private Item item_0;
+    private Item item_1;
+    private Item item_2;
+    private Item item_3;
+    private Integer ammo_0;
+    private Integer ammo_1;
+    private Integer ammo_2;
+    private Integer ammo_3;
+    private Item horse;
+    private Item horse_0;
+    private Item horse_1;
+    private Item horse_2;
+    private Timestamp horse_1_woundTime;
+    private Timestamp horse_2_woundTime;
+    private Timestamp horse_3_woundTime;
+    private Integer horse_1_woundDuration;
+    private Integer horse_2_woundDuration;
+    private Integer horse_3_woundDuration;
+    private Integer horse_1_stableId;
+    private Integer horse_2_stableId;
+    private Integer horse_3_stableId;
     private Integer ridingTier;
     private Timestamp woundTime;
     private Integer woundDuration;
@@ -76,7 +76,6 @@ public class Player {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "unique_id", nullable = false)
     public Integer getUniqueId() {
         return uniqueId;
@@ -86,7 +85,6 @@ public class Player {
         this.uniqueId = uniqueId;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 32)
     public String getName() {
         return name;
@@ -96,7 +94,6 @@ public class Player {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "gold", nullable = false)
     public Integer getGold() {
         return gold;
@@ -106,7 +103,6 @@ public class Player {
         this.gold = gold;
     }
 
-    @Basic
     @Column(name = "hp", nullable = false)
     public Integer getHp() {
         return hp;
@@ -116,7 +112,6 @@ public class Player {
         this.hp = hp;
     }
 
-    @Basic
     @Column(name = "food", nullable = false)
     public Integer getFood() {
         return food;
@@ -126,7 +121,6 @@ public class Player {
         this.food = food;
     }
 
-    @Basic
     @Column(name = "pos_x", nullable = false)
     public Integer getPosX() {
         return posX;
@@ -136,7 +130,6 @@ public class Player {
         this.posX = posX;
     }
 
-    @Basic
     @Column(name = "pos_y", nullable = false)
     public Integer getPosY() {
         return posY;
@@ -146,7 +139,6 @@ public class Player {
         this.posY = posY;
     }
 
-    @Basic
     @Column(name = "pos_z", nullable = false)
     public Integer getPosZ() {
         return posZ;
@@ -156,7 +148,6 @@ public class Player {
         this.posZ = posZ;
     }
 
-    @Basic
     @Column(name = "scene_name", nullable = false, length = 32)
     public String getSceneName() {
         return sceneName;
@@ -166,7 +157,6 @@ public class Player {
         this.sceneName = sceneName;
     }
 
-    @Basic
     @Column(name = "description_1", nullable = false, length = 128)
     public String getDescription1() {
         return description1;
@@ -176,7 +166,6 @@ public class Player {
         this.description1 = description1;
     }
 
-    @Basic
     @Column(name = "description_2", nullable = false, length = 128)
     public String getDescription2() {
         return description2;
@@ -186,7 +175,6 @@ public class Player {
         this.description2 = description2;
     }
 
-    @Basic
     @Column(name = "description_3", nullable = false, length = 128)
     public String getDescription3() {
         return description3;
@@ -196,154 +184,186 @@ public class Player {
         this.description3 = description3;
     }
 
-    @Basic
-    @Column(name = "body_armor", nullable = false)
-    public Integer getBodyArmor() {
+    @ManyToOne
+    @JoinColumn(
+            name = "body_armor_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getBodyArmor() {
         return bodyArmor;
     }
 
-    public void setBodyArmor(Integer bodyArmor) {
+    public void setBodyArmor(Item bodyArmor) {
         this.bodyArmor = bodyArmor;
     }
 
-    @Basic
-    @Column(name = "head_armor", nullable = false)
-    public Integer getHeadArmor() {
+    @ManyToOne
+    @JoinColumn(
+            name = "head_armor_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getHeadArmor() {
         return headArmor;
     }
 
-    public void setHeadArmor(Integer headArmor) {
+    public void setHeadArmor(Item headArmor) {
         this.headArmor = headArmor;
     }
 
-    @Basic
-    @Column(name = "foot_armor", nullable = false)
-    public Integer getFootArmor() {
+    @ManyToOne
+    @JoinColumn(
+            name = "foot_armor_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getFootArmor() {
         return footArmor;
     }
 
-    public void setFootArmor(Integer footArmor) {
+    public void setFootArmor(Item footArmor) {
         this.footArmor = footArmor;
     }
 
-    @Basic
-    @Column(name = "gloves_armor", nullable = false)
-    public Integer getGlovesArmor() {
-        return glovesArmor;
+    @ManyToOne
+    @JoinColumn(
+            name = "hand_armor_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getHandArmor() {
+        return handArmor;
     }
 
-    public void setGlovesArmor(Integer glovesArmor) {
-        this.glovesArmor = glovesArmor;
+    public void setHandArmor(Item glovesArmor) {
+        this.handArmor = glovesArmor;
     }
 
-    @Basic
-    @Column(name = "item_0", nullable = false)
-    public Integer getItem0() {
-        return item0;
+    @ManyToOne
+    @JoinColumn(
+            name = "item_0_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getItem_0() {
+        return item_0;
     }
 
-    public void setItem0(Integer item0) {
-        this.item0 = item0;
+    public void setItem_0(Item item0) {
+        this.item_0 = item0;
     }
 
-    @Basic
-    @Column(name = "item_1", nullable = false)
-    public Integer getItem1() {
-        return item1;
+    @ManyToOne
+    @JoinColumn(
+            name = "item_1_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getItem_1() {
+        return item_1;
     }
 
-    public void setItem1(Integer item1) {
-        this.item1 = item1;
+    public void setItem_1(Item item1) {
+        this.item_1 = item1;
     }
 
-    @Basic
-    @Column(name = "item_2", nullable = false)
-    public Integer getItem2() {
-        return item2;
+    @ManyToOne
+    @JoinColumn(
+            name = "item_2_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getItem_2() {
+        return item_2;
     }
 
-    public void setItem2(Integer item2) {
-        this.item2 = item2;
+    public void setItem_2(Item item2) {
+        this.item_2 = item2;
     }
 
-    @Basic
-    @Column(name = "item_3", nullable = false)
-    public Integer getItem3() {
-        return item3;
+    @ManyToOne
+    @JoinColumn(
+            name = "item_3_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getItem_3() {
+        return item_3;
     }
 
-    public void setItem3(Integer item3) {
-        this.item3 = item3;
+    public void setItem_3(Item item3) {
+        this.item_3 = item3;
     }
 
     @Basic
     @Column(name = "ammo_0", nullable = false)
-    public Integer getAmmo0() {
-        return ammo0;
+    public Integer getAmmo_0() {
+        return ammo_0;
     }
 
-    public void setAmmo0(Integer ammo0) {
-        this.ammo0 = ammo0;
+    public void setAmmo_0(Integer ammo0) {
+        this.ammo_0 = ammo0;
     }
 
     @Basic
     @Column(name = "ammo_1", nullable = false)
-    public Integer getAmmo1() {
-        return ammo1;
+    public Integer getAmmo_1() {
+        return ammo_1;
     }
 
-    public void setAmmo1(Integer ammo1) {
-        this.ammo1 = ammo1;
+    public void setAmmo_1(Integer ammo1) {
+        this.ammo_1 = ammo1;
     }
 
     @Basic
     @Column(name = "ammo_2", nullable = false)
-    public Integer getAmmo2() {
-        return ammo2;
+    public Integer getAmmo_2() {
+        return ammo_2;
     }
 
-    public void setAmmo2(Integer ammo2) {
-        this.ammo2 = ammo2;
+    public void setAmmo_2(Integer ammo2) {
+        this.ammo_2 = ammo2;
     }
 
     @Basic
     @Column(name = "ammo_3", nullable = false)
-    public Integer getAmmo3() {
-        return ammo3;
+    public Integer getAmmo_3() {
+        return ammo_3;
     }
 
-    public void setAmmo3(Integer ammo3) {
-        this.ammo3 = ammo3;
+    public void setAmmo_3(Integer ammo3) {
+        this.ammo_3 = ammo3;
     }
 
-    @Basic
-    @Column(name = "horse_1", nullable = false)
-    public Integer getHorse1() {
-        return horse1;
+    @ManyToOne
+    @JoinColumn(
+            name = "horse_0_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0")
+    public Item getHorse_0() {
+        return horse_0;
     }
 
-    public void setHorse1(Integer horse1) {
-        this.horse1 = horse1;
+    public void setHorse_0(Item horse1) {
+        this.horse_0 = horse1;
     }
 
-    @Basic
-    @Column(name = "horse_2", nullable = false)
-    public Integer getHorse2() {
-        return horse2;
+    @ManyToOne
+    @JoinColumn(
+            name = "horse_1_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getHorse_1() {
+        return horse_1;
     }
 
-    public void setHorse2(Integer horse2) {
-        this.horse2 = horse2;
+    public void setHorse_1(Item horse2) {
+        this.horse_1 = horse2;
     }
 
-    @Basic
-    @Column(name = "horse_3", nullable = false)
-    public Integer getHorse3() {
-        return horse3;
+    @ManyToOne
+    @JoinColumn(
+            name = "horse_2_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getHorse_2() {
+        return horse_2;
     }
 
-    public void setHorse3(Integer horse3) {
-        this.horse3 = horse3;
+    public void setHorse_2(Item horse3) {
+        this.horse_2 = horse3;
     }
 
     @Basic
@@ -356,104 +376,107 @@ public class Player {
         this.fatigue = fatigue;
     }
 
-    @Basic
-    @Column(name = "horse_id", nullable = false)
-    public Integer getHorseId() {
-        return horseId;
+    @ManyToOne
+    @JoinColumn(
+            name = "horse_id", referencedColumnName = "id",
+            nullable = false, columnDefinition = "int default 0"
+    )
+    public Item getHorse() {
+        return horse;
     }
 
-    public void setHorseId(Integer horseId) {
-        this.horseId = horseId;
+    public void setHorse(Item horseId) {
+        this.horse = horseId;
     }
 
     @Basic
     @Column(name = "horse_1_wound_time")
-    public Timestamp getHorse1WoundTime() {
-        return horse1WoundTime;
+    public Timestamp getHorse_1_woundTime() {
+        return horse_1_woundTime;
     }
 
-    public void setHorse1WoundTime(Timestamp horse1WoundTime) {
-        this.horse1WoundTime = horse1WoundTime;
+    public void setHorse_1_woundTime(Timestamp horse1WoundTime) {
+        this.horse_1_woundTime = horse1WoundTime;
     }
 
     @Basic
     @Column(name = "horse_2_wound_time")
-    public Timestamp getHorse2WoundTime() {
-        return horse2WoundTime;
+    public Timestamp getHorse_2_woundTime() {
+        return horse_2_woundTime;
     }
 
-    public void setHorse2WoundTime(Timestamp horse2WoundTime) {
-        this.horse2WoundTime = horse2WoundTime;
+    public void setHorse_2_woundTime(Timestamp horse2WoundTime) {
+        this.horse_2_woundTime = horse2WoundTime;
     }
 
     @Basic
     @Column(name = "horse_3_wound_time")
-    public Timestamp getHorse3WoundTime() {
-        return horse3WoundTime;
+    public Timestamp getHorse_3_woundTime() {
+        return horse_3_woundTime;
     }
 
-    public void setHorse3WoundTime(Timestamp horse3WoundTime) {
-        this.horse3WoundTime = horse3WoundTime;
+    public void setHorse_3_woundTime(Timestamp horse3WoundTime) {
+        this.horse_3_woundTime = horse3WoundTime;
     }
 
     @Basic
     @Column(name = "horse_1_wound_duration", nullable = false)
-    public Integer getHorse1WoundDuration() {
-        return horse1WoundDuration;
+    public Integer getHorse_1_woundDuration() {
+        return horse_1_woundDuration;
     }
 
-    public void setHorse1WoundDuration(Integer horse1WoundDuration) {
-        this.horse1WoundDuration = horse1WoundDuration;
+    public void setHorse_1_woundDuration(Integer horse1WoundDuration) {
+        this.horse_1_woundDuration = horse1WoundDuration;
     }
 
     @Basic
     @Column(name = "horse_2_wound_duration", nullable = false)
-    public Integer getHorse2WoundDuration() {
-        return horse2WoundDuration;
+    public Integer getHorse_2_woundDuration() {
+        return horse_2_woundDuration;
     }
 
-    public void setHorse2WoundDuration(Integer horse2WoundDuration) {
-        this.horse2WoundDuration = horse2WoundDuration;
+    public void setHorse_2_woundDuration(Integer horse2WoundDuration) {
+        this.horse_2_woundDuration = horse2WoundDuration;
     }
 
     @Basic
     @Column(name = "horse_3_wound_duration", nullable = false)
-    public Integer getHorse3WoundDuration() {
-        return horse3WoundDuration;
+    public Integer getHorse_3_woundDuration() {
+        return horse_3_woundDuration;
     }
 
-    public void setHorse3WoundDuration(Integer horse3WoundDuration) {
-        this.horse3WoundDuration = horse3WoundDuration;
+    public void setHorse_3_woundDuration(Integer horse3WoundDuration) {
+        this.horse_3_woundDuration = horse3WoundDuration;
     }
 
     @Basic
     @Column(name = "horse_1_stable_id", nullable = false)
-    public Integer getHorse1StableId() {
-        return horse1StableId;
+    public Integer getHorse_1_stableId() {
+        return horse_1_stableId;
     }
 
-    public void setHorse1StableId(Integer horse1StableId) {
-        this.horse1StableId = horse1StableId;
+    public void setHorse_1_stableId(Integer horse1StableId) {
+        this.horse_1_stableId = horse1StableId;
     }
 
     @Basic
     @Column(name = "horse_2_stable_id", nullable = false)
-    public Integer getHorse2StableId() {
-        return horse2StableId;
+    public Integer getHorse_2_stableId() {
+        return horse_2_stableId;
     }
 
-    public void setHorse2StableId(Integer horse2StableId) {
-        this.horse2StableId = horse2StableId;
+    public void setHorse_2_stableId(Integer horse2StableId) {
+        this.horse_2_stableId = horse2StableId;
     }
 
     @Basic
     @Column(name = "horse_3_stable_id", nullable = false)
-    public Integer getHorse3StableId() {
-        return horse3StableId;
+    public Integer getHorse_3_stableId() {
+        return horse_3_stableId;
     }
 
-    public void setHorse3StableId(Integer horse3StableId) {
-        this.horse3StableId = horse3StableId;
+    public void setHorse_3_stableId(Integer horse3StableId) {
+        this.horse_3_stableId = horse3StableId;
     }
 
     @Basic
@@ -526,18 +549,6 @@ public class Player {
         this.version = version;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return Objects.equals(id, player.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     @OneToMany(mappedBy = "player")
     @JsonIgnore
@@ -590,7 +601,7 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false, updatable = false)
     public Server getServer() {
         return server;
     }
@@ -617,5 +628,19 @@ public class Player {
 
     public void setTroop(Troop troop) {
         this.troop = troop;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(id, player.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

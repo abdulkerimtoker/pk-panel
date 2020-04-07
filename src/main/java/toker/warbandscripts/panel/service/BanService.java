@@ -1,8 +1,5 @@
 package toker.warbandscripts.panel.service;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.omg.CORBA.BAD_CONTEXT;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -10,10 +7,10 @@ import toker.warbandscripts.panel.entity.Ban;
 import toker.warbandscripts.panel.entity.PanelUser;
 import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.repository.BanRepository;
+import toker.warbandscripts.panel.repository.PanelUserRepository;
 import toker.warbandscripts.panel.repository.PlayerRepository;
 
 import java.io.*;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 @Service
@@ -23,13 +20,16 @@ public class BanService {
 
     private BanRepository banRepository;
     private PlayerRepository playerRepository;
+    private PanelUserRepository panelUserRepository;
 
     public BanService(PanelConfigurationService configurationService,
                       BanRepository banRepository,
-                      PlayerRepository playerRepository) {
+                      PlayerRepository playerRepository,
+                      PanelUserRepository panelUserRepository) {
         this.configurationService = configurationService;
         this.banRepository = banRepository;
         this.playerRepository = playerRepository;
+        this.panelUserRepository = panelUserRepository;
     }
 
     @Scheduled(fixedDelay = 1000 * 60)
@@ -49,7 +49,9 @@ public class BanService {
     }
 
     public Ban banPlayer(Ban ban) {
-        PanelUser admin = (PanelUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String adminName = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PanelUser admin = panelUserRepository.findByUsername(adminName);
+        ban.setId(null);
         ban.setPanelUser(admin);
         return banRepository.save(ban);
     }

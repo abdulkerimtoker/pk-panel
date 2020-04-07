@@ -1,7 +1,9 @@
 package toker.warbandscripts.panel.service;
 
 import org.springframework.stereotype.Service;
+import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.entity.Server;
+import toker.warbandscripts.panel.repository.PlayerRepository;
 import toker.warbandscripts.panel.repository.ServerRepository;
 
 import java.lang.reflect.Field;
@@ -14,11 +16,14 @@ import java.util.Map;
 public class ServerService {
 
     private ServerRepository serverRepository;
+    private PlayerRepository playerRepository;
 
     private Map<Class<?>, Method> typeToGetterMap = new HashMap<>();
 
-    public ServerService(ServerRepository serverRepository) {
+    public ServerService(ServerRepository serverRepository,
+                         PlayerRepository playerRepository) {
         this.serverRepository = serverRepository;
+        this.playerRepository = playerRepository;
     }
 
     public String getServerRoleName(String role, Object entity) {
@@ -56,5 +61,14 @@ public class ServerService {
         }
 
         return null;
+    }
+
+    public String getServerRoleNameForPlayer(String role, Player player) {
+        Player found = playerRepository.findById(player.getId()).orElse(null);
+        if (found != null) {
+            Server server = found.getServer();
+            return String.format("ROLE_%d_%s", server.getId(), role);
+        }
+        return "ROLE_INVALID";
     }
 }

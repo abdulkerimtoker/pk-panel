@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.controller.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,6 @@ import java.util.List;
 @RestController
 public class ProfessionController {
 
-    @Autowired
     private ProfessionService professionService;
 
     public ProfessionController(ProfessionService professionService) {
@@ -23,6 +23,7 @@ public class ProfessionController {
     }
 
     @GetMapping("/api/profession")
+    @Cacheable("professions")
     public List<Profession> professions() {
         return professionService.getAllProfessions();
     }

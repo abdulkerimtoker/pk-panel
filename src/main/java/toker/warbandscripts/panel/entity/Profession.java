@@ -1,6 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.persistence.*;
 import java.util.Collection;
