@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.controller.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.entity.Door;
 import toker.warbandscripts.panel.entity.DoorKey;
@@ -12,7 +13,6 @@ import java.util.List;
 @RestController
 public class DoorController {
 
-    @Autowired
     private DoorService doorService;
 
     public DoorController(DoorService doorService) {
@@ -21,8 +21,9 @@ public class DoorController {
 
     @GetMapping("/api/door/{doorId}")
     @JsonView(DoorKey.View.Player.class)
-    public Door door(@PathVariable int doorId) {
-        return doorService.getDoor(doorId).orElse(null);
+    public Door door(@PathVariable int doorId) throws ChangeSetPersister.NotFoundException {
+        return doorService.getDoor(doorId)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
     @GetMapping("/api/door")
@@ -33,7 +34,12 @@ public class DoorController {
 
     @PutMapping("/api/player/doorKey")
     @JsonView(DoorKey.View.Door.class)
-    public DoorKey saveDoorKey(@RequestBody DoorKey doorKey) {
-        return doorService.saveDoorKey(doorKey);
+    public DoorKey assignDoorKey(@RequestBody DoorKey doorKey) {
+        return doorService.assignDoorKey(doorKey);
+    }
+
+    @DeleteMapping("/api/doorKey/{doorKeyId}")
+    public void revokeDoorKey(@PathVariable int doorKeyId) {
+        doorService.revokeDoorKey(doorKeyId);
     }
 }

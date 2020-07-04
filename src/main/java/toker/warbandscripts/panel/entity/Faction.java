@@ -13,6 +13,7 @@ public class Faction {
     private Integer id;
     private String name;
     private Integer bannerId;
+    private Server server;
     private Collection<Player> players;
 
     @Id
@@ -26,7 +27,6 @@ public class Faction {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
@@ -36,7 +36,6 @@ public class Faction {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "banner_id", nullable = false)
     public Integer getBannerId() {
         return bannerId;
@@ -44,6 +43,16 @@ public class Faction {
 
     public void setBannerId(Integer bannerId) {
         this.bannerId = bannerId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 
     @Override

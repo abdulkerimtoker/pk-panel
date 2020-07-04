@@ -1,6 +1,9 @@
 package toker.warbandscripts.panel.service;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
 import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.entity.Server;
 import toker.warbandscripts.panel.repository.PlayerRepository;
@@ -10,7 +13,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service("serverService")
 public class ServerService {
@@ -70,5 +75,19 @@ public class ServerService {
             return String.format("ROLE_%d_%s", server.getId(), role);
         }
         return "ROLE_INVALID";
+    }
+
+    public List<Server> getServersForAdmin() {
+        JWTOpenIDAuthenticationToken token =
+                (JWTOpenIDAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        List<String> authorities = token.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        return serverRepository.findAll()
+                .stream()
+                .filter(server -> authorities.contains(String.format("ROLE_%d_USER", server.getId())))
+                .collect(Collectors.toList());
     }
 }

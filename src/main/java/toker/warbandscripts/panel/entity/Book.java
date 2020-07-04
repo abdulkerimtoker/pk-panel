@@ -9,6 +9,7 @@ import java.util.Objects;
 public class Book {
     private Integer id;
     private String name;
+    private Server server;
     private Collection<BookPage> bookPagesById;
 
     @Id
@@ -22,7 +23,6 @@ public class Book {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
@@ -30,6 +30,17 @@ public class Book {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 
     @Override
@@ -46,7 +57,7 @@ public class Book {
         return Objects.hash(id, name);
     }
 
-    @OneToMany(mappedBy = "bookByBookId")
+    @OneToMany(mappedBy = "book")
     public Collection<BookPage> getBookPagesById() {
         return bookPagesById;
     }

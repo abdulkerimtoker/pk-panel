@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import toker.warbandscripts.panel.entity.Server;
 
 public interface ServerRepository extends JpaRepository<Server, Integer>, JpaSpecificationExecutor<Server> {
-    @Cacheable("server")
     Server findByKey(String key);
 }

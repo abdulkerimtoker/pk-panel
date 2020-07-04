@@ -13,10 +13,11 @@ import java.util.List;
 
 public interface PlayerRepository extends JpaRepository<Player, Integer>, JpaSpecificationExecutor<Player> {
     @Query("SELECT p FROM Player p " +
-            "WHERE LOWER(p.name) LIKE CONCAT('%',LOWER(?1),'%') " +
+            "WHERE (LOWER(p.name) LIKE CONCAT('%',LOWER(?1),'%') " +
             "OR CAST(p.uniqueId as char) LIKE CONCAT('%',?1,'%') " +
-            "OR CAST(p.id as char) LIKE CONCAT('%',?1,'%')")
-    List<Player> likeSearch(String likeString);
+            "OR CAST(p.id as char) LIKE CONCAT('%',?1,'%'))" +
+            "AND p.server.id = ?2")
+    List<Player> likeSearch(String likeString, Integer serverId);
 
     @Override
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)

@@ -45,8 +45,20 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                         .map(BareGrantedAuthority::new)
                         .collect(Collectors.toList());
 
+                Integer selectedServerId = null;
+                String selectedServerIdStr = request.getHeader("Selected-Server-ID");
+
+                if (selectedServerIdStr != null &&
+                        authorityList.stream().map(BareGrantedAuthority::getAuthority)
+                                .collect(Collectors.toList())
+                                .contains(String.format("ROLE_%s_USER", selectedServerIdStr))) {
+                    selectedServerId = Integer.parseInt(selectedServerIdStr);
+                }
+
                 SecurityContextHolder.getContext().setAuthentication(
-                        new JWTOpenIDAuthenticationToken(authorityList, username, jwt, claimedIdentity));
+                        new JWTOpenIDAuthenticationToken(
+                                authorityList, username, jwt,
+                                claimedIdentity, selectedServerId));
             }
             catch (JWTVerificationException ignored) {}
         }

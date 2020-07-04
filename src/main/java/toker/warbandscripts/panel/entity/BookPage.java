@@ -9,7 +9,7 @@ public class BookPage {
     private Integer id;
     private Integer pageNumber;
     private String content;
-    private Book bookByBookId;
+    private Book book;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,16 @@ public class BookPage {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book bookByBookId) {
+        this.book = bookByBookId;
     }
 
     @Basic
@@ -33,7 +43,7 @@ public class BookPage {
     }
 
     @Basic
-    @Column(name = "content", nullable = false, length = -1)
+    @Column(name = "content", nullable = false, length = 2048)
     public String getContent() {
         return content;
     }
@@ -55,15 +65,5 @@ public class BookPage {
     @Override
     public int hashCode() {
         return Objects.hash(id, pageNumber, content);
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
-    public Book getBookByBookId() {
-        return bookByBookId;
-    }
-
-    public void setBookByBookId(Book bookByBookId) {
-        this.bookByBookId = bookByBookId;
     }
 }

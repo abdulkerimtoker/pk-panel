@@ -1,31 +1,44 @@
 package toker.warbandscripts.panel.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "chest")
+@IdClass(ChestPK.class)
 public class Chest {
-    private Integer id;
+
+    private Integer index;
+    private Server server;
     private String name;
     private Integer size;
     private Integer type;
 
-    private Collection<ChestSlot> chestSlotsById;
+    private Collection<ChestSlot> slots;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
+    @Column(name = "index", nullable = false)
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
-    @Basic
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
     @Column(name = "name", nullable = false, length = 32)
     public String getName() {
         return name;
@@ -35,7 +48,6 @@ public class Chest {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "size", nullable = false)
     public Integer getSize() {
         return size;
@@ -45,7 +57,6 @@ public class Chest {
         this.size = size;
     }
 
-    @Basic
     @Column(name = "chest_type", nullable = true)
     public Integer getType() {
         return type;
@@ -60,22 +71,43 @@ public class Chest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Chest chest = (Chest) o;
-        return Objects.equals(id, chest.id) &&
-                Objects.equals(name, chest.name) &&
-                Objects.equals(size, chest.size);
+        return Objects.equals(index, chest.index) &&
+                Objects.equals(server.getId(), chest.server.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, size);
+        return Objects.hash(index, name, size);
     }
 
     @OneToMany(mappedBy = "chest")
-    public Collection<ChestSlot> getChestSlotsById() {
-        return chestSlotsById;
+    public Collection<ChestSlot> getSlots() {
+        return slots;
     }
 
-    public void setChestSlotsById(Collection<ChestSlot> chestSlotsById) {
-        this.chestSlotsById = chestSlotsById;
+    public void setSlots(Collection<ChestSlot> chestSlotsById) {
+        this.slots = chestSlotsById;
+    }
+}
+
+class ChestPK implements Serializable {
+
+    private Integer index;
+    private Integer server;
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public Integer getServer() {
+        return server;
+    }
+
+    public void setServer(Integer server) {
+        this.server = server;
     }
 }

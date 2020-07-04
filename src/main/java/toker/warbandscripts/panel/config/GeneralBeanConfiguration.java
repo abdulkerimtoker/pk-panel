@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -14,6 +16,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
 import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.NullAxFetchListFactory;
@@ -23,6 +26,9 @@ import org.springframework.security.web.authentication.rememberme.InMemoryTokenR
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
+import toker.warbandscripts.panel.bean.ISelectedServerId;
+import toker.warbandscripts.panel.bean.SelectedServerId;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,5 +84,11 @@ public class GeneralBeanConfiguration {
             };
             return execution.execute(newRequest, body);
         }).build();
+    }
+
+    @Bean
+    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
+    public ISelectedServerId selectedServerId() {
+        return new SelectedServerId();
     }
 }

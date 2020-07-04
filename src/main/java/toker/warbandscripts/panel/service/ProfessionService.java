@@ -27,4 +27,8 @@ public class ProfessionService {
     public ProfessionAssignment saveProfessionAssignment(ProfessionAssignment professionAssignment) {
         return professionAssignmentRepository.saveAndFlush(professionAssignment);
     }
+
+    public void revokeProfession(int playerId, int professionId) {
+        professionAssignmentRepository.deleteByPlayerIdAndProfessionId(playerId, professionId);
+    }
 }

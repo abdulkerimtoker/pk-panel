@@ -1,5 +1,6 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "door_key")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DoorKey {
     private Integer id;
     private Boolean isOwner = false;
@@ -39,8 +41,7 @@ public class DoorKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DoorKey doorKey = (DoorKey) o;
-        return Objects.equals(id, doorKey.id) &&
-                Objects.equals(isOwner, doorKey.isOwner);
+        return Objects.equals(id, doorKey.id);
     }
 
     @Override

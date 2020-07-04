@@ -1,7 +1,10 @@
 package toker.warbandscripts.panel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import toker.warbandscripts.panel.bean.ISelectedServerId;
+import toker.warbandscripts.panel.bean.SelectedServerId;
 import toker.warbandscripts.panel.entity.*;
 import toker.warbandscripts.panel.repository.*;
 
@@ -13,7 +16,6 @@ import java.util.Optional;
 @Service
 public class PlayerService {
 
-
     private PlayerRepository playerRepository;
     private InventoryRepository inventoryRepository;
     private InventorySlotRepository inventorySlotRepository;
@@ -22,13 +24,16 @@ public class PlayerService {
     private ProfessionAssignmentRepository professionAssignmentRepository;
     private CraftingRequestRepository craftingRequestRepository;
 
+    private ISelectedServerId selectedServerId;
+
     public PlayerService(PlayerRepository playerRepository,
                          InventoryRepository inventoryRepository,
                          InventorySlotRepository inventorySlotRepository,
                          DoorKeyRepository doorKeyRepository,
                          NoticeBoadAccessRepository noticeBoadAccessRepository,
                          ProfessionAssignmentRepository professionAssignmentRepository,
-                         CraftingRequestRepository craftingRequestRepository) {
+                         CraftingRequestRepository craftingRequestRepository,
+                         ISelectedServerId selectedServerId) {
         this.playerRepository = playerRepository;
         this.inventoryRepository = inventoryRepository;
         this.inventorySlotRepository = inventorySlotRepository;
@@ -36,6 +41,7 @@ public class PlayerService {
         this.noticeBoadAccessRepository = noticeBoadAccessRepository;
         this.professionAssignmentRepository = professionAssignmentRepository;
         this.craftingRequestRepository = craftingRequestRepository;
+        this.selectedServerId = selectedServerId;
     }
 
     public Optional<Player> getPlayer(int id) {
@@ -47,7 +53,7 @@ public class PlayerService {
     }
 
     public List<Player> searchPlayers(String searchTerm) {
-        return playerRepository.likeSearch(searchTerm);
+        return playerRepository.likeSearch(searchTerm, selectedServerId.get());
     }
 
     public boolean setPlayerField(int id, String field, Object value) {

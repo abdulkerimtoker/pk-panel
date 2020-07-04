@@ -1,5 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -41,6 +43,7 @@ public class Server {
     }
 
     @Column(name = "key", nullable = false, length = 32)
+    @JsonIgnore
     public String getKey() {
         return key;
     }

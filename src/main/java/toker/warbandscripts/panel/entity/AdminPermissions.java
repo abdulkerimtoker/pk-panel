@@ -1,13 +1,16 @@
 package toker.warbandscripts.panel.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "admin_permissions")
+@IdClass(AdminPermissionsPK.class)
 public class AdminPermissions {
-    private Integer id;
+
     private Integer uniqueId;
+    private Server server;
     private Boolean panel;
     private Boolean gold;
     private Boolean kick;
@@ -29,17 +32,6 @@ public class AdminPermissions {
     private Boolean factions;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Basic
     @Column(name = "unique_id", nullable = false)
     public Integer getUniqueId() {
         return uniqueId;
@@ -47,6 +39,17 @@ public class AdminPermissions {
 
     public void setUniqueId(Integer uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
     }
 
     @Basic
@@ -244,31 +247,34 @@ public class AdminPermissions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AdminPermissions that = (AdminPermissions) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(uniqueId, that.uniqueId) &&
-                Objects.equals(panel, that.panel) &&
-                Objects.equals(gold, that.gold) &&
-                Objects.equals(kick, that.kick) &&
-                Objects.equals(temporaryBan, that.temporaryBan) &&
-                Objects.equals(permanentBan, that.permanentBan) &&
-                Objects.equals(killFade, that.killFade) &&
-                Objects.equals(freeze, that.freeze) &&
-                Objects.equals(teleportSelf, that.teleportSelf) &&
-                Objects.equals(adminItems, that.adminItems) &&
-                Objects.equals(healSelf, that.healSelf) &&
-                Objects.equals(godlikeTroop, that.godlikeTroop) &&
-                Objects.equals(ships, that.ships) &&
-                Objects.equals(announce, that.announce) &&
-                Objects.equals(overridePoll, that.overridePoll) &&
-                Objects.equals(allItems, that.allItems) &&
-                Objects.equals(mute, that.mute) &&
-                Objects.equals(animals, that.animals) &&
-                Objects.equals(joinFactions, that.joinFactions) &&
-                Objects.equals(factions, that.factions);
+        return Objects.equals(server, that.server) &&
+                Objects.equals(uniqueId, that.uniqueId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uniqueId, panel, gold, kick, temporaryBan, permanentBan, killFade, freeze, teleportSelf, adminItems, healSelf, godlikeTroop, ships, announce, overridePoll, allItems, mute, animals, joinFactions, factions);
+        return Objects.hash(uniqueId, server.getId(), panel, gold, kick, temporaryBan, permanentBan, killFade, freeze, teleportSelf, adminItems, healSelf, godlikeTroop, ships, announce, overridePoll, allItems, mute, animals, joinFactions, factions);
+    }
+}
+
+class AdminPermissionsPK implements Serializable {
+
+    private Integer uniqueId;
+    private Integer server;
+
+    public Integer getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(Integer uniqueId) {
+        this.uniqueId = uniqueId;
+    }
+
+    public Integer getServer() {
+        return server;
+    }
+
+    public void setServer(Integer server) {
+        this.server = server;
     }
 }
