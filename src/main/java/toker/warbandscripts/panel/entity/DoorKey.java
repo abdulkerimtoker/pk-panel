@@ -8,8 +8,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "door_key")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DoorKey {
+
     private Integer id;
     private Boolean isOwner = false;
     private Door door;
@@ -26,7 +26,6 @@ public class DoorKey {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "is_owner", nullable = false)
     public Boolean getIsOwner() {
         return isOwner;
@@ -36,21 +35,11 @@ public class DoorKey {
         this.isOwner = isOwner;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DoorKey doorKey = (DoorKey) o;
-        return Objects.equals(id, doorKey.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, isOwner);
-    }
-
     @ManyToOne
-    @JoinColumn(name = "door_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "door_index", referencedColumnName = "index", nullable = false),
+            @JoinColumn(name = "door_server_id", referencedColumnName = "server_id", nullable = false)
+    })
     @JsonView(View.Door.class)
     public Door getDoor() {
         return door;
@@ -69,6 +58,19 @@ public class DoorKey {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DoorKey doorKey = (DoorKey) o;
+        return Objects.equals(id, doorKey.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, isOwner);
     }
 
     public static class View {

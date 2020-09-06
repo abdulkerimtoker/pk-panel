@@ -1,61 +1,40 @@
 package toker.warbandscripts.panel.entity;
 
+import toker.warbandscripts.panel.entity.pk.ChestSlotPK;
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Table(name = "chest_slot")
 @IdClass(ChestSlotPK.class)
 public class ChestSlot {
+
+    private Chest chest;
     private Integer slot;
     private Integer ammo;
-    private Chest chest;
     private Item item;
 
     @Id
-    @Column(name = "slot", nullable = false)
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "chest_index", referencedColumnName = "index"),
+            @JoinColumn(name = "chest_server_id", referencedColumnName = "server_id")
+    })
+    public Chest getChest() {
+        return chest;
+    }
+
+    public void setChest(Chest chest) {
+        this.chest = chest;
+    }
+
+    @Id
+    @Column(name = "slot")
     public Integer getSlot() {
         return slot;
     }
 
     public void setSlot(Integer slot) {
         this.slot = slot;
-    }
-
-    @Basic
-    @Column(name = "ammo", nullable = false)
-    public Integer getAmmo() {
-        return ammo;
-    }
-
-    public void setAmmo(Integer ammo) {
-        this.ammo = ammo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChestSlot chestSlot = (ChestSlot) o;
-        return Objects.equals(slot, chestSlot.slot) &&
-                Objects.equals(ammo, chestSlot.ammo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(slot, ammo);
-    }
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "chest_id", referencedColumnName = "id", nullable = false)
-    public Chest getChest() {
-        return chest;
-    }
-
-    public void setChest(Chest chestByChestId) {
-        this.chest = chestByChestId;
     }
 
     @ManyToOne
@@ -67,38 +46,15 @@ public class ChestSlot {
     public void setItem(Item item) {
         this.item = item;
     }
+
+    @Column(name = "ammo", nullable = false)
+    public Integer getAmmo() {
+        return ammo;
+    }
+
+    public void setAmmo(Integer ammo) {
+        this.ammo = ammo;
+    }
+
 }
 
-class ChestSlotPK implements Serializable {
-    private Integer chest;
-    private Integer slot;
-
-    public Integer getChest() {
-        return chest;
-    }
-
-    public void setChest(Integer chest) {
-        this.chest = chest;
-    }
-
-    public Integer getSlot() {
-        return slot;
-    }
-
-    public void setSlot(Integer slot) {
-        this.slot = slot;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        ChestSlotPK that = (ChestSlotPK)obj;
-        return Objects.equals(this.slot, that.slot) && Objects.equals(this.chest, that.chest);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.slot, this.chest);
-    }
-}

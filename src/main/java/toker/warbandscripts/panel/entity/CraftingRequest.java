@@ -8,9 +8,10 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "crafting_request")
 public class CraftingRequest {
+
     private Integer id;
     private Timestamp creationTime;
-    private Boolean isTaken;
+    private Boolean taken;
     private CraftingRecipe craftingRecipe;
     private Player player;
     private CraftingStationInstance craftingStationInstance;
@@ -26,7 +27,6 @@ public class CraftingRequest {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "creation_time", nullable = false)
     public Timestamp getCreationTime() {
         return creationTime;
@@ -36,14 +36,13 @@ public class CraftingRequest {
         this.creationTime = creationTime;
     }
 
-    @Basic
     @Column(name = "is_taken", nullable = false)
-    public Boolean getTaken() {
-        return isTaken;
+    public Boolean isTaken() {
+        return taken;
     }
 
     public void setTaken(Boolean taken) {
-        isTaken = taken;
+        this.taken = taken;
     }
 
     @ManyToOne

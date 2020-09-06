@@ -22,7 +22,6 @@ public class CraftingStationInstance {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
@@ -33,7 +32,10 @@ public class CraftingStationInstance {
     }
 
     @ManyToOne
-    @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "station_index", referencedColumnName = "index", nullable = false),
+            @JoinColumn(name = "station_server_id", referencedColumnName = "server_id", nullable = false)
+    })
     @JsonView(View.CraftingStation.class)
     public CraftingStation getCraftingStation() {
         return craftingStation;
@@ -44,6 +46,7 @@ public class CraftingStationInstance {
     }
 
     public interface View {
+        interface None {}
         interface CraftingStation {}
     }
 }

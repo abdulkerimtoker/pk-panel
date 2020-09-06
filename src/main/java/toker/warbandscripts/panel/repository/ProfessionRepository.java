@@ -7,6 +7,5 @@ import toker.warbandscripts.panel.entity.Profession;
 
 import java.util.List;
 
-public interface ProfessionRepository extends JpaRepository<Profession, Integer>,
-        JpaSpecificationExecutor<Profession> {
+public interface ProfessionRepository extends BaseRepository<Profession, Integer> {
 }

@@ -1,32 +1,35 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "player")
 public class Player {
+
     private Integer id;
     private Integer uniqueId;
     private String name;
-    private Integer gold;
-    private Integer hp;
-    private Integer food;
-    private Integer fatigue;
-    private Integer posX;
-    private Integer posY;
-    private Integer posZ;
-    private Server server;
+    private Integer gold = 0;
+    private Integer hp = 100;
+    private Integer food = 100;
+    private Integer fatigue = 1000;
+    private Integer posX = -1;
+    private Integer posY = -1;
+    private Integer posZ = -1;
     private Faction faction;
     private Troop troop;
-    private String sceneName;
-    private String description1;
-    private String description2;
-    private String description3;
+    private String sceneName = "None";
+    private String description1 = "<Not Set>";
+    private String description2 = "<Not Set>";
+    private String description3 = "<Not Set>";
     private Item bodyArmor;
     private Item headArmor;
     private Item footArmor;
@@ -35,27 +38,28 @@ public class Player {
     private Item item_1;
     private Item item_2;
     private Item item_3;
-    private Integer ammo_0;
-    private Integer ammo_1;
-    private Integer ammo_2;
-    private Integer ammo_3;
+    private Integer ammo_0 = 0;
+    private Integer ammo_1 = 0;
+    private Integer ammo_2 = 0;
+    private Integer ammo_3 = 0;
     private Item horse;
+    private Integer horseSlot = -1;
     private Item horse_0;
     private Item horse_1;
     private Item horse_2;
     private Timestamp horse_1_woundTime;
     private Timestamp horse_2_woundTime;
     private Timestamp horse_3_woundTime;
-    private Integer horse_1_woundDuration;
-    private Integer horse_2_woundDuration;
-    private Integer horse_3_woundDuration;
-    private Integer horse_1_stableId;
-    private Integer horse_2_stableId;
-    private Integer horse_3_stableId;
-    private Integer ridingTier;
+    private Integer horse_1_woundDuration = 0;
+    private Integer horse_2_woundDuration = 0;
+    private Integer horse_3_woundDuration = 0;
+    private Integer horse_1_stableId = -1;
+    private Integer horse_2_stableId = -1;
+    private Integer horse_3_stableId = -1;
+    private Integer ridingTier = 0;
     private Timestamp woundTime;
-    private Integer woundDuration;
-    private Integer servedWoundTime;
+    private Integer woundDuration = 0;
+    private Integer servedWoundTime = 0;
     private Timestamp treatmentTime;
     private Timestamp lastLogTime;
     private Integer version;
@@ -64,6 +68,14 @@ public class Player {
     private Collection<NoticeBoardAccess> noticeBoardAccesses;
     private Collection<ProfessionAssignment> professionAssignments;
     private Collection<CraftingRequest> craftingRequests;
+
+    public Player() {
+        /*this.troop = toker.warbandscripts.panel.util.Entity.getReference(Troop.class, 14);
+        Item noItem = toker.warbandscripts.panel.util.Entity.getReference(Item.class, 0);
+        this.headArmor = this.bodyArmor = this.footArmor = this.handArmor = noItem;
+        this.item_0 = this.item_1 = this.item_2 = this.item_3 = noItem;
+        this.horse = this.horse_0 = this.horse_1 = this.horse_2 = noItem;*/
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -157,7 +169,7 @@ public class Player {
         this.sceneName = sceneName;
     }
 
-    @Column(name = "description_1", nullable = false, length = 128)
+    @Column(name = "description_1", nullable = false, length = 2048)
     public String getDescription1() {
         return description1;
     }
@@ -166,7 +178,7 @@ public class Player {
         this.description1 = description1;
     }
 
-    @Column(name = "description_2", nullable = false, length = 128)
+    @Column(name = "description_2", nullable = false, length = 2048)
     public String getDescription2() {
         return description2;
     }
@@ -175,7 +187,7 @@ public class Player {
         this.description2 = description2;
     }
 
-    @Column(name = "description_3", nullable = false, length = 128)
+    @Column(name = "description_3", nullable = false, length = 2048)
     public String getDescription3() {
         return description3;
     }
@@ -189,6 +201,7 @@ public class Player {
             name = "body_armor_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getBodyArmor() {
         return bodyArmor;
     }
@@ -202,6 +215,7 @@ public class Player {
             name = "head_armor_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getHeadArmor() {
         return headArmor;
     }
@@ -215,6 +229,7 @@ public class Player {
             name = "foot_armor_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getFootArmor() {
         return footArmor;
     }
@@ -228,6 +243,7 @@ public class Player {
             name = "hand_armor_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getHandArmor() {
         return handArmor;
     }
@@ -241,6 +257,7 @@ public class Player {
             name = "item_0_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getItem_0() {
         return item_0;
     }
@@ -254,6 +271,7 @@ public class Player {
             name = "item_1_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getItem_1() {
         return item_1;
     }
@@ -267,6 +285,7 @@ public class Player {
             name = "item_2_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getItem_2() {
         return item_2;
     }
@@ -280,6 +299,7 @@ public class Player {
             name = "item_3_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getItem_3() {
         return item_3;
     }
@@ -331,7 +351,9 @@ public class Player {
     @ManyToOne
     @JoinColumn(
             name = "horse_0_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0")
+            nullable = false, columnDefinition = "int default 0"
+    )
+    @JsonView(View.Items.class)
     public Item getHorse_0() {
         return horse_0;
     }
@@ -345,6 +367,7 @@ public class Player {
             name = "horse_1_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getHorse_1() {
         return horse_1;
     }
@@ -358,6 +381,7 @@ public class Player {
             name = "horse_2_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getHorse_2() {
         return horse_2;
     }
@@ -366,7 +390,6 @@ public class Player {
         this.horse_2 = horse3;
     }
 
-    @Basic
     @Column(name = "fatigue", nullable = false)
     public Integer getFatigue() {
         return fatigue;
@@ -381,12 +404,22 @@ public class Player {
             name = "horse_id", referencedColumnName = "id",
             nullable = false, columnDefinition = "int default 0"
     )
+    @JsonView(View.Items.class)
     public Item getHorse() {
         return horse;
     }
 
     public void setHorse(Item horseId) {
         this.horse = horseId;
+    }
+
+    @Column(name = "horse_slot", nullable = false)
+    public Integer getHorseSlot() {
+        return horseSlot;
+    }
+
+    public void setHorseSlot(Integer horseSlot) {
+        this.horseSlot = horseSlot;
     }
 
     @Basic
@@ -601,17 +634,10 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false, updatable = false)
-    public Server getServer() {
-        return server;
-    }
-
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "faction_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "faction_index", referencedColumnName = "index", nullable = false),
+            @JoinColumn(name = "server_id", referencedColumnName = "server_id", nullable = false)
+    })
     public Faction getFaction() {
         return faction;
     }
@@ -630,6 +656,21 @@ public class Player {
         this.troop = troop;
     }
 
+    @Transient
+    public boolean isWounded() {
+        if (getWoundTime() == null)
+            return false;
+
+        if (getTreatmentTime() == null || getTreatmentTime().before(getWoundTime())) {
+            return getServedWoundTime() < getWoundDuration() * 60;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getWoundTime());
+        calendar.add(Calendar.HOUR, getWoundDuration());
+
+        return calendar.toInstant().isAfter(Instant.now());
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -642,5 +683,13 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public interface View {
+        interface Server {}
+        interface Faction {}
+        interface Troop {}
+        interface Items {}
+        interface None {}
     }
 }

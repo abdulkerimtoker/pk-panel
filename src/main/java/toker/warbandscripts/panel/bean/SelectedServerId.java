@@ -6,9 +6,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.context.SecurityContextHolder;
 import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
 
-public class SelectedServerId implements ISelectedServerId {
-    @Override
-    public Integer get() {
+public class SelectedServerId {
+
+    public static Integer get() {
         JWTOpenIDAuthenticationToken token =
                 (JWTOpenIDAuthenticationToken) SecurityContextHolder
                         .getContext().getAuthentication();

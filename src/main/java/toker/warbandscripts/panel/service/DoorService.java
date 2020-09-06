@@ -1,8 +1,10 @@
 package toker.warbandscripts.panel.service;
 
 import org.springframework.stereotype.Service;
+import toker.warbandscripts.panel.bean.SelectedServerId;
 import toker.warbandscripts.panel.entity.Door;
 import toker.warbandscripts.panel.entity.DoorKey;
+import toker.warbandscripts.panel.entity.pk.DoorPK;
 import toker.warbandscripts.panel.repository.DoorKeyRepository;
 import toker.warbandscripts.panel.repository.DoorRepository;
 import toker.warbandscripts.panel.repository.PlayerRepository;
@@ -25,12 +27,12 @@ public class DoorService {
         this.playerRepository = playerRepository;
     }
 
-    public Optional<Door> getDoor(int doorId) {
+    public Optional<Door> getDoor(DoorPK doorId) {
         return doorRepository.findById(doorId);
     }
 
     public List<Door> getAllDoors() {
-        return doorRepository.findAll();
+        return doorRepository.findAllByServerId(SelectedServerId.get());
     }
 
     public DoorKey assignDoorKey(DoorKey doorKey) {
@@ -39,5 +41,9 @@ public class DoorService {
 
     public void revokeDoorKey(int doorKeyId) {
         doorKeyRepository.deleteById(doorKeyId);
+    }
+
+    public boolean changeLockState(int index, int serverId, boolean locked) {
+        return doorRepository.changeLockState(index, serverId, locked) > 0;
     }
 }

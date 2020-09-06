@@ -1,7 +1,8 @@
 package toker.warbandscripts.panel.entity;
 
+import toker.warbandscripts.panel.entity.pk.AdminPermissionsPK;
+
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -257,24 +258,3 @@ public class AdminPermissions {
     }
 }
 
-class AdminPermissionsPK implements Serializable {
-
-    private Integer uniqueId;
-    private Integer server;
-
-    public Integer getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(Integer uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public Integer getServer() {
-        return server;
-    }
-
-    public void setServer(Integer server) {
-        this.server = server;
-    }
-}

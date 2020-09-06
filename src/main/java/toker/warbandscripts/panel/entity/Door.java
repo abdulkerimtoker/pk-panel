@@ -1,6 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import toker.warbandscripts.panel.entity.pk.DoorPK;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -8,24 +9,36 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "door")
+@IdClass(DoorPK.class)
 public class Door {
-    private Integer id;
+
+    private Integer index;
+    private Server server;
     private String name;
     private Boolean locked;
     private Collection<DoorKey> doorKeys;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
+    @Column(name = "index", nullable = false)
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIndex(Integer id) {
+        this.index = id;
     }
 
-    @Basic
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
     @Column(name = "name", nullable = false, length = 32)
     public String getName() {
         return name;
@@ -35,7 +48,6 @@ public class Door {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "locked", nullable = false)
     public Boolean getLocked() {
         return locked;
@@ -43,21 +55,6 @@ public class Door {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Door door = (Door) o;
-        return Objects.equals(id, door.id) &&
-                Objects.equals(name, door.name) &&
-                Objects.equals(locked, door.locked);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, locked);
     }
 
     @OneToMany(mappedBy = "door")
@@ -73,4 +70,19 @@ public class Door {
     public static class View {
         public static class DoorKeys {}
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Door door = (Door) o;
+        return Objects.equals(index, door.index) &&
+                Objects.equals(server, door.server);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(index, name, locked);
+    }
 }
+

@@ -10,7 +10,7 @@ public class Book {
     private Integer id;
     private String name;
     private Server server;
-    private Collection<BookPage> bookPagesById;
+    private Collection<BookPage> bookPages;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,6 @@ public class Book {
         this.name = name;
     }
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
     public Server getServer() {
@@ -58,11 +57,11 @@ public class Book {
     }
 
     @OneToMany(mappedBy = "book")
-    public Collection<BookPage> getBookPagesById() {
-        return bookPagesById;
+    public Collection<BookPage> getBookPages() {
+        return bookPages;
     }
 
-    public void setBookPagesById(Collection<BookPage> bookPagesById) {
-        this.bookPagesById = bookPagesById;
+    public void setBookPages(Collection<BookPage> bookPagesById) {
+        this.bookPages = bookPagesById;
     }
 }

@@ -31,8 +31,7 @@ public class PanelUser {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "username", nullable = false, length = 32)
+    @Column(name = "username", nullable = false, unique = true, length = 64)
     public String getUsername() {
         return username;
     }
@@ -41,8 +40,7 @@ public class PanelUser {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "claimed_identity", nullable = true, length = 128)
+    @Column(name = "claimed_identity", unique = true, length = 128)
     public String getClaimedIdentity() {
         return claimedIdentity;
     }
@@ -51,7 +49,6 @@ public class PanelUser {
         this.claimedIdentity = claimedIdentity;
     }
 
-    @Basic
     @Column(name = "creation_time", nullable = false)
     public Timestamp getCreationTime() {
         return creationTime;
@@ -61,7 +58,6 @@ public class PanelUser {
         this.creationTime = creationTime;
     }
 
-    @Basic
     @Column(name = "is_locked", nullable = false)
     public Boolean getIsLocked() {
         return isLocked;

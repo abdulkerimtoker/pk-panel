@@ -49,7 +49,10 @@ public class NoticeBoardAccess {
     }
 
     @ManyToOne
-    @JoinColumn(name = "board_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "board_index", referencedColumnName = "index", nullable = false),
+            @JoinColumn(name = "board_server_id", referencedColumnName = "server_id", nullable = false)
+    })
     @JsonView(View.Board.class)
     public NoticeBoard getBoard() {
         return board;

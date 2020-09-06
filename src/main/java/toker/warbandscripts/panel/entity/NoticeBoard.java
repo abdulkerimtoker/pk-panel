@@ -1,6 +1,7 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import toker.warbandscripts.panel.entity.pk.NoticeBoardPK;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -8,24 +9,36 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "notice_board")
+@IdClass(NoticeBoardPK.class)
 public class NoticeBoard {
-    private Integer id;
+
+    private Integer index;
+    private Server server;
     private String name;
     private Collection<NoticeBoardAccess> accesses;
     private Collection<NoticeBoardEntry> entries;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
+    @Column(name = "index", nullable = false)
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIndex(Integer id) {
+        this.index = id;
     }
 
-    @Basic
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
     @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
@@ -40,13 +53,13 @@ public class NoticeBoard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NoticeBoard that = (NoticeBoard) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(index, that.index) &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(index, name);
     }
 
     @OneToMany(mappedBy = "board")
@@ -75,3 +88,4 @@ public class NoticeBoard {
         public static class None {}
     }
 }
+

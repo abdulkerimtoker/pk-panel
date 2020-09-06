@@ -62,7 +62,7 @@ public class Inventory {
         this.player = playerByPlayerId;
     }
 
-    @OneToMany(mappedBy = "inventory")
+    @OneToMany(mappedBy = "inventory", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     public Collection<InventorySlot> getSlots() {
         return slots;
     }

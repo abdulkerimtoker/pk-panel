@@ -20,42 +20,45 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    interface PlayerView extends Player.View.Faction,
+            Player.View.Troop, Player.View.Items {}
+
     @GetMapping("/api/player/{playerId}")
+    @JsonView(PlayerView.class)
     public Player player(@PathVariable int playerId) throws ChangeSetPersister.NotFoundException {
         return playerService.getPlayer(playerId)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
-    @GetMapping("/api/player/search")
-    public List<Player> search(@RequestParam String search) {
-        return playerService.searchPlayers(search);
-    }
-
     @PutMapping("/api/player")
-    @PreAuthorize("hasRole(@serverService.getServerRoleName('PLAYER_MANAGER', #player))")
+    @PreAuthorize("@authService.canModifyPlayer(#player.id)")
+    @JsonView(PlayerView.class)
     public Player updatePlayer(@RequestBody Player player) {
         return playerService.savePlayer(player);
+    }
+
+    interface PlayerSearchView extends Player.View.Faction, Player.View.Troop {}
+
+    @GetMapping("/api/player/search")
+    @JsonView(PlayerSearchView.class)
+    public List<Player> search(@RequestParam String search) {
+        return playerService.searchPlayers(search);
     }
 
     @ExceptionHandler(OptimisticLockException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Wrong version")
     public void versionConflict() {}
 
-    @PutMapping("/api/player/{playerId}/{field}")
-    public boolean updatePlayerField(@PathVariable int playerId,
-                                     @PathVariable String field,
-                                     @RequestBody Object value) {
-        return playerService.setPlayerField(playerId, field, value);
-    }
-
     @GetMapping("/api/player/{playerId}/inventory")
     public Inventory inventory(@PathVariable int playerId) {
         return playerService.getPlayerInventory(playerId);
     }
 
-    @PutMapping("/api/player/inventory/slot")
-    public InventorySlot inventorySlot(@RequestBody InventorySlot inventorySlot) {
-        return playerService.saveInventorySlot(inventorySlot);
+    @PutMapping("/api/inventory/{inventoryId}")
+    @PreAuthorize("@authService.canModifyPlayer(@playerService.getInventory(#inventoryId).player.id)")
+    public InventorySlot inventorySlot(@PathVariable int inventoryId,
+                                       @RequestBody InventorySlot inventorySlot) {
+        return playerService.updateInventorySlot(inventoryId, inventorySlot);
     }
 
     @GetMapping("/api/player/{playerId}/doorKeys")

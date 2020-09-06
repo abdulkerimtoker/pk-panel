@@ -11,14 +11,17 @@ import org.springframework.security.openid.OpenIDConsumerException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import toker.warbandscripts.panel.entity.PanelUser;
-import toker.warbandscripts.panel.entity.PanelUserAuthority;
 import toker.warbandscripts.panel.entity.PanelUserAuthorityAssignment;
+import toker.warbandscripts.panel.entity.PanelUserSession;
+import toker.warbandscripts.panel.repository.PanelUserSessionRepository;
 import toker.warbandscripts.panel.service.PanelUserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +35,14 @@ public class OpenIDLoginController {
 
     private PanelUserService panelUserService;
 
-    public OpenIDLoginController(OpenIDConsumer consumer, PanelUserService panelUserService) {
+    private PanelUserSessionRepository sessionRepo;
+
+    public OpenIDLoginController(OpenIDConsumer consumer,
+                                 PanelUserService panelUserService,
+                                 PanelUserSessionRepository sessionRepo) {
         this.consumer = consumer;
         this.panelUserService = panelUserService;
+        this.sessionRepo = sessionRepo;
     }
 
     @RequestMapping("/api/login")
@@ -63,24 +71,37 @@ public class OpenIDLoginController {
 
         if (token.getStatus() == OpenIDAuthenticationStatus.SUCCESS) {
             PanelUser panelUser = panelUserService.getOrCreateForClaimedIdentity(token.getIdentityUrl());
-            List<String> authorizations = panelUser.getAuthorityAssignments()
-                    .stream()
-                    .map(assignment -> String.format(
-                            "ROLE_%d_%s",
-                            assignment.getServer().getId(),
-                            assignment.getAuthority().getAuthorityName()
-                    ))
-                    .collect(Collectors.toList());
 
-            String jwt = JWT.create()
-                    .withSubject(panelUser.getUsername())
-                    .withClaim("Identity", token.getIdentityUrl())
-                    .withClaim("Authorizations", authorizations)
-                    .sign(HMAC512("sea".getBytes()));
+            if (panelUser != null) {
+                PanelUserSession session = new PanelUserSession();
+                session.setUser(panelUser);
+                session = sessionRepo.save(session);
 
-            return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer "  + jwt)
-                    .build();
+                Collection<PanelUserAuthorityAssignment> authorities =
+                        panelUser.getAuthorityAssignments();
+                List<String> authorizations = authorities != null ?
+                        panelUser.getAuthorityAssignments()
+                                .stream()
+                                .map(assignment -> String.format(
+                                        "ROLE_%d_%s",
+                                        assignment.getServer().getId(),
+                                        assignment.getAuthority().getAuthorityName()
+                                ))
+                                .collect(Collectors.toList())
+                        : new LinkedList<>();
+
+                String jwt = JWT.create()
+                        .withSubject(panelUser.getUsername())
+                        .withClaim("Identity", token.getIdentityUrl())
+                        .withClaim("Session-ID", session.getId())
+                        .withClaim("Authorizations", authorizations)
+                        .sign(HMAC512("sea".getBytes()));
+
+                return ResponseEntity.status(HttpStatus.ACCEPTED)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer "  + jwt)
+                        .build();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

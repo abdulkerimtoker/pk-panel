@@ -6,6 +6,6 @@ import toker.warbandscripts.panel.entity.DoorKey;
 
 import java.util.List;
 
-public interface DoorKeyRepository extends JpaRepository<DoorKey, Integer>, JpaSpecificationExecutor<DoorKey> {
+public interface DoorKeyRepository extends BaseRepository<DoorKey, Integer> {
     List<DoorKey> findAllByPlayerId(Integer playerId);
 }

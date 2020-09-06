@@ -1,93 +1,56 @@
 package toker.warbandscripts.panel.service;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
-import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.entity.Server;
-import toker.warbandscripts.panel.repository.PlayerRepository;
+import toker.warbandscripts.panel.entity.ServerConfiguration;
+import toker.warbandscripts.panel.repository.ServerConfigurationRepository;
 import toker.warbandscripts.panel.repository.ServerRepository;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import javax.persistence.criteria.JoinType;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Collection;
+import java.util.Optional;
 
-@Service("serverService")
+@Service
 public class ServerService {
 
     private ServerRepository serverRepository;
-    private PlayerRepository playerRepository;
-
-    private Map<Class<?>, Method> typeToGetterMap = new HashMap<>();
+    private ServerConfigurationRepository serverConfigurationRepository;
 
     public ServerService(ServerRepository serverRepository,
-                         PlayerRepository playerRepository) {
+                         ServerConfigurationRepository serverConfigurationRepository) {
         this.serverRepository = serverRepository;
-        this.playerRepository = playerRepository;
+        this.serverConfigurationRepository = serverConfigurationRepository;
     }
 
-    public String getServerRoleName(String role, Object entity) {
-        Server server = getServerForEntity(entity);
-        if (server == null) {
-            return "ROLE_INVALID";
-        }
-        return String.format("ROLE_%d_%s", server.getId(), role);
-    }
-
-    private Server getServerForEntity(Object entity) {
-        Class _class = entity.getClass();
-
-        if (!typeToGetterMap.containsKey(_class)) {
-            for (Field field : _class.getDeclaredFields()) {
-                if (field.getType().equals(Server.class)) {
-                    String getterName = "get" + Character.toUpperCase(field.getName().charAt(0))
-                            + field.getName().substring(1);
-                    try {
-                        Method getter = _class.getDeclaredMethod(getterName);
-                        typeToGetterMap.put(_class, getter);
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                }
+    public Server getServer(Integer serverId, String... with) throws ChangeSetPersister.NotFoundException {
+        return serverRepository.findOne((root, query, builder) -> {
+            for (String attr : with) {
+                root.fetch(attr, JoinType.LEFT);
             }
-        }
-
-        try {
-            Server server = (Server)typeToGetterMap.get(_class).invoke(entity);
-            return serverRepository.findByKey(server.getKey());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+            return builder.equal(root.get("id"), serverId);
+        }).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
-    public String getServerRoleNameForPlayer(String role, Player player) {
-        Player found = playerRepository.findById(player.getId()).orElse(null);
-        if (found != null) {
-            Server server = found.getServer();
-            return String.format("ROLE_%d_%s", server.getId(), role);
-        }
-        return "ROLE_INVALID";
+    public Server getServerByKey(String key) {
+        return serverRepository.findByKey(key).orElse(null);
     }
 
-    public List<Server> getServersForAdmin() {
-        JWTOpenIDAuthenticationToken token =
-                (JWTOpenIDAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        List<String> authorities = token.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+    public Optional<ServerConfiguration> getServerConfiguration(int serverId, String name) {
+        return serverConfigurationRepository.findByServerIdAndName(serverId, name);
+    }
 
-        return serverRepository.findAll()
-                .stream()
-                .filter(server -> authorities.contains(String.format("ROLE_%d_USER", server.getId())))
-                .collect(Collectors.toList());
+    public Collection<ServerConfiguration> getServerConfigurations(int serverId) {
+        return serverConfigurationRepository.findAllByServerId(serverId);
+    }
+
+    public File getMapDir(Server server) {
+        File exe = new File(server.getExePath());
+        File serverDir = new File(exe.getParent());
+        File modulesDir = new File(serverDir, "Modules");
+        File moduleDir = new File(modulesDir, server.getModuleName());
+        return new File(moduleDir, "SceneObj");
     }
 }

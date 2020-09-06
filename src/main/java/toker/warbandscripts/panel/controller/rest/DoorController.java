@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
+import toker.warbandscripts.panel.bean.SelectedServerId;
 import toker.warbandscripts.panel.entity.Door;
 import toker.warbandscripts.panel.entity.DoorKey;
+import toker.warbandscripts.panel.entity.pk.DoorPK;
 import toker.warbandscripts.panel.service.DoorService;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class DoorController {
     @GetMapping("/api/door/{doorId}")
     @JsonView(DoorKey.View.Player.class)
     public Door door(@PathVariable int doorId) throws ChangeSetPersister.NotFoundException {
-        return doorService.getDoor(doorId)
+        return doorService.getDoor(new DoorPK(doorId, SelectedServerId.get()))
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 

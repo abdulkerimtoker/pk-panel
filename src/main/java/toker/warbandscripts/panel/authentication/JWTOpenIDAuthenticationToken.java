@@ -15,12 +15,14 @@ public class JWTOpenIDAuthenticationToken extends AbstractAuthenticationToken {
     private String jwt;
     private String claimedIdentity;
     private Integer selectedServerId;
+    private int sessionId;
 
     public JWTOpenIDAuthenticationToken(Collection<? extends GrantedAuthority> authorities,
                                         String username,
                                         String jwt,
                                         String claimedIdentity,
-                                        Integer selectedServerId) {
+                                        Integer selectedServerId,
+                                        int sessionId) {
         super(authorities);
 
         this.authorities = authorities;
@@ -28,6 +30,7 @@ public class JWTOpenIDAuthenticationToken extends AbstractAuthenticationToken {
         this.jwt = jwt;
         this.claimedIdentity = claimedIdentity;
         this.selectedServerId = selectedServerId;
+        this.sessionId = sessionId;
 
         setAuthenticated(true);
     }
@@ -49,5 +52,9 @@ public class JWTOpenIDAuthenticationToken extends AbstractAuthenticationToken {
 
     public Integer getSelectedServerId() {
         return selectedServerId;
+    }
+
+    public int getSessionId() {
+        return sessionId;
     }
 }

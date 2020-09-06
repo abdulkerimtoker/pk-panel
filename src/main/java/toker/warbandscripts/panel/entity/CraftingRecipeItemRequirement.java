@@ -1,28 +1,43 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import toker.warbandscripts.panel.entity.pk.CraftingRecipeItemRequirementPK;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "crafting_recipe_item_requirement")
+@IdClass(CraftingRecipeItemRequirementPK.class)
 public class CraftingRecipeItemRequirement {
-    private Integer id;
+
+    private CraftingRecipe craftingRecipe;
+    private Item item;
     private Integer amount;
-    private CraftingRecipe craftingRecipeByRecipeId;
-    private Item itemByItemId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
+    public CraftingRecipe getCraftingRecipe() {
+        return craftingRecipe;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCraftingRecipe(CraftingRecipe craftingRecipeByRecipeId) {
+        this.craftingRecipe = craftingRecipeByRecipeId;
     }
 
-    @Basic
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item itemByItemId) {
+        this.item = itemByItemId;
+    }
+
     @Column(name = "amount", nullable = false)
     public Integer getAmount() {
         return amount;
@@ -37,32 +52,12 @@ public class CraftingRecipeItemRequirement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CraftingRecipeItemRequirement that = (CraftingRecipeItemRequirement) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(amount, that.amount);
+        return Objects.equals(craftingRecipe, that.craftingRecipe) &&
+                Objects.equals(item, that.item);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount);
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false)
-    public CraftingRecipe getCraftingRecipeByRecipeId() {
-        return craftingRecipeByRecipeId;
-    }
-
-    public void setCraftingRecipeByRecipeId(CraftingRecipe craftingRecipeByRecipeId) {
-        this.craftingRecipeByRecipeId = craftingRecipeByRecipeId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
-    public Item getItemByItemId() {
-        return itemByItemId;
-    }
-
-    public void setItemByItemId(Item itemByItemId) {
-        this.itemByItemId = itemByItemId;
+        return Objects.hash(craftingRecipe, item);
     }
 }

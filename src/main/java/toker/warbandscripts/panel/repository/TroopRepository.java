@@ -9,5 +9,5 @@ import toker.warbandscripts.panel.entity.Troop;
 import java.util.List;
 import java.util.Optional;
 
-public interface TroopRepository extends JpaRepository<Troop, Integer>, JpaSpecificationExecutor<Troop> {
+public interface TroopRepository extends BaseRepository<Troop, Integer> {
 }

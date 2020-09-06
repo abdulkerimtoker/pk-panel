@@ -1,29 +1,44 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import toker.warbandscripts.panel.entity.pk.CraftingStationPK;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "crafting_station")
+@IdClass(CraftingStationPK.class)
 public class CraftingStation {
-    private Integer id;
+
+    private Integer index;
+    private Server server;
     private String name;
-    private Collection<CraftingRecipe> craftingRecipesById;
-    private Collection<CraftingStationInstance> craftingStationInstances;
+    private Collection<CraftingRecipe> craftingRecipes;
+    private Collection<CraftingStationInstance> instances;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    public Integer getId() {
-        return id;
+    @Column(name = "index", nullable = false)
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIndex(Integer id) {
+        this.index = id;
     }
 
-    @Basic
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
     @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
@@ -33,35 +48,44 @@ public class CraftingStation {
         this.name = name;
     }
 
+    @OneToMany(mappedBy = "craftingStation")
+    @JsonView(View.Recipes.class)
+    public Collection<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+
+    public void setCraftingRecipes(Collection<CraftingRecipe> craftingRecipesById) {
+        this.craftingRecipes = craftingRecipesById;
+    }
+
+    @OneToMany(mappedBy = "craftingStation")
+    @JsonView(View.Instances.class)
+    public Collection<CraftingStationInstance> getInstances() {
+        return instances;
+    }
+
+    public void setInstances(Collection<CraftingStationInstance> craftingStationInstances) {
+        this.instances = craftingStationInstances;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CraftingStation that = (CraftingStation) o;
-        return Objects.equals(id, that.id) &&
+        return Objects.equals(index, that.index) &&
                 Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(index, name);
     }
 
-    @OneToMany(mappedBy = "craftingStation")
-    public Collection<CraftingRecipe> getCraftingRecipesById() {
-        return craftingRecipesById;
-    }
-
-    public void setCraftingRecipesById(Collection<CraftingRecipe> craftingRecipesById) {
-        this.craftingRecipesById = craftingRecipesById;
-    }
-
-    @OneToMany(mappedBy = "craftingStation")
-    public Collection<CraftingStationInstance> getCraftingStationInstances() {
-        return craftingStationInstances;
-    }
-
-    public void setCraftingStationInstances(Collection<CraftingStationInstance> craftingStationInstances) {
-        this.craftingStationInstances = craftingStationInstances;
+    public interface View {
+        interface None {}
+        interface Recipes {}
+        interface Instances {}
     }
 }
+

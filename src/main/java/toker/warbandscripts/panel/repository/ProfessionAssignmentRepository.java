@@ -7,10 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import toker.warbandscripts.panel.entity.ProfessionAssignment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProfessionAssignmentRepository extends
-        JpaRepository<ProfessionAssignment, Integer>,
-        JpaSpecificationExecutor<ProfessionAssignment> {
+        BaseRepository<ProfessionAssignment, Integer> {
+
     List<ProfessionAssignment> findAllByPlayerId(Integer playerId);
 
     @Modifying

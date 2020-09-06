@@ -26,7 +26,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws IOException, ServletException {
         String jwt = request.getHeader("Authorization");
 
         if (jwt != null && jwt.startsWith("Bearer ")) {
@@ -35,6 +37,11 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                 DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512("sea".getBytes()))
                         .build()
                         .verify(jwt);
+
+                int sessionId = decodedJWT.getClaim("Session-ID").asInt();
+
+                if (EndedSessions.isSessionEnded(sessionId))
+                    throw new Exception();
 
                 String username = decodedJWT.getSubject();
                 String claimedIdentity = decodedJWT.getClaim("Identity").asString();
@@ -58,9 +65,10 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
                 SecurityContextHolder.getContext().setAuthentication(
                         new JWTOpenIDAuthenticationToken(
                                 authorityList, username, jwt,
-                                claimedIdentity, selectedServerId));
+                                claimedIdentity, selectedServerId,
+                                sessionId));
             }
-            catch (JWTVerificationException ignored) {}
+            catch (Exception ignored) {}
         }
 
         chain.doFilter(request, response);
@@ -68,7 +76,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/api/login") ||
+        return !request.getServletPath().startsWith("/api") ||
+                request.getServletPath().equals("/api/login") ||
                 request.getServletPath().equals("/api/processLogin");
     }
 }

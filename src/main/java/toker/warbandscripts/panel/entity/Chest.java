@@ -1,8 +1,11 @@
 package toker.warbandscripts.panel.entity;
 
+import toker.warbandscripts.panel.entity.pk.ChestPK;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +17,6 @@ public class Chest {
     private Server server;
     private String name;
     private Integer size;
-    private Integer type;
 
     private Collection<ChestSlot> slots;
 
@@ -39,7 +41,7 @@ public class Chest {
         this.server = server;
     }
 
-    @Column(name = "name", nullable = false, length = 32)
+    @Column(name = "name", nullable = false, length = 64)
     public String getName() {
         return name;
     }
@@ -57,13 +59,13 @@ public class Chest {
         this.size = size;
     }
 
-    @Column(name = "chest_type", nullable = true)
-    public Integer getType() {
-        return type;
+    @OneToMany(mappedBy = "chest")
+    public Collection<ChestSlot> getSlots() {
+        return slots;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setSlots(Collection<ChestSlot> slots) {
+        this.slots = slots;
     }
 
     @Override
@@ -78,36 +80,5 @@ public class Chest {
     @Override
     public int hashCode() {
         return Objects.hash(index, name, size);
-    }
-
-    @OneToMany(mappedBy = "chest")
-    public Collection<ChestSlot> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(Collection<ChestSlot> chestSlotsById) {
-        this.slots = chestSlotsById;
-    }
-}
-
-class ChestPK implements Serializable {
-
-    private Integer index;
-    private Integer server;
-
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public Integer getServer() {
-        return server;
-    }
-
-    public void setServer(Integer server) {
-        this.server = server;
     }
 }

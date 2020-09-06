@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import toker.warbandscripts.panel.entity.Server;
 
-public interface ServerRepository extends JpaRepository<Server, Integer>, JpaSpecificationExecutor<Server> {
-    Server findByKey(String key);
+import java.util.Optional;
+
+public interface ServerRepository extends BaseRepository<Server, Integer> {
+    Optional<Server> findByKey(String key);
 }

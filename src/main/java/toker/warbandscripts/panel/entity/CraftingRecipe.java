@@ -1,14 +1,17 @@
 package toker.warbandscripts.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "crafting_recipe")
 public class CraftingRecipe {
+
     private Integer id;
     private Integer professionTier;
     private Integer price;
@@ -16,7 +19,8 @@ public class CraftingRecipe {
     private Profession profession;
     private Item item;
     private Integer hours;
-    private Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirements;
+    private Collection<CraftingRecipeItemRequirement> itemRequirements;
+    private List<CraftingRequest> craftingRequests;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +33,6 @@ public class CraftingRecipe {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "profession_tier", nullable = false)
     public Integer getProfessionTier() {
         return professionTier;
@@ -39,7 +42,6 @@ public class CraftingRecipe {
         this.professionTier = professionTier;
     }
 
-    @Basic
     @Column(name = "price", nullable = false)
     public Integer getPrice() {
         return price;
@@ -49,23 +51,11 @@ public class CraftingRecipe {
         this.price = price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CraftingRecipe that = (CraftingRecipe) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(professionTier, that.professionTier) &&
-                Objects.equals(price, that.price);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, professionTier, price);
-    }
-
     @ManyToOne
-    @JoinColumn(name = "station_id", referencedColumnName = "id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "station_index", referencedColumnName = "index", nullable = false),
+            @JoinColumn(name = "station_server_id", referencedColumnName = "server_id", nullable = false)
+    })
     @JsonView(View.CraftingStation.class)
     public CraftingStation getCraftingStation() {
         return craftingStation;
@@ -97,7 +87,6 @@ public class CraftingRecipe {
         this.item = itemByItemId;
     }
 
-    @Basic
     @Column(name = "hours", nullable = false)
     public Integer getHours() {
         return hours;
@@ -107,14 +96,39 @@ public class CraftingRecipe {
         this.hours = hours;
     }
 
-    @OneToMany(mappedBy = "craftingRecipeByRecipeId")
+    @OneToMany(mappedBy = "craftingRecipe", cascade = CascadeType.REMOVE)
     @JsonView(View.ItemRequirements.class)
-    public Collection<CraftingRecipeItemRequirement> getCraftingRecipeItemRequirements() {
-        return craftingRecipeItemRequirements;
+    public Collection<CraftingRecipeItemRequirement> getItemRequirements() {
+        return itemRequirements;
     }
 
-    public void setCraftingRecipeItemRequirements(Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirementsById) {
-        this.craftingRecipeItemRequirements = craftingRecipeItemRequirementsById;
+    public void setItemRequirements(Collection<CraftingRecipeItemRequirement> craftingRecipeItemRequirementsById) {
+        this.itemRequirements = craftingRecipeItemRequirementsById;
+    }
+
+    @OneToMany(mappedBy = "craftingRecipe", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    public List<CraftingRequest> getCraftingRequests() {
+        return craftingRequests;
+    }
+
+    public void setCraftingRequests(List<CraftingRequest> craftingRequests) {
+        this.craftingRequests = craftingRequests;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CraftingRecipe that = (CraftingRecipe) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(professionTier, that.professionTier) &&
+                Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, professionTier, price);
     }
 
     public interface View {

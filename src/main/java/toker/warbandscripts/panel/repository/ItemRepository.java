@@ -9,5 +9,5 @@ import toker.warbandscripts.panel.entity.Item;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<Item, Integer>, JpaSpecificationExecutor<Item> {
+public interface ItemRepository extends BaseRepository<Item, Integer> {
 }

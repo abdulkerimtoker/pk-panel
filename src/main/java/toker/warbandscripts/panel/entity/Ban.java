@@ -4,14 +4,18 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Calendar;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ban")
 public class Ban {
+
     private Integer id;
     private Integer playerUniqueId;
     private Timestamp time;
+    private Integer minutes;
     private Boolean isUndone;
     private Boolean isPermanent;
     private String reason;
@@ -47,8 +51,17 @@ public class Ban {
         this.time = time;
     }
 
+    @Column(name = "minutes", nullable = false)
+    public Integer getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(Integer minutes) {
+        this.minutes = minutes;
+    }
+
     @Column(name = "is_undone", nullable = false)
-    public Boolean getUndone() {
+    public Boolean isUndone() {
         return isUndone;
     }
 
@@ -57,7 +70,7 @@ public class Ban {
     }
 
     @Column(name = "is_permanent", nullable = false)
-    public Boolean getPermanent() {
+    public Boolean isPermanent() {
         return isPermanent;
     }
 
@@ -94,6 +107,17 @@ public class Ban {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    @Transient
+    public boolean isExpired() {
+        if (isPermanent)
+            return false;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.MINUTE, minutes);
+        return calendar.toInstant().isBefore(Instant.now());
     }
 
     @Override

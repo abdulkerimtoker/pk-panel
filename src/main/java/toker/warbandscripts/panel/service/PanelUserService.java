@@ -4,16 +4,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
 import toker.warbandscripts.panel.entity.PanelUser;
 import toker.warbandscripts.panel.entity.PanelUserRank;
+import toker.warbandscripts.panel.repository.PanelUserRankRepository;
 import toker.warbandscripts.panel.repository.PanelUserRepository;
 
+import javax.persistence.criteria.JoinType;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -24,17 +31,25 @@ import java.util.regex.Pattern;
 public class PanelUserService {
 
     private PanelUserRepository panelUserRepository;
+    private PanelUserRankRepository panelUserRankRepository;
 
     @Qualifier("steam-api")
     private RestTemplate restTemplate;
 
-    public PanelUserService(PanelUserRepository panelUserRepository, RestTemplate restTemplate) {
+    public PanelUserService(PanelUserRepository panelUserRepository,
+                            PanelUserRankRepository panelUserRankRepository,
+                            RestTemplate restTemplate) {
         this.panelUserRepository = panelUserRepository;
+        this.panelUserRankRepository = panelUserRankRepository;
         this.restTemplate = restTemplate;
     }
 
     public PanelUser getOrCreateForClaimedIdentity(String claimedIdentity) {
-        PanelUser panelUser = panelUserRepository.findByClaimedIdentity(claimedIdentity);
+        PanelUser panelUser = panelUserRepository.findOne(((root, query, builder) -> {
+            root.fetch("authorityAssignments", JoinType.LEFT);
+            return builder.equal(root.get("claimedIdentity"), claimedIdentity);
+        })).orElse(null);
+
         if (panelUser == null) {
             Pattern pattern = Pattern.compile("https://steamcommunity\\.com/openid/id/(?<steamid>\\d+)");
             Matcher matcher = pattern.matcher(claimedIdentity);
@@ -46,16 +61,20 @@ public class PanelUserService {
                 ObjectMapper mapper = new ObjectMapper();
                 try {
                     JsonNode node = mapper.readTree(sea);
-                    String username = node.get("response").get("players").elements().next().get("personaname").asText();
+                    String username = node.get("response")
+                            .get("players")
+                            .elements()
+                            .next()
+                            .get("personaname")
+                            .asText();
+
                     panelUser = new PanelUser();
                     panelUser.setClaimedIdentity(claimedIdentity);
                     panelUser.setUsername(username);
                     panelUser.setIsLocked(false);
-                    PanelUserRank rank = new PanelUserRank();
-                    rank.setId(1);
-                    panelUser.setRank(rank);
+                    panelUser.setRank(panelUserRankRepository.getOne(1));
                     panelUser.setCreationTime(Timestamp.from(Instant.now()));
-                    panelUser = panelUserRepository.save(panelUser);
+                    panelUser = panelUserRepository.saveAndFlush(panelUser);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -64,7 +83,9 @@ public class PanelUserService {
         return panelUser;
     }
 
-    public boolean isUserToBeLoggedOut(PanelUser panelUser) {
-        return false;
+    public Collection<GrantedAuthority> getAuthoritiesForCurrentUser() {
+        JWTOpenIDAuthenticationToken token =
+                (JWTOpenIDAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        return token.getAuthorities();
     }
 }

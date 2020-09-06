@@ -1,16 +1,28 @@
 package toker.warbandscripts.panel;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import toker.warbandscripts.panel.authentication.EndedSessions;
+import toker.warbandscripts.panel.entity.PanelUserSession;
+import toker.warbandscripts.panel.entity.PanelUserSession_;
+import toker.warbandscripts.panel.repository.BaseRepository;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EnableJpaRepositories
-public class PanelApplication {
+@EnableAspectJAutoProxy
+@EnableScheduling
+public class PanelApplication implements CommandLineRunner {
 
     public static void main(String[] args) throws Exception {
         Properties properties = new Properties();
@@ -25,9 +37,11 @@ public class PanelApplication {
             System.setProperty("server.port", "8080");
         }
 
-        String[] compulsoryConfigs = {"PANEL_DB_HOST", "PANEL_DB_PORT", "PANEL_DB_NAME", "PANEL_DB_USER",
-                "PANEL_DB_USER_PASS", "SERVER_BAN_LIST_FILE", "SERVER_LOGS_DIR", "SERVER_STARTUP_COMMAND",
-                "SERVER_NAME", "SERVER_HOST", "SERVER_PORT", "PANEL_TITLE"};
+        String[] compulsoryConfigs = {
+                "PANEL_DB_HOST", "PANEL_DB_PORT",
+                "PANEL_DB_NAME", "PANEL_DB_USER",
+                "PANEL_DB_USER_PASS"
+        };
 
         for (String config : compulsoryConfigs) {
             if (!properties.containsKey(config)) {
@@ -36,8 +50,26 @@ public class PanelApplication {
             }
         }
 
-        System.setProperty("PANEL_TITLE", properties.getProperty("PANEL_TITLE"));
-
         SpringApplication.run(PanelApplication.class, args);
+    }
+
+    private BaseRepository<PanelUserSession, Integer> sessionRepo;
+
+    public PanelApplication(BaseRepository<PanelUserSession, Integer> sessionRepo) {
+        this.sessionRepo = sessionRepo;
+    }
+
+    @Override
+    public void run(String... args) {
+        List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
+                builder.equal(root.get(PanelUserSession_.ended), true));
+        EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
+    }
+
+    @Scheduled(fixedDelay = 5 * 1000)
+    public void endSessionsPeriodically() {
+        List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
+                builder.equal(root.get(PanelUserSession_.ended), true));
+        EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
     }
 }
