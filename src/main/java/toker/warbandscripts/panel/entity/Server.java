@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import toker.warbandscripts.panel.util.DefaultStringValue;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -64,6 +65,7 @@ public class Server {
 
     @Column(name = "exe_path")
     @JsonIgnore
+    @DefaultStringValue("sead")
     public String getExePath() {
         return exePath;
     }

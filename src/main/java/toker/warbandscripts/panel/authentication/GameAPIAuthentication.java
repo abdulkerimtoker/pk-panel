@@ -3,9 +3,6 @@ package toker.warbandscripts.panel.authentication;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import toker.warbandscripts.panel.entity.Server;
 
-import java.util.Collections;
-import java.util.LinkedList;
-
 public class GameAPIAuthentication extends AbstractAuthenticationToken {
 
     private Server server;

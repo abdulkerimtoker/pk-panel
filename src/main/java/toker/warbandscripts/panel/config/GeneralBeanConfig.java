@@ -8,47 +8,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.support.HttpRequestWrapper;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.openid.NullAxFetchListFactory;
 import org.springframework.security.openid.OpenID4JavaConsumer;
 import org.springframework.security.openid.OpenIDConsumer;
-import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.MultipartConfigElement;
-import java.io.File;
 import java.net.URI;
 
 @Configuration
 public class GeneralBeanConfig {
 
     @Bean
-    public File localLogFolder() {
-        File localLogFolder = new File(System.getProperty("user.dir"), "logs");
-        if (!localLogFolder.exists()) {
-            localLogFolder.mkdir();
-        }
-        return localLogFolder;
-    }
-
-    @Bean
-    @Qualifier("rememberMeTokenRepository")
-    public PersistentTokenRepository rememberMeTokenRepository() {
-        return new InMemoryTokenRepositoryImpl();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public OpenIDConsumer openIDConsumer() {
+
         ConsumerManager manager = new ConsumerManager();
         manager.setMaxAssocAttempts(0);
         return new OpenID4JavaConsumer(manager, new NullAxFetchListFactory());

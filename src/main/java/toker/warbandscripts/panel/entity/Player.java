@@ -2,6 +2,7 @@ package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import toker.warbandscripts.panel.util.DefaultItemValue;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -197,10 +198,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "body_armor_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "body_armor_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getBodyArmor() {
         return bodyArmor;
@@ -211,10 +210,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "head_armor_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "head_armor_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHeadArmor() {
         return headArmor;
@@ -225,10 +222,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "foot_armor_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "foot_armor_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getFootArmor() {
         return footArmor;
@@ -239,10 +234,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "hand_armor_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "hand_armor_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHandArmor() {
         return handArmor;
@@ -253,10 +246,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "item_0_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "item_0_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getItem_0() {
         return item_0;
@@ -267,10 +258,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "item_1_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "item_1_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getItem_1() {
         return item_1;
@@ -281,10 +270,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "item_2_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "item_2_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getItem_2() {
         return item_2;
@@ -295,10 +282,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "item_3_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "item_3_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getItem_3() {
         return item_3;
@@ -308,7 +293,6 @@ public class Player {
         this.item_3 = item3;
     }
 
-    @Basic
     @Column(name = "ammo_0", nullable = false)
     public Integer getAmmo_0() {
         return ammo_0;
@@ -318,7 +302,6 @@ public class Player {
         this.ammo_0 = ammo0;
     }
 
-    @Basic
     @Column(name = "ammo_1", nullable = false)
     public Integer getAmmo_1() {
         return ammo_1;
@@ -328,7 +311,6 @@ public class Player {
         this.ammo_1 = ammo1;
     }
 
-    @Basic
     @Column(name = "ammo_2", nullable = false)
     public Integer getAmmo_2() {
         return ammo_2;
@@ -338,7 +320,6 @@ public class Player {
         this.ammo_2 = ammo2;
     }
 
-    @Basic
     @Column(name = "ammo_3", nullable = false)
     public Integer getAmmo_3() {
         return ammo_3;
@@ -349,10 +330,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "horse_0_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "horse_0_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHorse_0() {
         return horse_0;
@@ -363,10 +342,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "horse_1_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "horse_1_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHorse_1() {
         return horse_1;
@@ -377,10 +354,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "horse_2_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "horse_2_id", referencedColumnName = "id",nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHorse_2() {
         return horse_2;
@@ -400,10 +375,8 @@ public class Player {
     }
 
     @ManyToOne
-    @JoinColumn(
-            name = "horse_id", referencedColumnName = "id",
-            nullable = false, columnDefinition = "int default 0"
-    )
+    @JoinColumn(name = "horse_id", referencedColumnName = "id", nullable = false)
+    @DefaultItemValue(itemId = 0)
     @JsonView(View.Items.class)
     public Item getHorse() {
         return horse;
@@ -422,7 +395,6 @@ public class Player {
         this.horseSlot = horseSlot;
     }
 
-    @Basic
     @Column(name = "horse_1_wound_time")
     public Timestamp getHorse_1_woundTime() {
         return horse_1_woundTime;
@@ -432,7 +404,6 @@ public class Player {
         this.horse_1_woundTime = horse1WoundTime;
     }
 
-    @Basic
     @Column(name = "horse_2_wound_time")
     public Timestamp getHorse_2_woundTime() {
         return horse_2_woundTime;
@@ -442,7 +413,6 @@ public class Player {
         this.horse_2_woundTime = horse2WoundTime;
     }
 
-    @Basic
     @Column(name = "horse_3_wound_time")
     public Timestamp getHorse_3_woundTime() {
         return horse_3_woundTime;
@@ -452,7 +422,6 @@ public class Player {
         this.horse_3_woundTime = horse3WoundTime;
     }
 
-    @Basic
     @Column(name = "horse_1_wound_duration", nullable = false)
     public Integer getHorse_1_woundDuration() {
         return horse_1_woundDuration;
@@ -462,7 +431,6 @@ public class Player {
         this.horse_1_woundDuration = horse1WoundDuration;
     }
 
-    @Basic
     @Column(name = "horse_2_wound_duration", nullable = false)
     public Integer getHorse_2_woundDuration() {
         return horse_2_woundDuration;
@@ -472,7 +440,6 @@ public class Player {
         this.horse_2_woundDuration = horse2WoundDuration;
     }
 
-    @Basic
     @Column(name = "horse_3_wound_duration", nullable = false)
     public Integer getHorse_3_woundDuration() {
         return horse_3_woundDuration;
@@ -482,7 +449,6 @@ public class Player {
         this.horse_3_woundDuration = horse3WoundDuration;
     }
 
-    @Basic
     @Column(name = "horse_1_stable_id", nullable = false)
     public Integer getHorse_1_stableId() {
         return horse_1_stableId;
@@ -492,7 +458,6 @@ public class Player {
         this.horse_1_stableId = horse1StableId;
     }
 
-    @Basic
     @Column(name = "horse_2_stable_id", nullable = false)
     public Integer getHorse_2_stableId() {
         return horse_2_stableId;
@@ -502,7 +467,6 @@ public class Player {
         this.horse_2_stableId = horse2StableId;
     }
 
-    @Basic
     @Column(name = "horse_3_stable_id", nullable = false)
     public Integer getHorse_3_stableId() {
         return horse_3_stableId;
@@ -512,7 +476,6 @@ public class Player {
         this.horse_3_stableId = horse3StableId;
     }
 
-    @Basic
     @Column(name = "riding_tier", nullable = false)
     public Integer getRidingTier() {
         return ridingTier;
@@ -522,7 +485,6 @@ public class Player {
         this.ridingTier = ridingTier;
     }
 
-    @Basic
     @Column(name = "wound_time")
     public Timestamp getWoundTime() {
         return woundTime;
@@ -532,7 +494,6 @@ public class Player {
         this.woundTime = woundTime;
     }
 
-    @Basic
     @Column(name = "wound_duration", nullable = false)
     public Integer getWoundDuration() {
         return woundDuration;
@@ -542,7 +503,6 @@ public class Player {
         this.woundDuration = woundDuration;
     }
 
-    @Basic
     @Column(name = "served_wound_time", nullable = false)
     public Integer getServedWoundTime() {
         return servedWoundTime;
@@ -552,7 +512,6 @@ public class Player {
         this.servedWoundTime = servedWoundTime;
     }
 
-    @Basic
     @Column(name = "treatment_time")
     public Timestamp getTreatmentTime() {
         return treatmentTime;
@@ -562,7 +521,6 @@ public class Player {
         this.treatmentTime = treatmentTime;
     }
 
-    @Basic
     @Column(name = "last_log_time")
     public Timestamp getLastLogTime() {
         return lastLogTime;

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 import toker.warbandscripts.panel.entity.Ban;
 import toker.warbandscripts.panel.service.BanService;

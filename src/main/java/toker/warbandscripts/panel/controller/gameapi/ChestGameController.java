@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import toker.warbandscripts.panel.entity.Chest;
 import toker.warbandscripts.panel.entity.ChestSlot;
 import toker.warbandscripts.panel.entity.Server;
-import toker.warbandscripts.panel.entity.pk.ChestPK;
-import toker.warbandscripts.panel.repository.ChestRepository;
 import toker.warbandscripts.panel.service.ChestService;
 
 import java.util.Collection;

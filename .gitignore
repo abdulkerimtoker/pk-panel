@@ -25,5 +25,5 @@
 /.nb-gradle/
 
 logs/
-
 config.txt
+.gradle/

@@ -5,6 +5,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import toker.warbandscripts.panel.bean.SelectedServerId;
+import toker.warbandscripts.panel.entity.Player;
 import toker.warbandscripts.panel.entity.Server;
 import toker.warbandscripts.panel.service.AuthService;
 import toker.warbandscripts.panel.service.ServerService;
@@ -28,6 +29,7 @@ public class ServerController {
     @GetMapping("/api/servers")
     @JsonView(Server.View.None.class)
     public List<Server> servers() {
+        new Player().getItem_0();
         return authService.getServersForAdmin();
     }
 

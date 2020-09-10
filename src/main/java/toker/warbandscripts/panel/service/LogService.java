@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 public class LogService {
 
-    private Pattern pattern = Pattern.compile("[\\w _\\-\\[\\]]{3,}");
+    private Pattern pattern = Pattern.compile("[\\w _\\-\\[\\]:]{3,64}");
 
     public String[] getLogFileNames(Server server) {
         File serverFolder = new File(new File(server.getExePath()).getParent());

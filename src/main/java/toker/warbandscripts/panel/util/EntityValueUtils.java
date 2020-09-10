@@ -3,7 +3,6 @@ package toker.warbandscripts.panel.util;
 
 import javax.persistence.Entity;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 

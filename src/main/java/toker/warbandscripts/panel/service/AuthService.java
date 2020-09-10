@@ -2,7 +2,6 @@ package toker.warbandscripts.panel.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Service;
 import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
 import toker.warbandscripts.panel.entity.Player;
@@ -10,8 +9,6 @@ import toker.warbandscripts.panel.entity.Server;
 import toker.warbandscripts.panel.repository.PlayerRepository;
 import toker.warbandscripts.panel.repository.ServerRepository;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;

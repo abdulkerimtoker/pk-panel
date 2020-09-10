@@ -1,7 +1,6 @@
 package toker.warbandscripts.panel.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.cache.annotation.Cacheable;
 import toker.warbandscripts.panel.entity.pk.FactionPK;
 
 import javax.persistence.*;

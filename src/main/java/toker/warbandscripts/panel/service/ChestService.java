@@ -2,7 +2,6 @@ package toker.warbandscripts.panel.service;
 
 import org.springframework.stereotype.Service;
 import toker.warbandscripts.panel.entity.Chest;
-import toker.warbandscripts.panel.entity.Item;
 import toker.warbandscripts.panel.entity.pk.ChestPK;
 import toker.warbandscripts.panel.repository.ChestRepository;
 import toker.warbandscripts.panel.repository.ChestSlotRepository;

@@ -3,7 +3,7 @@ package toker.warbandscripts.panel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableAspectJAutoProxy
 @EnableScheduling
+@EnableSpringConfigured
 public class PanelApplication implements CommandLineRunner {
 
     public static void main(String[] args) throws Exception {
@@ -64,6 +64,7 @@ public class PanelApplication implements CommandLineRunner {
         List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
                 builder.equal(root.get(PanelUserSession_.ended), true));
         EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
+
     }
 
     @Scheduled(fixedDelay = 5 * 1000)
@@ -71,5 +72,9 @@ public class PanelApplication implements CommandLineRunner {
         List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
                 builder.equal(root.get(PanelUserSession_.ended), true));
         EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
+    }
+
+    public static void sea(Object... objects) {
+        System.out.println();
     }
 }

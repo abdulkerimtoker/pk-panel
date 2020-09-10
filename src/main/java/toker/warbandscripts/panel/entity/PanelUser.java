@@ -1,6 +1,5 @@
 package toker.warbandscripts.panel.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;

@@ -2,16 +2,13 @@ package toker.warbandscripts.panel.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import toker.warbandscripts.panel.authentication.JWTOpenIDAuthenticationToken;
 import toker.warbandscripts.panel.entity.PanelUser;
-import toker.warbandscripts.panel.entity.PanelUserRank;
 import toker.warbandscripts.panel.repository.PanelUserRankRepository;
 import toker.warbandscripts.panel.repository.PanelUserRepository;
 
@@ -20,10 +17,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

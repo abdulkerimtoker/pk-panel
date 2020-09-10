@@ -1,7 +1,6 @@
 package toker.warbandscripts.panel.controller.rest;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import toker.warbandscripts.panel.entity.Profession;

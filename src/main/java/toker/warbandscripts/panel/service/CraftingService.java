@@ -1,7 +1,6 @@
 package toker.warbandscripts.panel.service;
 
 import org.springframework.stereotype.Service;
-import toker.warbandscripts.panel.entity.CraftingRequest;
 import toker.warbandscripts.panel.entity.CraftingStation;
 import toker.warbandscripts.panel.repository.CraftingRequestRepository;
 import toker.warbandscripts.panel.repository.CraftingStationRepository;

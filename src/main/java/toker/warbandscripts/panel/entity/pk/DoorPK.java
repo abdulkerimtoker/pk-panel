@@ -1,7 +1,5 @@
 package toker.warbandscripts.panel.entity.pk;
 
-import toker.warbandscripts.panel.entity.Server;
-
 import java.io.Serializable;
 import java.util.Objects;
 

@@ -1,8 +1,5 @@
 package toker.warbandscripts.panel.entity.pk;
 
-import toker.warbandscripts.panel.entity.Player;
-import toker.warbandscripts.panel.entity.Profession;
-
 import java.io.Serializable;
 import java.util.Objects;
 

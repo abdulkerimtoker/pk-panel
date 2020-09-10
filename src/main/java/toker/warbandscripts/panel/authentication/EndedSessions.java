@@ -1,9 +1,6 @@
 package toker.warbandscripts.panel.authentication;
 
-import toker.warbandscripts.panel.entity.PanelUserSession;
-
 import java.util.Collection;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 public class EndedSessions {
