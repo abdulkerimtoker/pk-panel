@@ -1,10 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.3.3.RELEASE'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-
     id 'java'
-    id 'io.freefair.aspectj' version '5.2.1'
-
+    id "io.freefair.aspectj.post-compile-weaving" version "5.2.1"
     id 'idea'
 }
 
@@ -14,7 +12,6 @@ sourceCompatibility = '14'
 
 idea {
     module {
-        sourceDirs += file("build/generated/sources/annotationProcessor/java/main")
         generatedSourceDirs += file("build/generated/sources/annotationProcessor/java/main")
     }
 }
@@ -30,19 +27,48 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    compile 'org.springframework.boot:spring-boot-starter-aop:2.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-security:2.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-cache:2.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-websocket:2.3.3.RELEASE'
-    compile 'org.springframework.session:spring-session-core:2.3.0.RELEASE'
-    compile 'org.springframework.security:spring-security-openid:5.3.3.RELEASE'
-    compile 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
-    compile 'org.springframework.security:spring-security-messaging:5.3.3.RELEASE'
-    compile 'org.hibernate:hibernate-ehcache:5.4.17.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.3.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-cache:2.3.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.3.3.RELEASE'
+    implementation 'org.springframework.session:spring-session-core:2.3.0.RELEASE'
+    implementation 'org.springframework.security:spring-security-openid:5.3.3.RELEASE'
+    implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
+    implementation 'org.springframework.security:spring-security-messaging:5.3.3.RELEASE'
+
     annotationProcessor 'org.hibernate:hibernate-jpamodelgen:5.4.17.Final'
-    compile 'org.postgresql:postgresql:42.2.16'
-    compile 'org.apache.commons:commons-dbcp2:2.7.0'
-    compile 'com.auth0:java-jwt:3.10.0'
+    implementation 'org.hibernate:hibernate-ehcache:5.4.17.Final'
+    implementation 'org.postgresql:postgresql:42.2.16'
+    implementation 'org.apache.commons:commons-dbcp2:2.7.0'
+
+    implementation 'com.auth0:java-jwt:3.10.0'
+
+    implementation 'org.aspectj:aspectjrt:1.9.6'
+    //implementation 'org.aspectj:aspectjtools:1.9.6'
 }
+
+/*compileJava {
+    dependsOn configurations.ajc.getTaskDependencyFromProjectDependency(true, "compileJava")
+
+    doLast {
+        ant.taskdef(resource:"org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties",
+                classpath: configurations.ajc.asPath)
+        ant.iajc(
+                source:sourceCompatibility,
+                target:targetCompatibility,
+                destDir:sourceSets.main.output.classesDirs.singleFile.absolutePath,
+                maxmem:"512m",
+                fork:"true",
+                classpath:sourceSets.main.compileClasspath.asPath) {
+            sourceroots {
+                sourceSets.main.java.srcDirs.each {
+                    pathelement(location:it.absolutePath)
+                }
+                sourceSets.main.output.generatedSourcesDirs.each {
+                    pathelement(location:it.absolutePath)
+                }
+            }
+        }
+    }
+}*/
