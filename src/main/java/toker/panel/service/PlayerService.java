@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class PlayerService {
 
     private PlayerRepository playerRepository;

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import toker.panel.authentication.EndedSessions;
+import toker.panel.entity.Book;
 import toker.panel.entity.PanelUserSession;
 import toker.panel.entity.PanelUserSession_;
 import toker.panel.repository.BaseRepository;

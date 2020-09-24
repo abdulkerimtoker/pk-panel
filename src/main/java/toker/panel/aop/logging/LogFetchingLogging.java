@@ -50,6 +50,7 @@ public class LogFetchingLogging {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("logFile", fileName);
+        node.put("serverId", auth.getSelectedServerId());
         ArrayNode wordsNode = mapper.createArrayNode();
         Arrays.stream(words).filter(word -> !word.isBlank()).forEach(wordsNode::add);
         node.set("words", wordsNode);

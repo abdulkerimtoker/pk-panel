@@ -110,6 +110,7 @@ public class PanelUser {
     }
 
     public interface View {
+        interface None {}
         interface Bans {}
         interface AuthorityAssignments {}
     }
