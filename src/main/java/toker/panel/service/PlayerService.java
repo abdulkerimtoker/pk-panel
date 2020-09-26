@@ -244,7 +244,7 @@ public class PlayerService {
         Inventory inventory = new Inventory();
         inventory.setPlayer(player);
         inventory.setSize(20);
-        LinkedList<InventorySlot> slots = new LinkedList<>();
+        LinkedHashSet<InventorySlot> slots = new LinkedHashSet<>();
         for (int i = 1; i <= 20; i++) {
             InventorySlot slot = new InventorySlot();
             slot.setInventory(inventory);

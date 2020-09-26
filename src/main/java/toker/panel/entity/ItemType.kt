@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
-@Table(name = "profession")
-data class Profession(
+@Table(name = "item_type")
+data class ItemType(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
         var id: Int? = null,
 
-        @Column(name = "name", nullable = false, length = 32)
+        @Column(name = "name", nullable = false, length = 16)
         var name: String? = null,
 
-        @OneToMany(mappedBy = "profession")
+        @OneToMany(mappedBy = "type")
         @JsonIgnore
-        var professionAssignments: MutableSet<ProfessionAssignment>? = null
+        var items: MutableSet<Item>? = null
 )

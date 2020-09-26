@@ -13,10 +13,10 @@ data class Book(
         @Column(name = "name", nullable = false, length = 64)
         var name: String? = null,
 
-        @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
         @ManyToOne
+        @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
         var server: Server? = null,
 
         @OneToMany(mappedBy = "book")
-        var bookPages: Collection<BookPage>? = null
+        var bookPages: MutableSet<BookPage>? = null
 )

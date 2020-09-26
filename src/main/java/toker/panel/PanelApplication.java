@@ -63,14 +63,14 @@ public class PanelApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
-                builder.equal(root.get(PanelUserSession_.ended), true));
+                builder.equal(root.get(PanelUserSession_.isEnded), true));
         EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
     }
 
     @Scheduled(fixedDelay = 5 * 1000)
     public void endSessionsPeriodically() {
         List<PanelUserSession> endedSessions = sessionRepo.findAll((root, query, builder) ->
-                builder.equal(root.get(PanelUserSession_.ended), true));
+                builder.equal(root.get(PanelUserSession_.isEnded), true));
         EndedSessions.endSessions(endedSessions.stream().map(PanelUserSession::getId).collect(Collectors.toList()));
     }
 }

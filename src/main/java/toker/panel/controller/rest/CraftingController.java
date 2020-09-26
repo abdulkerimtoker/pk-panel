@@ -12,6 +12,7 @@ import javax.persistence.criteria.JoinType;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -120,12 +121,12 @@ public class CraftingController {
         current.setPrice(recipe.getPrice());
         current.setHours(recipe.getHours());
         CraftingRecipe finalCurrent = current;
-        Collection<CraftingRecipeItemRequirement> requirements = recipe.getItemRequirements().stream()
+        Set<CraftingRecipeItemRequirement> requirements = recipe.getItemRequirements().stream()
                 .map(requirement -> {
                     requirement.setCraftingRecipe(finalCurrent);
                     return requirementRepo.save(requirement);
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         current = recipeRepo.save(current);
         current.setItemRequirements(requirements);
@@ -172,7 +173,7 @@ public class CraftingController {
                 builder.equal(root.get(CraftingStation_.server).get(Server_.id), SelectedServerId.get())
         )).orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        Collection<CraftingRecipeItemRequirement> requirements = craftingRecipe.getItemRequirements();
+        Set<CraftingRecipeItemRequirement> requirements = craftingRecipe.getItemRequirements();
         craftingRecipe.setItemRequirements(null);
         craftingRecipe.setCraftingStation(craftingStation);
         craftingRecipe = recipeRepo.save(craftingRecipe);

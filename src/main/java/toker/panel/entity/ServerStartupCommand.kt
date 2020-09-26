@@ -1,62 +1,31 @@
-package toker.panel.entity;
+package toker.panel.entity
 
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonView;
-import toker.panel.entity.pk.ServerStartupCommandPK;
+import com.fasterxml.jackson.annotation.JsonView
+import toker.panel.entity.pk.ServerStartupCommandPK
+import javax.persistence.*
 
 @Entity
 @Table(name = "server_startup_command")
-@IdClass(ServerStartupCommandPK.class)
-public class ServerStartupCommand {
+@IdClass(ServerStartupCommandPK::class)
+data class ServerStartupCommand(
+        @Id
+        @ManyToOne
+        @JoinColumn(name = "server_id", referencedColumnName = "id")
+        @JsonView(View.Server::class)
+        var server: Server? = null,
 
-    private Server server;
-    private String command;
-    private String value;
-    private Integer order;
+        @Id
+        @Column(name = "command", length = 64, nullable = false)
+        var command: String? = null,
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "server_id", referencedColumnName = "id")
-    @JsonView(View.Server.class)
-    public Server getServer() {
-        return server;
-    }
+        @Column(name = "value")
+        var value: String? = null,
 
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
-    @Id
-    @Column(name = "command", length = 64, nullable = false)
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    @Column(name = "value")
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @Column(name = "_order", nullable = false)
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    public interface View {
-        interface None {}
-        interface Server {}
+        @Column(name = "_order", nullable = false)
+        var order: Int? = null
+) {
+    interface View {
+        interface None
+        interface Server
     }
 }

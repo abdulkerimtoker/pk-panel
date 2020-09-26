@@ -126,7 +126,7 @@ public class CraftingGameController {
 
         List<CraftingRequest> craftingRequests = requestRepo.findAll((root, query, builder) -> builder.and(
                 builder.equal(root.get(CraftingRequest_.player).get(Player_.id), player.getId()),
-                builder.equal(root.get(CraftingRequest_.taken), false)
+                builder.equal(root.get(CraftingRequest_.isTaken), false)
         ));
 
         if (!craftingRequests.isEmpty())
@@ -192,7 +192,7 @@ public class CraftingGameController {
 
         List<CraftingRequest> craftingRequests = requestRepo.findAll((root, query, builder) -> builder.and(
                 builder.equal(root.get(CraftingRequest_.player).get(Player_.id), player.getId()),
-                builder.equal(root.get(CraftingRequest_.taken), false)
+                builder.equal(root.get(CraftingRequest_.isTaken), false)
         ));
 
         if (craftingRequests.isEmpty())

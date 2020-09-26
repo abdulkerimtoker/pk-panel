@@ -64,7 +64,7 @@ public class PanelUserService {
                     panelUser = new PanelUser();
                     panelUser.setClaimedIdentity(claimedIdentity);
                     panelUser.setUsername(username);
-                    panelUser.setIsLocked(false);
+                    panelUser.setLocked(false);
                     panelUser.setRank(panelUserRankRepository.getOne(1));
                     panelUser.setCreationTime(Timestamp.from(Instant.now()));
                     panelUser = panelUserRepository.saveAndFlush(panelUser);

@@ -1,62 +1,41 @@
-package toker.panel.service;
+package toker.panel.service
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import toker.panel.authentication.JWTOpenIDAuthenticationToken;
-import toker.panel.entity.Player;
-import toker.panel.entity.Server;
-import toker.panel.repository.PlayerRepository;
-import toker.panel.repository.ServerRepository;
-
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Service
+import toker.panel.authentication.JWTOpenIDAuthenticationToken
+import toker.panel.entity.Server
+import toker.panel.repository.PlayerRepository
+import toker.panel.repository.ServerRepository
+import java.lang.reflect.Method
+import java.util.*
+import java.util.stream.Collectors
 
 @Service("authService")
-public class AuthService {
+class AuthService(private val serverRepository: ServerRepository,
+                  private val playerRepository: PlayerRepository) {
+    private val typeToGetterMap: Map<Class<*>, Method> = HashMap()
 
-    private ServerRepository serverRepository;
-    private PlayerRepository playerRepository;
-
-    private Map<Class<?>, Method> typeToGetterMap = new HashMap<>();
-
-    public AuthService(ServerRepository serverRepository,
-                       PlayerRepository playerRepository) {
-        this.serverRepository = serverRepository;
-        this.playerRepository = playerRepository;
-    }
-
-    public boolean canModifyPlayer(int playerId) {
-        Player current = playerRepository.findById(playerId).orElse(null);
-
-        if (current == null) {
-            return true;
-        }
-
-        JWTOpenIDAuthenticationToken token =
-                (JWTOpenIDAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-
-        return token.getAuthorities()
+    fun canModifyPlayer(playerId: Int): Boolean {
+        val faction = playerRepository.findById(playerId).orElse(null).faction ?: return true
+        val token = SecurityContextHolder.getContext().authentication as JWTOpenIDAuthenticationToken
+        return token.authorities
                 .stream()
-                .map(GrantedAuthority::getAuthority)
+                .map { obj: GrantedAuthority -> obj.authority }
                 .collect(Collectors.toList())
-                .contains(String.format("ROLE_%d_PLAYER_MANAGER", current.getFaction().getServer().getId()));
+                .contains(String.format("ROLE_%d_PLAYER_MANAGER", faction.server?.id))
     }
 
-    public List<Server> getServersForAdmin() {
-        JWTOpenIDAuthenticationToken token =
-                (JWTOpenIDAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        List<String> authorities = token.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-
-        return serverRepository.findAll()
-                .stream()
-                .filter(server -> authorities.contains(String.format("ROLE_%d_USER", server.getId())))
-                .collect(Collectors.toList());
-    }
+    val serversForAdmin: List<Server>
+        get() {
+            val token = SecurityContextHolder.getContext().authentication as JWTOpenIDAuthenticationToken
+            val authorities = token.authorities
+                    .stream()
+                    .map { obj: GrantedAuthority -> obj.authority }
+                    .collect(Collectors.toList())
+            return serverRepository.findAll()
+                    .stream()
+                    .filter { (id) -> authorities.contains(String.format("ROLE_%d_USER", id)) }
+                    .collect(Collectors.toList())
+        }
 }
