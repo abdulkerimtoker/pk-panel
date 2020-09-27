@@ -4,7 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import toker.panel.bean.SelectedServerId;
+import toker.panel.bean.SelectedServerIdKt;
 import toker.panel.entity.Faction;
 import toker.panel.entity.pk.FactionPK;
 import toker.panel.annotation.DefaultFactionValue;
@@ -35,7 +35,7 @@ public class DefaultFactionValueInterceptor {
             try {
                 Method getter = type.getDeclaredMethod(joinPoint.getSignature().getName());
                 return factionRepo.getOne(new FactionPK(getter.getAnnotation(DefaultFactionValue.class).index(),
-                        SelectedServerId.get()));
+                        SelectedServerIdKt.getSelectedServerId()));
             } catch (NoSuchMethodException ignored) { }
         }
         return value;

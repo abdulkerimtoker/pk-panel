@@ -1,27 +1,18 @@
-package toker.panel.controller.rest;
+package toker.panel.controller.rest
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import toker.panel.service.PanelUserService;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+import toker.panel.service.PanelUserService
+import java.util.stream.Collectors
 
 @RestController
-public class UserController {
-
-    private PanelUserService panelUserService;
-
-    public UserController(PanelUserService panelUserService) {
-        this.panelUserService = panelUserService;
-    }
-
+class UserController(private val panelUserService: PanelUserService) {
     @GetMapping("/api/user/authorities")
-    public List<String> authorities() {
-        return panelUserService.getAuthoritiesForCurrentUser()
+    fun authorities(): List<String> {
+        return panelUserService.authoritiesForCurrentUser
                 .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .map { obj: GrantedAuthority -> obj.authority }
+                .collect(Collectors.toList())
     }
 }

@@ -53,7 +53,7 @@ class BanService(private val banRepository: BanRepository,
         val adminName = SecurityContextHolder
                 .getContext().authentication.principal as String
         ban.panelUser = panelUserRepository.findByUsername(adminName)
-        ban.server = serverRepository.getOne(SelectedServerId.get())
+        ban.server = serverRepository.getOne(SelectedServerId)
         ban.time = Timestamp.from(Instant.now())
         ban.isUndone = false
         return banRepository.saveAndFlush(ban)
@@ -68,7 +68,7 @@ class BanService(private val banRepository: BanRepository,
     }
 
     fun undoAllBansForPlayer(playerUniqueId: Int) {
-        banRepository.undoAllByPlayerUniqueId(playerUniqueId, SelectedServerId.get())
+        banRepository.undoAllByPlayerUniqueId(playerUniqueId, SelectedServerId)
     }
 
     fun getBansOfPlayer(playerId: Int): List<Ban>? {

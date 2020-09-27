@@ -1,14 +1,11 @@
-package toker.panel.bean;
+package toker.panel.bean
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import toker.panel.authentication.JWTOpenIDAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder
+import toker.panel.authentication.JWTOpenIDAuthenticationToken
 
-public class SelectedServerId {
-
-    public static Integer get() {
-        JWTOpenIDAuthenticationToken token =
-                (JWTOpenIDAuthenticationToken) SecurityContextHolder
-                        .getContext().getAuthentication();
-        return token.getSelectedServerId();
+val SelectedServerId: Int
+    get() {
+        val token = SecurityContextHolder
+                .getContext().authentication as JWTOpenIDAuthenticationToken
+        return token.selectedServerId
     }
-}

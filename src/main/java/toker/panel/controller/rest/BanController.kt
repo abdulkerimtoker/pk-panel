@@ -1,52 +1,43 @@
-package toker.panel.controller.rest;
+package toker.panel.controller.rest
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import toker.panel.entity.Ban;
-import toker.panel.service.BanService;
-
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonView
+import org.springframework.data.crossstore.ChangeSetPersister
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
+import toker.panel.entity.Ban
+import toker.panel.service.BanService
 
 @RestController
-public class BanController {
-
-    private BanService banService;
-
-    public BanController(BanService banService) {
-        this.banService = banService;
-    }
-
+class BanController(private val banService: BanService) {
     @GetMapping("/api/players/{playerId}/bans")
-    @JsonView(Ban.View.PanelUser.class)
-    public List<Ban> bansByPlayer(@PathVariable int playerId) {
-        return banService.getBansOfPlayer(playerId);
+    @JsonView(Ban.View.PanelUser::class)
+    fun bansByPlayer(@PathVariable playerId: Int): List<Ban>? {
+        return banService.getBansOfPlayer(playerId)
     }
 
     @GetMapping("/api/admins/{adminId}/bans")
-    @JsonView(Ban.View.None.class)
-    public List<Ban> bansByAdmin(@PathVariable int adminId) {
-        return banService.getBansOfAdmin(adminId);
+    @JsonView(Ban.View.None::class)
+    fun bansByAdmin(@PathVariable adminId: Int): List<Ban> {
+        return banService.getBansOfAdmin(adminId)
     }
 
     @PostMapping("/api/bans")
-    @JsonView(Ban.View.PanelUser.class)
-    public Ban ban(@RequestBody Ban ban) {
-        if (ban.getMinutes() < 0)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        return banService.banPlayer(ban);
+    @JsonView(Ban.View.PanelUser::class)
+    fun ban(@RequestBody ban: Ban): Ban {
+        if (ban.minutes!! < 0) throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        return banService.banPlayer(ban)
     }
 
     @PutMapping("/api/bans/{banId}/undo")
-    @JsonView(Ban.View.None.class)
-    public Ban undoBan(@PathVariable int banId) throws ChangeSetPersister.NotFoundException {
-        return banService.undoBan(banId);
+    @JsonView(Ban.View.None::class)
+    @Throws(ChangeSetPersister.NotFoundException::class)
+    fun undoBan(@PathVariable banId: Int): Ban {
+        return banService.undoBan(banId)
     }
 
     @PutMapping("/api/bans/byUniqueId/{playerUniqueId}/undo")
-    public void unbanPlayer(@PathVariable int playerUniqueId) {
-        banService.undoAllBansForPlayer(playerUniqueId);
+    fun unbanPlayer(@PathVariable playerUniqueId: Int) {
+        banService.undoAllBansForPlayer(playerUniqueId)
     }
 }

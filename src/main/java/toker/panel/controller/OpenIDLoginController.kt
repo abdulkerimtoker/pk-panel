@@ -1,127 +1,103 @@
-package toker.panel.controller;
+package toker.panel.controller
 
-import com.auth0.jwt.JWT;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.openid.OpenIDAuthenticationStatus;
-import org.springframework.security.openid.OpenIDAuthenticationToken;
-import org.springframework.security.openid.OpenIDConsumer;
-import org.springframework.security.openid.OpenIDConsumerException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import toker.panel.entity.PanelUser;
-import toker.panel.entity.PanelUserAuthorityAssignment;
-import toker.panel.entity.PanelUserSession;
-import toker.panel.repository.PanelUserSessionRepository;
-import toker.panel.service.PanelUserService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.security.openid.OpenIDAuthenticationStatus
+import org.springframework.security.openid.OpenIDConsumer
+import org.springframework.security.openid.OpenIDConsumerException
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import toker.panel.entity.PanelUserAuthorityAssignment
+import toker.panel.entity.PanelUserSession
+import toker.panel.repository.PanelUserSessionRepository
+import toker.panel.service.PanelUserService
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.*
+import java.util.stream.Collectors
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletRequestWrapper
 
 @RestController
-public class OpenIDLoginController {
-    private static final String OPENID_CLAIMED_IDENTITY = "https://steamcommunity.com/openid";
-
-    private OpenIDConsumer consumer;
-
-    private PanelUserService panelUserService;
-
-    private PanelUserSessionRepository sessionRepo;
-
-    public OpenIDLoginController(OpenIDConsumer consumer,
-                                 PanelUserService panelUserService,
-                                 PanelUserSessionRepository sessionRepo) {
-        this.consumer = consumer;
-        this.panelUserService = panelUserService;
-        this.sessionRepo = sessionRepo;
-    }
-
+class OpenIDLoginController(private val consumer: OpenIDConsumer,
+                            private val panelUserService: PanelUserService,
+                            private val sessionRepo: PanelUserSessionRepository) {
     @RequestMapping("/api/login")
-    public ResponseEntity login(HttpServletRequest request) throws OpenIDConsumerException {
-        String requestUrl = request.getRequestURL().toString();
-        String redirectTo = consumer.beginConsumption(request,
+    @Throws(OpenIDConsumerException::class)
+    fun login(request: HttpServletRequest): ResponseEntity<*> {
+        val requestUrl = request.requestURL.toString()
+        val redirectTo = consumer.beginConsumption(request,
                 OPENID_CLAIMED_IDENTITY,
-                requestUrl.replace(request.getServletPath(), "/processLogin"),
-                lookupRealm(requestUrl));
+                requestUrl.replace(request.servletPath, "/processLogin"),
+                lookupRealm(requestUrl))
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.LOCATION, redirectTo)
-                .build();
+                .build<Any>()
     }
 
     @RequestMapping("/api/processLogin")
-    public ResponseEntity processLogin(HttpServletRequest request) throws OpenIDConsumerException {
-        OpenIDAuthenticationToken token = consumer.endConsumption(new HttpServletRequestWrapper(request) {
-            @Override
-            public StringBuffer getRequestURL() {
-                return new StringBuffer(request.getRequestURL().toString()
-                        .replace("api/processLogin", "processLogin"));
+    @Throws(OpenIDConsumerException::class)
+    fun processLogin(request: HttpServletRequest): ResponseEntity<*> {
+        val token = consumer.endConsumption(object : HttpServletRequestWrapper(request) {
+            override fun getRequestURL(): StringBuffer {
+                return StringBuffer(request.requestURL.toString()
+                        .replace("api/processLogin", "processLogin"))
             }
-        });
-
-        request.getSession().invalidate();
-
-        if (token.getStatus() == OpenIDAuthenticationStatus.SUCCESS) {
-            PanelUser panelUser = panelUserService.getOrCreateForClaimedIdentity(token.getIdentityUrl());
-
+        })
+        request.session.invalidate()
+        if (token.status == OpenIDAuthenticationStatus.SUCCESS) {
+            val panelUser = panelUserService.getOrCreateForClaimedIdentity(token.identityUrl)
             if (panelUser != null) {
-                PanelUserSession session = new PanelUserSession();
-                session.setUser(panelUser);
-                session = sessionRepo.save(session);
-
-                Collection<PanelUserAuthorityAssignment> authorities =
-                        panelUser.getAuthorityAssignments();
-                List<String> authorizations = authorities != null ?
-                        panelUser.getAuthorityAssignments()
-                                .stream()
-                                .map(assignment -> String.format(
-                                        "ROLE_%d_%s",
-                                        assignment.getServer().getId(),
-                                        assignment.getAuthority().getAuthorityName()
-                                ))
-                                .collect(Collectors.toList())
-                        : new LinkedList<>();
-
-                String jwt = JWT.create()
-                        .withSubject(panelUser.getUsername())
-                        .withClaim("Identity", token.getIdentityUrl())
-                        .withClaim("Session-ID", session.getId())
+                var session = PanelUserSession()
+                session.user = panelUser
+                session = sessionRepo.save(session)
+                val authorities: Collection<PanelUserAuthorityAssignment>? = panelUser.authorityAssignments
+                val authorizations = if (authorities != null) panelUser.authorityAssignments!!
+                        .stream()
+                        .map { (_, _, server, authority) ->
+                            String.format(
+                                    "ROLE_%d_%s",
+                                    server!!.id,
+                                    authority!!.authorityName
+                            )
+                        }
+                        .collect(Collectors.toList()) else LinkedList()
+                val jwt = JWT.create()
+                        .withSubject(panelUser.username)
+                        .withClaim("Identity", token.identityUrl)
+                        .withClaim("Session-ID", session.id)
                         .withClaim("Authorizations", authorizations)
-                        .sign(HMAC512("sea".getBytes()));
-
+                        .sign(Algorithm.HMAC512("sea".toByteArray()))
                 return ResponseEntity.status(HttpStatus.ACCEPTED)
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer "  + jwt)
-                        .build();
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer $jwt")
+                        .build<Any>()
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build<Any>()
         }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build<Any>()
     }
 
-    private String lookupRealm(String requestUrl) {
-        try {
-            URL url = new URL(requestUrl);
-            int port = url.getPort();
-            StringBuilder realmBuffer = new StringBuilder()
-                    .append(url.getProtocol()).append("://").append(url.getHost());
+    private fun lookupRealm(requestUrl: String): String? {
+        return try {
+            val url = URL(requestUrl)
+            val port = url.port
+            val realmBuffer = StringBuilder()
+                    .append(url.protocol).append("://").append(url.host)
             if (port > 0) {
-                realmBuffer.append(":").append(port);
+                realmBuffer.append(":").append(port)
             }
-            realmBuffer.append("/");
-            return realmBuffer.toString();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return null;
+            realmBuffer.append("/")
+            realmBuffer.toString()
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+            null
         }
+    }
+
+    companion object {
+        private const val OPENID_CLAIMED_IDENTITY = "https://steamcommunity.com/openid"
     }
 }

@@ -33,7 +33,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
                     private val languageRepo: LanguageRepository,
                     private val serverService: ServerService) {
 
-    fun getPlayer(id: Int): Optional<Player?> {
+    fun getPlayer(id: Int): Optional<Player> {
         return playerRepository.findById(id)
     }
 
@@ -87,7 +87,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
     }
 
     fun searchPlayers(searchTerm: String): List<Player> {
-        return playerRepository.likeSearch(searchTerm, SelectedServerId.get())
+        return playerRepository.likeSearch(searchTerm, SelectedServerId)
     }
 
     fun getPlayerInventory(playerId: Int): Inventory {

@@ -1,48 +1,37 @@
-package toker.panel.controller.rest;
+package toker.panel.controller.rest
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import toker.panel.bean.SelectedServerId;
-import toker.panel.entity.Player;
-import toker.panel.entity.Server;
-import toker.panel.service.AuthService;
-import toker.panel.service.ServerService;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonView
+import org.springframework.data.crossstore.ChangeSetPersister
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import toker.panel.bean.SelectedServerId
+import toker.panel.entity.Server
+import toker.panel.entity.Server.View.StartupCommands
+import toker.panel.service.AuthService
+import toker.panel.service.ServerService
+import java.io.File
+import java.io.IOException
 
 @RestController
-public class ServerController {
-
-    private AuthService authService;
-    private ServerService serverService;
-
-    public ServerController(AuthService authService,
-                            ServerService serverService) {
-        this.authService = authService;
-        this.serverService = serverService;
-    }
-
+class ServerController(private val authService: AuthService,
+                       private val serverService: ServerService) {
     @GetMapping("/api/servers")
-    @JsonView(Server.View.None.class)
-    public List<Server> servers() {
-        new Player().getItem_0();
-        return authService.getServersForAdmin();
+    @JsonView(Server.View.None::class)
+    fun servers(): List<Server> {
+        return authService.serversForAdmin
     }
 
     @GetMapping("/api/servers/{serverId}")
-    @JsonView(Server.View.StartupCommands.class)
-    public Server server(@PathVariable int serverId) throws ChangeSetPersister.NotFoundException {
-        return serverService.getServer(serverId, "startupCommands");
+    @JsonView(StartupCommands::class)
+    @Throws(ChangeSetPersister.NotFoundException::class)
+    fun server(@PathVariable serverId: Int): Server {
+        return serverService.getServer(serverId, "startupCommands")
     }
 
     @PostMapping("/api/uploadMap")
-    public void uploadMap(@RequestParam MultipartFile map)
-            throws ChangeSetPersister.NotFoundException, IOException {
-        Server server = serverService.getServer(SelectedServerId.get());
-        map.transferTo(new File(serverService.getMapDir(server), map.getOriginalFilename()));
+    @Throws(ChangeSetPersister.NotFoundException::class, IOException::class)
+    fun uploadMap(@RequestParam map: MultipartFile) {
+        val server = serverService.getServer(SelectedServerId)
+        map.transferTo(File(serverService.getMapDir(server), map.originalFilename!!))
     }
 }

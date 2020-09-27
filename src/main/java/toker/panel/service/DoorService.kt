@@ -19,7 +19,7 @@ class DoorService(private val doorRepository: DoorRepository,
     }
 
     val allDoors: List<Door>
-        get() = doorRepository.findAllByServerId(SelectedServerId.get())
+        get() = doorRepository.findAllByServerId(SelectedServerId)
 
     fun assignDoorKey(doorKey: DoorKey): DoorKey {
         return doorKeyRepository.saveAndFlush(doorKey)

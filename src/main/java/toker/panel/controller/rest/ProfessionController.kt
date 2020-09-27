@@ -1,37 +1,28 @@
-package toker.panel.controller.rest;
+package toker.panel.controller.rest
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.*;
-import toker.panel.entity.Profession;
-import toker.panel.entity.ProfessionAssignment;
-import toker.panel.service.ProfessionService;
-
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonView
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.web.bind.annotation.*
+import toker.panel.entity.Profession
+import toker.panel.entity.ProfessionAssignment
+import toker.panel.service.ProfessionService
 
 @RestController
-public class ProfessionController {
-
-    private ProfessionService professionService;
-
-    public ProfessionController(ProfessionService professionService) {
-        this.professionService = professionService;
-    }
-
+class ProfessionController(private val professionService: ProfessionService) {
     @GetMapping("/api/profession")
     @Cacheable("professions")
-    public List<Profession> professions() {
-        return professionService.getAllProfessions();
+    fun professions(): List<Profession> {
+        return professionService.allProfessions
     }
 
     @PutMapping("/api/player/professionAssignment")
-    @JsonView(ProfessionAssignment.View.Profession.class)
-    public ProfessionAssignment saveProfessionAssignment(@RequestBody ProfessionAssignment professionAssignment) {
-        return professionService.saveProfessionAssignment(professionAssignment);
+    @JsonView(ProfessionAssignment.View.Profession::class)
+    fun saveProfessionAssignment(@RequestBody professionAssignment: ProfessionAssignment): ProfessionAssignment {
+        return professionService.saveProfessionAssignment(professionAssignment)
     }
 
     @DeleteMapping("/api/player/{playerId}/profession/{professionId}")
-    public void revokeProfession(@PathVariable int playerId, @PathVariable int professionId) {
-        professionService.revokeProfession(playerId, professionId);
+    fun revokeProfession(@PathVariable playerId: Int, @PathVariable professionId: Int) {
+        professionService.revokeProfession(playerId, professionId)
     }
 }
