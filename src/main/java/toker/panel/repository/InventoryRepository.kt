@@ -1,6 +1,5 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.Inventory;
+import toker.panel.entity.Inventory
 
-public interface InventoryRepository extends BaseRepository<Inventory, Integer> {
-}
+interface InventoryRepository : BaseRepository<Inventory, Int>

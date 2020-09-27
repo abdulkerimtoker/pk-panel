@@ -1,11 +1,8 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.CraftingStation;
-import toker.panel.entity.pk.CraftingStationPK;
+import toker.panel.entity.CraftingStation
+import toker.panel.entity.pk.CraftingStationPK
 
-import java.util.List;
-
-public interface CraftingStationRepository
-        extends BaseRepository<CraftingStation, CraftingStationPK> {
-    List<CraftingStation> findAllByServerId(Integer serverId);
+interface CraftingStationRepository : BaseRepository<CraftingStation, CraftingStationPK> {
+    fun findAllByServerId(serverId: Int): List<CraftingStation>
 }

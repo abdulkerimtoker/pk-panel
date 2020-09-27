@@ -1,9 +1,8 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.LanguageProficiency;
-import toker.panel.entity.pk.LanguageProficiencyPK;
+import toker.panel.entity.LanguageProficiency
+import toker.panel.entity.pk.LanguageProficiencyPK
 
-public interface LanguageProficiencyRepository
-        extends BaseRepository<LanguageProficiency, LanguageProficiencyPK> {
-    void deleteByPlayerIdAndLanguageId(Integer playerId, Integer languageId);
+interface LanguageProficiencyRepository : BaseRepository<LanguageProficiency, LanguageProficiencyPK> {
+    fun deleteByPlayerIdAndLanguageId(playerId: Int, languageId: Int)
 }

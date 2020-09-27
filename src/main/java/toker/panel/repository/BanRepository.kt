@@ -1,20 +1,18 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
-import toker.panel.entity.Ban;
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
+import org.springframework.transaction.annotation.Transactional
+import toker.panel.entity.Ban
 
-import java.util.List;
-
-public interface BanRepository extends BaseRepository<Ban, Integer> {
-    List<Ban> findAllByPlayerUniqueId(Integer playerUniqueId);
-    List<Ban> findAllByPanelUserId(Integer panelUserId);
-    List<Ban> findAllByServerId(Integer serverId);
+interface BanRepository : BaseRepository<Ban, Int> {
+    fun findAllByPlayerUniqueId(playerUniqueId: Int): List<Ban>
+    fun findAllByPanelUserId(panelUserId: Int): List<Ban>
+    fun findAllByServerId(serverId: Int): List<Ban>
 
     @Modifying
     @Transactional
-    @Query("UPDATE Ban SET undone = true WHERE playerUniqueId = :playerUniqueId " +
+    @Query("UPDATE Ban SET isUndone = true WHERE playerUniqueId = :playerUniqueId " +
             "AND server.id = :serverId")
-    void undoAllByPlayerUniqueId(Integer playerUniqueId, Integer serverId);
+    fun undoAllByPlayerUniqueId(playerUniqueId: Int, serverId: Int)
 }

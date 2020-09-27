@@ -1,10 +1,9 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.AdminPermissions;
-import toker.panel.entity.pk.AdminPermissionsPK;
+import toker.panel.entity.AdminPermissions
+import toker.panel.entity.pk.AdminPermissionsPK
+import java.util.*
 
-import java.util.Optional;
-
-public interface AdminPermissionsRepository extends BaseRepository<AdminPermissions, AdminPermissionsPK> {
-    Optional<AdminPermissions> findByServerIdAndUniqueId(Integer serverId, Integer uniqueId);
+interface AdminPermissionsRepository : BaseRepository<AdminPermissions, AdminPermissionsPK> {
+    fun findByServerIdAndUniqueId(serverId: Int, uniqueId: Int): Optional<AdminPermissions>
 }

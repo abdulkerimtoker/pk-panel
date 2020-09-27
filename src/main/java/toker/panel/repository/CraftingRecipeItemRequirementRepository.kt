@@ -1,14 +1,11 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import org.springframework.data.jpa.repository.Modifying;
-import toker.panel.entity.CraftingRecipeItemRequirement;
+import org.springframework.data.jpa.repository.Modifying
+import toker.panel.entity.CraftingRecipeItemRequirement
+import javax.transaction.Transactional
 
-import javax.transaction.Transactional;
-
-public interface CraftingRecipeItemRequirementRepository
-        extends BaseRepository<CraftingRecipeItemRequirement, Integer> {
-
+interface CraftingRecipeItemRequirementRepository : BaseRepository<CraftingRecipeItemRequirement, Int> {
     @Transactional
     @Modifying
-    void deleteAllByCraftingRecipeId(Integer recipeId);
+    fun deleteAllByCraftingRecipeId(recipeId: Int)
 }

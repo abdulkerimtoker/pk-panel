@@ -1,9 +1,7 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.CraftingRequest;
+import toker.panel.entity.CraftingRequest
 
-import java.util.List;
-
-public interface CraftingRequestRepository extends BaseRepository<CraftingRequest, Integer> {
-    List<CraftingRequest> findAllByPlayerId(Integer playerId);
+interface CraftingRequestRepository : BaseRepository<CraftingRequest, Int> {
+    fun findAllByPlayerId(playerId: Int): List<CraftingRequest>
 }

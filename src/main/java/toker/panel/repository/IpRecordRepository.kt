@@ -1,6 +1,5 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.IpRecord;
+import toker.panel.entity.IpRecord
 
-public interface IpRecordRepository extends BaseRepository<IpRecord, Integer> {
-}
+interface IpRecordRepository : BaseRepository<IpRecord, Int>

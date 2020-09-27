@@ -1,6 +1,5 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.NoticeBoard;
+import toker.panel.entity.NoticeBoard
 
-public interface NoticeBoardRepository extends BaseRepository<NoticeBoard, Integer> {
-}
+interface NoticeBoardRepository : BaseRepository<NoticeBoard, Int>

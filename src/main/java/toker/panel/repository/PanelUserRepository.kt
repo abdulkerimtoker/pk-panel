@@ -1,8 +1,8 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.PanelUser;
+import toker.panel.entity.PanelUser
 
-public interface PanelUserRepository extends BaseRepository<PanelUser, Integer> {
-    PanelUser findByUsername(String username);
-    PanelUser findByClaimedIdentity(String claimedIdentity);
+interface PanelUserRepository : BaseRepository<PanelUser, Int> {
+    fun findByUsername(username: String): PanelUser
+    fun findByClaimedIdentity(claimedIdentity: String): PanelUser
 }

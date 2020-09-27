@@ -1,55 +1,48 @@
-package toker.panel.service;
+package toker.panel.service
 
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.stereotype.Service;
-import toker.panel.entity.Server;
-import toker.panel.entity.ServerConfiguration;
-import toker.panel.repository.ServerConfigurationRepository;
-import toker.panel.repository.ServerRepository;
-
-import javax.persistence.criteria.JoinType;
-import java.io.File;
-import java.util.Collection;
-import java.util.Optional;
+import org.springframework.data.crossstore.ChangeSetPersister
+import org.springframework.stereotype.Service
+import toker.panel.entity.Server
+import toker.panel.entity.ServerConfiguration
+import toker.panel.repository.ServerConfigurationRepository
+import toker.panel.repository.ServerRepository
+import java.io.File
+import java.util.*
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
 @Service
-public class ServerService {
-
-    private ServerRepository serverRepository;
-    private ServerConfigurationRepository serverConfigurationRepository;
-
-    public ServerService(ServerRepository serverRepository,
-                         ServerConfigurationRepository serverConfigurationRepository) {
-        this.serverRepository = serverRepository;
-        this.serverConfigurationRepository = serverConfigurationRepository;
-    }
-
-    public Server getServer(Integer serverId, String... with) throws ChangeSetPersister.NotFoundException {
-        return serverRepository.findOne((root, query, builder) -> {
-            for (String attr : with) {
-                root.fetch(attr, JoinType.LEFT);
+class ServerService(private val serverRepository: ServerRepository,
+                    private val serverConfigurationRepository: ServerConfigurationRepository) {
+    @Throws(ChangeSetPersister.NotFoundException::class)
+    fun getServer(serverId: Int?, vararg with: String?): Server {
+        return serverRepository.findOne { root: Root<Server?>, query: CriteriaQuery<*>?, builder: CriteriaBuilder ->
+            for (attr in with) {
+                root.fetch<Any, Any>(attr, JoinType.LEFT)
             }
-            return builder.equal(root.get("id"), serverId);
-        }).orElseThrow(ChangeSetPersister.NotFoundException::new);
+            builder.equal(root.get<Any>("id"), serverId)
+        }.orElseThrow { ChangeSetPersister.NotFoundException() }
     }
 
-    public Server getServerByKey(String key) {
-        return serverRepository.findByKey(key).orElse(null);
+    fun getServerByKey(key: String): Server {
+        return serverRepository.findByKey(key).orElse(null)
     }
 
-    public Optional<ServerConfiguration> getServerConfiguration(int serverId, String name) {
-        return serverConfigurationRepository.findByServerIdAndName(serverId, name);
+    fun getServerConfiguration(serverId: Int, name: String): Optional<ServerConfiguration> {
+        return serverConfigurationRepository.findByServerIdAndName(serverId, name)
     }
 
-    public Collection<ServerConfiguration> getServerConfigurations(int serverId) {
-        return serverConfigurationRepository.findAllByServerId(serverId);
+    fun getServerConfigurations(serverId: Int): Collection<ServerConfiguration> {
+        return serverConfigurationRepository.findAllByServerId(serverId)
     }
 
-    public File getMapDir(Server server) {
-        File exe = new File(server.getExePath());
-        File serverDir = new File(exe.getParent());
-        File modulesDir = new File(serverDir, "Modules");
-        File moduleDir = new File(modulesDir, server.getModuleName());
-        return new File(moduleDir, "SceneObj");
+    fun getMapDir(server: Server): File {
+        val exe = File(server.exePath!!)
+        val serverDir = File(exe.parent)
+        val modulesDir = File(serverDir, "Modules")
+        val moduleDir = File(modulesDir, server.moduleName!!)
+        return File(moduleDir, "SceneObj")
     }
 }

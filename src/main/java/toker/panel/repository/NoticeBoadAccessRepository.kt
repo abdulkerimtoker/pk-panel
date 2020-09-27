@@ -1,9 +1,7 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.NoticeBoardAccess;
+import toker.panel.entity.NoticeBoardAccess
 
-import java.util.List;
-
-public interface NoticeBoadAccessRepository extends BaseRepository<NoticeBoardAccess, Integer>{
-    List<NoticeBoardAccess> findAllByPlayerId(Integer playerId);
+interface NoticeBoadAccessRepository : BaseRepository<NoticeBoardAccess, Int> {
+    fun findAllByPlayerId(playerId: Int): List<NoticeBoardAccess>
 }

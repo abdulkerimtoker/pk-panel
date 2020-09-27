@@ -1,12 +1,9 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.ServerConfiguration;
+import toker.panel.entity.ServerConfiguration
+import java.util.*
 
-import java.util.Collection;
-import java.util.Optional;
-
-public interface ServerConfigurationRepository extends BaseRepository<ServerConfiguration, Integer> {
-
-    Optional<ServerConfiguration> findByServerIdAndName(Integer serverId, String name);
-    Collection<ServerConfiguration> findAllByServerId(Integer serverId);
+interface ServerConfigurationRepository : BaseRepository<ServerConfiguration, Int> {
+    fun findByServerIdAndName(serverId: Int, name: String): Optional<ServerConfiguration>
+    fun findAllByServerId(serverId: Int): Collection<ServerConfiguration>
 }

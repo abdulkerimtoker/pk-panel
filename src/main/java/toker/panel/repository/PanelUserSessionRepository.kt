@@ -1,6 +1,5 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.PanelUserSession;
+import toker.panel.entity.PanelUserSession
 
-public interface PanelUserSessionRepository extends BaseRepository<PanelUserSession, Integer> {
-}
+interface PanelUserSessionRepository : BaseRepository<PanelUserSession, Int>

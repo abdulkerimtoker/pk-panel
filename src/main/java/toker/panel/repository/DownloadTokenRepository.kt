@@ -1,9 +1,8 @@
-package toker.panel.repository;
+package toker.panel.repository
 
-import toker.panel.entity.DownloadToken;
+import toker.panel.entity.DownloadToken
+import java.util.*
 
-import java.util.Optional;
-
-public interface DownloadTokenRepository extends BaseRepository<DownloadToken, Integer> {
-    Optional<DownloadToken> findByToken(String token);
+interface DownloadTokenRepository : BaseRepository<DownloadToken, Int> {
+    fun findByToken(token: String): Optional<DownloadToken>
 }

@@ -14,7 +14,7 @@ class AdminController(
 
     @GetMapping("/api/admins")
     @JsonView(PanelUser.View.AuthorityAssignments::class)
-    fun admins(): List<PanelUser> {
+    fun admins(): MutableList<PanelUser> {
         return panelUserRepo.findAll()
     }
 }

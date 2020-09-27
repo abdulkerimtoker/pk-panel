@@ -14,7 +14,6 @@ import java.util.stream.Collectors
 @Service("authService")
 class AuthService(private val serverRepository: ServerRepository,
                   private val playerRepository: PlayerRepository) {
-    private val typeToGetterMap: Map<Class<*>, Method> = HashMap()
 
     fun canModifyPlayer(playerId: Int): Boolean {
         val faction = playerRepository.findById(playerId).orElse(null).faction ?: return true

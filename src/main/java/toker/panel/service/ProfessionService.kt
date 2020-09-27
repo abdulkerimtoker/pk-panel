@@ -1,34 +1,22 @@
-package toker.panel.service;
+package toker.panel.service
 
-import org.springframework.stereotype.Service;
-import toker.panel.entity.Profession;
-import toker.panel.entity.ProfessionAssignment;
-import toker.panel.repository.ProfessionAssignmentRepository;
-import toker.panel.repository.ProfessionRepository;
-
-import java.util.List;
+import org.springframework.stereotype.Service
+import toker.panel.entity.Profession
+import toker.panel.repository.ProfessionRepository
+import toker.panel.repository.ProfessionAssignmentRepository
+import toker.panel.entity.ProfessionAssignment
 
 @Service
-public class ProfessionService {
+class ProfessionService(private val professionRepository: ProfessionRepository,
+                        private val professionAssignmentRepository: ProfessionAssignmentRepository) {
+    val allProfessions: List<Profession>
+        get() = professionRepository.findAll()
 
-    private ProfessionRepository professionRepository;
-    private ProfessionAssignmentRepository professionAssignmentRepository;
-
-    public ProfessionService(ProfessionRepository professionRepository,
-                             ProfessionAssignmentRepository professionAssignmentRepository) {
-        this.professionRepository = professionRepository;
-        this.professionAssignmentRepository = professionAssignmentRepository;
+    fun saveProfessionAssignment(professionAssignment: ProfessionAssignment): ProfessionAssignment {
+        return professionAssignmentRepository.saveAndFlush(professionAssignment)
     }
 
-    public List<Profession> getAllProfessions() {
-        return professionRepository.findAll();
-    }
-
-    public ProfessionAssignment saveProfessionAssignment(ProfessionAssignment professionAssignment) {
-        return professionAssignmentRepository.saveAndFlush(professionAssignment);
-    }
-
-    public void revokeProfession(int playerId, int professionId) {
-        professionAssignmentRepository.deleteByPlayerIdAndProfessionId(playerId, professionId);
+    fun revokeProfession(playerId: Int, professionId: Int) {
+        professionAssignmentRepository.deleteByPlayerIdAndProfessionId(playerId, professionId)
     }
 }
