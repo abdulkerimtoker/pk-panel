@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "crafting_station_instance")
-data class CraftingStationInstance(
+class CraftingStationInstance(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

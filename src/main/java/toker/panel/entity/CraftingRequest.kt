@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "crafting_request")
-data class CraftingRequest(
+class CraftingRequest(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

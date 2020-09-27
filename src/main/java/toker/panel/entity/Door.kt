@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "door")
 @IdClass(DoorPK::class)
-data class Door(
+class Door(
         @Id
         @Column(name = "index", nullable = false)
         var index: Int? = null,
@@ -23,12 +23,12 @@ data class Door(
         var name: String? = null,
 
         @Column(name = "locked", nullable = false)
-        var locked: Boolean? = null,
-
-        @OneToMany(mappedBy = "door")
-        @JsonView(DoorKeys::class)
-        var doorKeys: MutableSet<DoorKey>? = null
+        var locked: Boolean? = null
 ) {
+    @OneToMany(mappedBy = "door")
+    @JsonView(DoorKeys::class)
+    var doorKeys: MutableSet<DoorKey>? = null
+
     interface View {
         interface DoorKeys
     }

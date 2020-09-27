@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "faction")
 @IdClass(FactionPK::class)
-data class Faction(
+class Faction(
         @Id
         @Column(name = "index", nullable = false)
         var index: Int? = null,
@@ -21,12 +21,12 @@ data class Faction(
         var name: String? = null,
 
         @Column(name = "banner_id", nullable = false)
-        var bannerId: Int? = null,
-
-        @OneToMany(mappedBy = "faction")
-        @JsonView(View.Players::class)
-        var players: MutableSet<Player>? = null
+        var bannerId: Int? = null
 ) {
+    @OneToMany(mappedBy = "faction")
+    @JsonView(View.Players::class)
+    var players: MutableSet<Player>? = null
+
     interface View {
         interface None
         interface Players

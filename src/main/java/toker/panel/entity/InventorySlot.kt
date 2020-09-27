@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "inventory_slot")
 @IdClass(InventorySlotPK::class)
-data class InventorySlot(
+class InventorySlot(
         @Id
         @Column(name = "slot", nullable = false)
         var slot: Int? = null,

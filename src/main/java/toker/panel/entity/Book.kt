@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "book")
-data class Book(
+class Book(
         @Column(name = "id", nullable = false)
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Id
@@ -16,7 +16,7 @@ data class Book(
         @ManyToOne
         @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
         var server: Server? = null,
-
-        @OneToMany(mappedBy = "book")
-        var bookPages: MutableSet<BookPage>? = null
-)
+) {
+    @OneToMany(mappedBy = "book")
+    var bookPages: MutableSet<BookPage>? = null
+}

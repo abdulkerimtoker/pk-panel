@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "log")
-data class Log(
+class Log(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")

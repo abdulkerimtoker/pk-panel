@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "inventory")
-data class Inventory(
+class Inventory(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -19,7 +19,7 @@ data class Inventory(
         @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false)
         @JsonIgnore
         var player: Player? = null,
-
+) {
         @OneToMany(mappedBy = "inventory", cascade = [CascadeType.MERGE, CascadeType.PERSIST])
         var slots: MutableSet<InventorySlot>? = null
-)
+}

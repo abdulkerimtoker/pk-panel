@@ -8,7 +8,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "profession_assignment")
 @IdClass(ProfessionAssignmentPK::class)
-data class ProfessionAssignment(
+class ProfessionAssignment(
         @Id
         @ManyToOne
         @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)

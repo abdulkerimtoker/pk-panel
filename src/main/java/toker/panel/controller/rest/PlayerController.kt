@@ -41,7 +41,7 @@ class PlayerController(private val playerService: PlayerService) {
     fun versionConflict() { }
 
     @GetMapping("/api/player/{playerId}/inventory")
-    fun inventory(@PathVariable playerId: Int): Inventory {
+    fun inventory(@PathVariable playerId: Int): Inventory? {
         return playerService.getPlayerInventory(playerId)
     }
 

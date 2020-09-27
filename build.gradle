@@ -41,6 +41,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
     implementation 'org.springframework.security:spring-security-messaging:5.3.3.RELEASE'
 
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.11.2'
+
     kapt 'org.hibernate:hibernate-jpamodelgen:5.4.17.Final'
     implementation 'org.hibernate:hibernate-ehcache:5.4.17.Final'
     implementation 'org.postgresql:postgresql:42.2.16'

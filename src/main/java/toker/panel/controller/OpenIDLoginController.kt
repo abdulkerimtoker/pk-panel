@@ -57,11 +57,11 @@ class OpenIDLoginController(private val consumer: OpenIDConsumer,
                 val authorities: Collection<PanelUserAuthorityAssignment>? = panelUser.authorityAssignments
                 val authorizations = if (authorities != null) panelUser.authorityAssignments!!
                         .stream()
-                        .map { (_, _, server, authority) ->
+                        .map { authorityAssignment ->
                             String.format(
                                     "ROLE_%d_%s",
-                                    server!!.id,
-                                    authority!!.authorityName
+                                    authorityAssignment.server!!.id,
+                                    authorityAssignment.authority!!.authorityName
                             )
                         }
                         .collect(Collectors.toList()) else LinkedList()

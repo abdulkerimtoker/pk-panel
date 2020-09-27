@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "admin_permissions")
 @IdClass(AdminPermissionsPK::class)
-data class AdminPermissions(
+class AdminPermissions(
         @Id
         @Column(name = "unique_id", nullable = false)
         var uniqueId: Int? = null,

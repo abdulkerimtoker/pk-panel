@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "crafting_recipe_item_requirement")
 @IdClass(CraftingRecipeItemRequirementPK::class)
-data class CraftingRecipeItemRequirement(
+class CraftingRecipeItemRequirement(
         @Id
         @ManyToOne
         @JoinColumn(name = "recipe_id", referencedColumnName = "id", nullable = false)

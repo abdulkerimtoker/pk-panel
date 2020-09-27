@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "item")
-data class Item(
+class Item(
         @Id
         @Column(name = "id", nullable = false)
         var id: Int? = null,

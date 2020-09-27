@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "server_configuration")
 @IdClass(ServerConfigurationPK::class)
-data class ServerConfiguration(
+class ServerConfiguration(
         @Id
         @ManyToOne
         @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)

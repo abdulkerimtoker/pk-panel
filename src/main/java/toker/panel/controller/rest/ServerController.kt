@@ -15,11 +15,10 @@ import java.io.IOException
 @RestController
 class ServerController(private val authService: AuthService,
                        private val serverService: ServerService) {
+
     @GetMapping("/api/servers")
     @JsonView(Server.View.None::class)
-    fun servers(): List<Server> {
-        return authService.serversForAdmin
-    }
+    fun servers(): List<Server> = authService.serversForAdmin
 
     @GetMapping("/api/servers/{serverId}")
     @JsonView(StartupCommands::class)

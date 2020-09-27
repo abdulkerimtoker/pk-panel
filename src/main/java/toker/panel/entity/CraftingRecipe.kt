@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "crafting_recipe")
-data class CraftingRecipe(
+class CraftingRecipe(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -37,15 +37,15 @@ data class CraftingRecipe(
 
         @Column(name = "hours", nullable = false)
         var hours: Int? = null,
-
-        @OneToMany(mappedBy = "craftingRecipe", cascade = [CascadeType.REMOVE])
-        @JsonView(ItemRequirements::class)
-        var itemRequirements: MutableSet<CraftingRecipeItemRequirement>? = null,
-
-        @OneToMany(mappedBy = "craftingRecipe", cascade = [CascadeType.REMOVE])
-        @JsonIgnore
-        var craftingRequests: MutableSet<CraftingRequest>? = null
 ) {
+    @OneToMany(mappedBy = "craftingRecipe", cascade = [CascadeType.REMOVE])
+    @JsonView(ItemRequirements::class)
+    var itemRequirements: MutableSet<CraftingRecipeItemRequirement>? = null
+
+    @OneToMany(mappedBy = "craftingRecipe", cascade = [CascadeType.REMOVE])
+    @JsonIgnore
+    var craftingRequests: MutableSet<CraftingRequest>? = null
+
     interface View {
         interface Item
         interface Profession

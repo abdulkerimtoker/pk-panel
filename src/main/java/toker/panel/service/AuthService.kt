@@ -34,7 +34,7 @@ class AuthService(private val serverRepository: ServerRepository,
                     .collect(Collectors.toList())
             return serverRepository.findAll()
                     .stream()
-                    .filter { (id) -> authorities.contains(String.format("ROLE_%d_USER", id)) }
+                    .filter { server -> authorities.contains(String.format("ROLE_%d_USER", server.id)) }
                     .collect(Collectors.toList())
         }
 }

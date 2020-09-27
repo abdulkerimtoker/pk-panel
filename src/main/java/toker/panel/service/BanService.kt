@@ -25,22 +25,22 @@ class BanService(private val banRepository: BanRepository,
     @Scheduled(fixedDelay = 1000 * 30)
     @Throws(IOException::class)
     fun refreshBanList() {
-        for ((id, _, _, _, exePath) in serverRepository.findAll()) {
-            val serverFolder = File(File(exePath!!).parent)
+        for (server in serverRepository.findAll()) {
+            val serverFolder = File(File(server.exePath!!).parent)
             val banFile = File(serverFolder, "banlist.txt")
             val writer = FileWriter(banFile)
-            for ((_, playerUniqueId, time, minutes, isUndone, isPermanent) in banRepository.findAllByServerId(id!!)) {
-                if (isUndone!!) continue
-                if (isPermanent!!) {
-                    writer.write(playerUniqueId.toString())
+            for (ban in banRepository.findAllByServerId(server.id!!)) {
+                if (ban.isUndone!!) continue
+                if (ban.isPermanent!!) {
+                    writer.write(ban.playerUniqueId.toString())
                     writer.write(System.lineSeparator())
                     continue
                 }
                 val calendar = Calendar.getInstance()
-                calendar.time = time
-                calendar.add(Calendar.MINUTE, minutes!!)
+                calendar.time = ban.time
+                calendar.add(Calendar.MINUTE, ban.minutes!!)
                 if (calendar.toInstant().isAfter(Instant.now())) {
-                    writer.write(playerUniqueId.toString())
+                    writer.write(ban.playerUniqueId.toString())
                     writer.write(System.lineSeparator())
                 }
             }

@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "download_token")
-data class DownloadToken(
+class DownloadToken(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")

@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "ban")
-data class Ban(
+class Ban(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

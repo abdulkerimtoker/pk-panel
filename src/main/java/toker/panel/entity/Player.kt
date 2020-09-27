@@ -13,7 +13,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "player")
-data class Player(
+class Player(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -202,28 +202,28 @@ data class Player(
 
         @Version
         @Column(name = "version", nullable = false)
-        var version: Int? = null,
-
-        @OneToMany(mappedBy = "player")
-        @JsonIgnore
-        var doorKeys: MutableSet<DoorKey>? = null,
-
-        @OneToMany(mappedBy = "player")
-        @JsonIgnore
-        var inventories: MutableSet<Inventory>? = null,
-
-        @OneToMany(mappedBy = "player")
-        @JsonIgnore
-        var noticeBoardAccesses: MutableSet<NoticeBoardAccess>? = null,
-        
-        @OneToMany(mappedBy = "player")
-        @JsonIgnore
-        var professionAssignments: MutableSet<ProfessionAssignment>? = null,
-
-        @OneToMany(mappedBy = "player")
-        @JsonIgnore
-        var craftingRequests: MutableSet<CraftingRequest>? = null
+        var version: Int? = null
 ) {
+    @OneToMany(mappedBy = "player")
+    @JsonIgnore
+    var doorKeys: MutableSet<DoorKey>? = null
+
+    @OneToMany(mappedBy = "player")
+    @JsonIgnore
+    var inventories: MutableSet<Inventory>? = null
+
+    @OneToMany(mappedBy = "player")
+    @JsonIgnore
+    var noticeBoardAccesses: MutableSet<NoticeBoardAccess>? = null
+
+    @OneToMany(mappedBy = "player")
+    @JsonIgnore
+    var professionAssignments: MutableSet<ProfessionAssignment>? = null
+
+    @OneToMany(mappedBy = "player")
+    @JsonIgnore
+    var craftingRequests: MutableSet<CraftingRequest>? = null
+
     @get:Transient
     val isWounded: Boolean
         get() {

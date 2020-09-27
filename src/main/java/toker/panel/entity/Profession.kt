@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "profession")
-data class Profession(
+class Profession(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -13,8 +13,8 @@ data class Profession(
 
         @Column(name = "name", nullable = false, length = 32)
         var name: String? = null,
-
-        @OneToMany(mappedBy = "profession")
-        @JsonIgnore
-        var professionAssignments: MutableSet<ProfessionAssignment>? = null
-)
+) {
+    @OneToMany(mappedBy = "profession")
+    @JsonIgnore
+    var professionAssignments: MutableSet<ProfessionAssignment>? = null
+}

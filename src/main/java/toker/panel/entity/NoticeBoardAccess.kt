@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "notice_board_access")
-data class NoticeBoardAccess(
+class NoticeBoardAccess(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

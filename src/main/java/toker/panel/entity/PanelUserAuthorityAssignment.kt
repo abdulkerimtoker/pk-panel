@@ -1,11 +1,10 @@
 package toker.panel.entity
 
-import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "panel_user_authority_assignment")
-data class PanelUserAuthorityAssignment(
+class PanelUserAuthorityAssignment(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "chest_slot")
 @IdClass(ChestSlotPK::class)
-data class ChestSlot(
+class ChestSlot(
         @Id
         @ManyToOne
         @JoinColumns(JoinColumn(name = "chest_index", referencedColumnName = "index"), JoinColumn(name = "chest_server_id", referencedColumnName = "server_id"))

@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "server_startup_command")
 @IdClass(ServerStartupCommandPK::class)
-data class ServerStartupCommand(
+class ServerStartupCommand(
         @Id
         @ManyToOne
         @JoinColumn(name = "server_id", referencedColumnName = "id")

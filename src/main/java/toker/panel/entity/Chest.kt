@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "chest")
 @IdClass(ChestPK::class)
-data class Chest(
+class Chest(
         @Id
         @Column(name = "index", nullable = false)
         var index: Int? = null,
@@ -22,7 +22,7 @@ data class Chest(
 
         @Column(name = "size", nullable = false)
         var size: Int? = null,
-
-        @OneToMany(mappedBy = "chest")
-        var slots: MutableSet<ChestSlot>? = null
-)
+) {
+    @OneToMany(mappedBy = "chest")
+    var slots: MutableSet<ChestSlot>? = null
+}

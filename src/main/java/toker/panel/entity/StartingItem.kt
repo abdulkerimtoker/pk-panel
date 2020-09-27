@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "starting_item")
 @IdClass(StartingItemPK::class)
-data class StartingItem(
+class StartingItem(
         @Id
         @ManyToOne
         @JoinColumn(name = "server_id", referencedColumnName = "id")

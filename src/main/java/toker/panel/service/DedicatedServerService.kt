@@ -26,8 +26,8 @@ class DedicatedServerService(private val serverRepository: ServerRepository,
         val serverFolder = File(exeFile.parent)
         val configFile = File(serverFolder, "config.txt")
         val writer = FileWriter(configFile)
-        for ((_, command, value) in server.startupCommands!!) {
-            writer.write(String.format("%s %s", command, value))
+        for (serverCommand in server.startupCommands!!) {
+            writer.write(String.format("%s %s", serverCommand.command, serverCommand.value))
             writer.write(System.lineSeparator())
         }
         writer.write("set_server_ban_list_file banlist.txt")

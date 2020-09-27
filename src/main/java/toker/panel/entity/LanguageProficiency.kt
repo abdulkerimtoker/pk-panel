@@ -7,7 +7,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "language_proficiency")
 @IdClass(LanguageProficiencyPK::class)
-data class LanguageProficiency(
+class LanguageProficiency(
         @Id
         @ManyToOne
         @JoinColumn(name = "player_id", referencedColumnName = "id")

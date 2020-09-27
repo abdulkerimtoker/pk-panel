@@ -21,15 +21,15 @@ data class CraftingStation(
 
         @Column(name = "name", nullable = false, length = 64)
         var name: String? = null,
-
-        @OneToMany(mappedBy = "craftingStation")
-        @JsonView(Recipes::class)
-        var craftingRecipes: MutableSet<CraftingRecipe>? = null,
-
-        @OneToMany(mappedBy = "craftingStation")
-        @JsonView(View.Instances::class)
-        var instances: MutableSet<CraftingStationInstance>? = null
 ) {
+    @OneToMany(mappedBy = "craftingStation")
+    @JsonView(Recipes::class)
+    var craftingRecipes: MutableSet<CraftingRecipe>? = null
+
+    @OneToMany(mappedBy = "craftingStation")
+    @JsonView(View.Instances::class)
+    var instances: MutableSet<CraftingStationInstance>? = null
+
     interface View {
         interface None
         interface Recipes

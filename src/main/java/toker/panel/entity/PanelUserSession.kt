@@ -2,12 +2,11 @@ package toker.panel.entity
 
 import java.sql.Timestamp
 import java.time.Instant
-import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "panel_user_session")
-data class PanelUserSession(
+class PanelUserSession(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")

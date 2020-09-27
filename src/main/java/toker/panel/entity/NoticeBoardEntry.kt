@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "notice_board_entry")
-data class NoticeBoardEntry(
+class NoticeBoardEntry(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

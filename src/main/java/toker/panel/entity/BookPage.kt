@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "book_page")
-data class BookPage(
+class BookPage(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

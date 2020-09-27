@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "server")
-data class Server(
+class Server(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -43,13 +43,13 @@ data class Server(
 
         @Column(name = "module_name", nullable = false)
         var moduleName: String? = null,
-
+) {
         @OneToMany(mappedBy = "server")
         @JsonView(StartupCommands::class)
         var startupCommands: MutableSet<ServerStartupCommand>? = null
-) {
-    interface View {
-        interface None
-        interface StartupCommands
-    }
+
+        interface View {
+                interface None
+                interface StartupCommands
+        }
 }

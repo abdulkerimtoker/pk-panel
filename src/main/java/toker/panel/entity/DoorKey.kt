@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "door_key")
-data class DoorKey(
+class DoorKey(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)

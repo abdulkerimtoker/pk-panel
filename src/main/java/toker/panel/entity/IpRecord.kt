@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "ip_record")
-data class IpRecord(
+class IpRecord(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         @Column(name = "id")

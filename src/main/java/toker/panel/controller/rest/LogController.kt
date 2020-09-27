@@ -32,14 +32,14 @@ class LogController(private val logService: LogService,
 
     @Throws(ChangeSetPersister.NotFoundException::class)
     @GetMapping("/api/log/list")
-    fun getLogFiles(): Array<String> {
+    fun getLogFiles(): Array<String>? {
         val server = serverService.getServer(SelectedServerId)
         return logService.getLogFileNames(server)
     }
 
     @GetMapping("/api/log/get/{fileName}")
     @Throws(ChangeSetPersister.NotFoundException::class)
-    fun getLogFile(@PathVariable fileName: String?): DownloadToken? {
+    fun getLogFile(@PathVariable fileName: String): DownloadToken? {
         val server = serverService.getServer(SelectedServerId)
         val log = logService.getLogFile(server, fileName)
         val auth = SecurityContextHolder.getContext()

@@ -90,17 +90,17 @@ class PlayerService(private val playerRepository: PlayerRepository,
         return playerRepository.likeSearch(searchTerm, SelectedServerId)
     }
 
-    fun getPlayerInventory(playerId: Int): Inventory {
-        return inventoryRepository.findOne(Specification { root: Root<Inventory?>, _, builder: CriteriaBuilder ->
-            root.fetch<Any, Any>("slots", JoinType.LEFT)
+    fun getPlayerInventory(playerId: Int): Inventory? {
+        return inventoryRepository.findOne { root: Root<Inventory>, _, builder: CriteriaBuilder ->
+            root.fetch(Inventory_.slots, JoinType.LEFT)
             builder.equal(root.get<Any>("player").get<Any>("id"), playerId)
-        }).orElse(null)
+        }.orElse(null)
     }
 
     @Throws(ChangeSetPersister.NotFoundException::class)
     fun getInventory(inventoryId: Int): Inventory {
-        return inventoryRepository.findOne { root: Root<Inventory?>, _, builder: CriteriaBuilder ->
-            root.fetch<Any, Any>("slots", JoinType.LEFT)
+        return inventoryRepository.findOne { root: Root<Inventory>, _, builder: CriteriaBuilder ->
+            root.fetch(Inventory_.slots, JoinType.LEFT)
             builder.equal(root.get<Any>("id"), inventoryId)
         }.orElseThrow { ChangeSetPersister.NotFoundException() }
     }
@@ -165,14 +165,14 @@ class PlayerService(private val playerRepository: PlayerRepository,
         val professionAssignments: Collection<ProfessionAssignment> = getPlayerProfessions(player.id!!)
         val finalHealingConstant = healingConstant
         val finalTierMultiplier = tierMultiplier
-        professionAssignments.forEach(Consumer { (profession, _, tier) ->
-            if (profession!!.name == "Surgeon") {
-                getPlayerInventory(player.id!!).slots!!.forEach(Consumer { inventorySlot: InventorySlot ->
+        professionAssignments.forEach(Consumer { professionAssignment ->
+            if (professionAssignment.profession!!.name == "Surgeon") {
+                getPlayerInventory(player.id!!)?.slots!!.forEach(Consumer { inventorySlot: InventorySlot ->
                     if (!treated.get() && inventorySlot.item!!.id == 617) {
                         inventorySlot.item = itemRepository.getOne(0)
                         inventorySlotRepository.save(inventorySlot)
                         val newWoundDuration = patient.woundDuration -
-                                (finalHealingConstant + finalTierMultiplier * tier!!)
+                                (finalHealingConstant + finalTierMultiplier * professionAssignment.tier!!)
                         patient.treatmentTime = Timestamp.from(Instant.now())
                         patient.woundDuration = newWoundDuration
                         patient.servedWoundTime = 0
@@ -225,10 +225,10 @@ class PlayerService(private val playerRepository: PlayerRepository,
                 .filter { it!!.type!!.id == Constants.HAND_ARMOR }
                 .collect(Collectors.toList())
         val random = Random()
-        if (!headArmors.isEmpty()) player.headArmor = headArmors[random.nextInt(headArmors.size - 1)]
-        if (!bodyArmors.isEmpty()) player.bodyArmor = bodyArmors[random.nextInt(bodyArmors.size - 1)]
-        if (!footArmors.isEmpty()) player.footArmor = footArmors[random.nextInt(footArmors.size - 1)]
-        if (!handArmors.isEmpty()) player.handArmor = handArmors[random.nextInt(handArmors.size - 1)]
+        if (headArmors.isNotEmpty()) player.headArmor = headArmors[random.nextInt(headArmors.size - 1)]
+        if (bodyArmors.isNotEmpty()) player.bodyArmor = bodyArmors[random.nextInt(bodyArmors.size - 1)]
+        if (footArmors.isNotEmpty()) player.footArmor = footArmors[random.nextInt(footArmors.size - 1)]
+        if (handArmors.isNotEmpty()) player.handArmor = handArmors[random.nextInt(handArmors.size - 1)]
         return player
     }
 

@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "panel_user")
-data class PanelUser(
+class PanelUser(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", nullable = false)
@@ -26,18 +26,18 @@ data class PanelUser(
         @Column(name = "is_locked", nullable = false)
         var isLocked: Boolean? = null,
 
-        @OneToMany(mappedBy = "panelUser")
-        @JsonView(Bans::class)
-        var bans: Collection<Ban>? = null,
-
         @ManyToOne
         @JoinColumn(name = "rank_id", referencedColumnName = "id", nullable = false)
-        var rank: PanelUserRank? = null,
-
-        @OneToMany(mappedBy = "panelUser")
-        @JsonView(AuthorityAssignments::class)
-        var authorityAssignments: MutableSet<PanelUserAuthorityAssignment>? = null
+        var rank: PanelUserRank? = null
 ) {
+    @OneToMany(mappedBy = "panelUser")
+    @JsonView(Bans::class)
+    var bans: Collection<Ban>? = null
+
+    @OneToMany(mappedBy = "panelUser")
+    @JsonView(AuthorityAssignments::class)
+    var authorityAssignments: MutableSet<PanelUserAuthorityAssignment>? = null
+
     interface View {
         interface None
         interface Bans
