@@ -18,7 +18,7 @@ class ServerService(private val serverRepository: ServerRepository,
                     private val serverConfigurationRepository: ServerConfigurationRepository) {
     @Throws(ChangeSetPersister.NotFoundException::class)
     fun getServer(serverId: Int?, vararg with: String?): Server {
-        return serverRepository.findOne { root: Root<Server?>, query: CriteriaQuery<*>?, builder: CriteriaBuilder ->
+        return serverRepository.findOne { root: Root<Server?>, _, builder: CriteriaBuilder ->
             for (attr in with) {
                 root.fetch<Any, Any>(attr, JoinType.LEFT)
             }

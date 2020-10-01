@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import toker.panel.authentication.JWTOpenIDAuthenticationToken
+import toker.panel.bean.SelectedServerId
 import toker.panel.entity.Server
 import toker.panel.repository.PlayerRepository
 import toker.panel.repository.ServerRepository
@@ -14,6 +15,8 @@ import java.util.stream.Collectors
 @Service("authService")
 class AuthService(private val serverRepository: ServerRepository,
                   private val playerRepository: PlayerRepository) {
+
+    fun getRoleName(authorityName: String) = "ROLE_${SelectedServerId}_${authorityName}"
 
     fun canModifyPlayer(playerId: Int): Boolean {
         val faction = playerRepository.findById(playerId).orElse(null).faction ?: return true

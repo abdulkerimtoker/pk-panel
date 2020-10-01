@@ -16,4 +16,19 @@ class StartingItem(
         @OneToOne
         @JoinColumn(name = "item_id", referencedColumnName = "id")
         var item: Item? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as StartingItem
+        if (server != other.server) return false
+        if (item != other.item) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = server?.hashCode() ?: 0
+        result = 31 * result + (item?.hashCode() ?: 0)
+        return result
+    }
+}

@@ -1,13 +1,11 @@
-package toker.panel.util;
+package toker.panel.util
 
-public class Constants {
-
-    public static final int HEAD_ARMOR = 1;
-    public static final int BODY_ARMOR = 2;
-    public static final int FOOT_ARMOR = 3;
-    public static final int HAND_ARMOR = 4;
-    public static final int ITEM = 5;
-    public static final int HORSE = 6;
-
-    public static final int DEFAULT_TROOP_ID = 14;
+object Constants {
+    const val HEAD_ARMOR = 1
+    const val BODY_ARMOR = 2
+    const val FOOT_ARMOR = 3
+    const val HAND_ARMOR = 4
+    const val ITEM = 5
+    const val HORSE = 6
+    const val DEFAULT_TROOP_ID = 14
 }

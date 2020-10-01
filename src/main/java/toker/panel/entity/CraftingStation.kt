@@ -35,4 +35,19 @@ data class CraftingStation(
         interface Recipes
         interface Instances
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as CraftingStation
+        if (index != other.index) return false
+        if (server != other.server) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = index ?: 0
+        result = 31 * result + (server?.hashCode() ?: 0)
+        return result
+    }
 }

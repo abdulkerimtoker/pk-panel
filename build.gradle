@@ -67,7 +67,7 @@ compileTestKotlin {
 }
 
 kapt {
-    useBuildCache = false
+    useBuildCache = true
 }
 
 idea {

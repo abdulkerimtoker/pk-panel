@@ -19,7 +19,7 @@ class ChestService(private val chestRepository: ChestRepository,
                    private val chestSlotRepository: ChestSlotRepository,
                    private val itemRepository: ItemRepository) {
     fun getChest(index: Int, serverId: Int): Optional<Chest> {
-        return chestRepository.findOne { root: Root<Chest?>, query: CriteriaQuery<*>?, builder: CriteriaBuilder ->
+        return chestRepository.findOne { root: Root<Chest?>, _, builder: CriteriaBuilder ->
             root.fetch<Any, Any>("slots", JoinType.LEFT)
             builder.and(
                     builder.equal(root.get<Any>("index"), index),

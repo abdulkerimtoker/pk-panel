@@ -1,6 +1,6 @@
-package toker.panel.util;
+package toker.panel.util
 
-public enum Languages {
+enum class Languages(val id: Int) {
     COMMON(1),
     VAEGIR(2),
     NORDIC(3),
@@ -8,16 +8,5 @@ public enum Languages {
     KHERGIT(5),
     GEROIAN(6),
     BALIONESE(7),
-
-    DEFAULT(COMMON.getId());
-
-    private final int id;
-
-    Languages(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
+    DEFAULT(COMMON.id);
 }

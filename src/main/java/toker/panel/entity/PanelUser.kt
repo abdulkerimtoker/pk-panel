@@ -1,5 +1,6 @@
 package toker.panel.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
 import toker.panel.entity.PanelUser.View.AuthorityAssignments
 import toker.panel.entity.PanelUser.View.Bans
@@ -18,6 +19,7 @@ class PanelUser(
         var username: String? = null,
 
         @Column(name = "claimed_identity", unique = true, length = 128)
+        @JsonIgnore
         var claimedIdentity: String? = null,
 
         @Column(name = "creation_time", nullable = false)
@@ -42,5 +44,17 @@ class PanelUser(
         interface None
         interface Bans
         interface AuthorityAssignments
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as PanelUser
+        if (id != other.id) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id ?: 0
     }
 }

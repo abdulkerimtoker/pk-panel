@@ -25,4 +25,19 @@ class Chest(
 ) {
     @OneToMany(mappedBy = "chest")
     var slots: MutableSet<ChestSlot>? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Chest
+        if (index != other.index) return false
+        if (server != other.server) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = index ?: 0
+        result = 31 * result + (server?.hashCode() ?: 0)
+        return result
+    }
 }

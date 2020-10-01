@@ -234,7 +234,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
 
     fun getLanguageProficiencies(playerId: Int): List<LanguageProficiency> {
         return proficiencyRepo.findAll { root: Root<LanguageProficiency?>, _, builder: CriteriaBuilder ->
-            builder.equal(root.get<Player>(LanguageProficiency_.player).get<Int>(toker.panel.entity.Player_.id), playerId) }
+            builder.equal(root.get(LanguageProficiency_.player).get(Player_.id), playerId) }
     }
 
     fun assignLanguageProficiency(playerId: Int, languageId: Int): LanguageProficiency {

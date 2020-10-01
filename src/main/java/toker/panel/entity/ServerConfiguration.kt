@@ -22,4 +22,19 @@ class ServerConfiguration(
 
         @Column(name = "value")
         var value: String? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as ServerConfiguration
+        if (server != other.server) return false
+        if (name != other.name) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = server?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        return result
+    }
+}

@@ -22,4 +22,19 @@ class ChestSlot(
         @ManyToOne
         @JoinColumn(name = "item_id", referencedColumnName = "id", nullable = false)
         var item: Item? = null
-)
+) {
+        override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
+                other as ChestSlot
+                if (chest != other.chest) return false
+                if (slot != other.slot) return false
+                return true
+        }
+
+        override fun hashCode(): Int {
+                var result = chest?.hashCode() ?: 0
+                result = 31 * result + (slot ?: 0)
+                return result
+        }
+}

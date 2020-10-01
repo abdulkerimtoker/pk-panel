@@ -15,4 +15,12 @@
         <property name="userRepo" ref="panelUserRepository" />
         <property name="logRepo" ref="logRepository" />
     </bean>
+
+    <bean id="sessionEnder"
+          class="toker.panel.aop.SessionEnder"
+          factory-method="aspectOf">
+        <property name="panelUserRepository" ref="panelUserRepository" />
+        <property name="sessionRepository" ref="panelUserSessionRepository" />
+        <property name="assignmentRepository" ref="panelUserAuthorityAssignmentRepository" />
+    </bean>
 </beans>

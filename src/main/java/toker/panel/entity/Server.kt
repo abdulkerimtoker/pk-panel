@@ -44,12 +44,24 @@ class Server(
         @Column(name = "module_name", nullable = false)
         var moduleName: String? = null,
 ) {
-        @OneToMany(mappedBy = "server")
-        @JsonView(StartupCommands::class)
-        var startupCommands: MutableSet<ServerStartupCommand>? = null
+    @OneToMany(mappedBy = "server")
+    @JsonView(StartupCommands::class)
+    var startupCommands: MutableSet<ServerStartupCommand>? = null
 
-        interface View {
-                interface None
-                interface StartupCommands
-        }
+    interface View {
+        interface None
+        interface StartupCommands
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        other as Server
+        if (id != other.id) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id ?: 0
+    }
 }

@@ -23,5 +23,6 @@ class PanelUserRank(
 
     interface View {
         interface PanelUsers
+        interface None
     }
 }
