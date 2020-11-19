@@ -13,16 +13,11 @@ import javax.inject.Inject
 
 @Aspect
 class DefaultFactionValueInterceptor {
-    private var factionRepo: FactionRepository? = null
-    @Inject
-    fun setFactionRepo(factionRepo: FactionRepository?) {
-        this.factionRepo = factionRepo
-    }
+    lateinit var factionRepo: FactionRepository
 
     @Pointcut("execution(public toker.panel.entity.Faction *(..)) && " +
             "@annotation(toker.panel.annotation.DefaultFactionValue)")
-    fun getting() {
-    }
+    fun getting() { }
 
     @Around("getting()")
     @Throws(Throwable::class)

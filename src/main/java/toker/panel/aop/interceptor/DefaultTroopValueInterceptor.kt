@@ -11,16 +11,10 @@ import javax.inject.Inject
 
 @Aspect
 class DefaultTroopValueInterceptor {
-    private var troopRepo: TroopRepository? = null
-    @Inject
-    fun setTroopRepo(troopRepo: TroopRepository?) {
-        this.troopRepo = troopRepo
-    }
-
+    lateinit var troopRepo: TroopRepository
     @Pointcut("execution(public toker.panel.entity.Troop *(..)) && " +
             "@annotation(toker.panel.annotation.DefaultTroopValue)")
-    fun getting() {
-    }
+    fun getting() { }
 
     @Around("getting()")
     @Throws(Throwable::class)
@@ -31,8 +25,7 @@ class DefaultTroopValueInterceptor {
             try {
                 val getter = type.getDeclaredMethod(joinPoint.signature.name)
                 return troopRepo!!.getOne(getter.getAnnotation(DefaultTroopValue::class.java).id)
-            } catch (ignored: NoSuchMethodException) {
-            }
+            } catch (ignored: NoSuchMethodException) { }
         }
         return value
     }

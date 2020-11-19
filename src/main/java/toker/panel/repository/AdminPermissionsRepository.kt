@@ -6,4 +6,5 @@ import java.util.*
 
 interface AdminPermissionsRepository : BaseRepository<AdminPermissions, AdminPermissionsPK> {
     fun findByServerIdAndUniqueId(serverId: Int, uniqueId: Int): Optional<AdminPermissions>
+    fun findAllByServerId(serverId: Int): List<AdminPermissions>
 }

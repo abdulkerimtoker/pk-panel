@@ -11,19 +11,14 @@ import javax.inject.Inject
 
 @Aspect
 class DefaultItemValueInterceptor {
-    private var itemRepo: ItemRepository? = null
-    @Inject
-    fun setItemRepo(itemRepo: ItemRepository?) {
-        this.itemRepo = itemRepo
-    }
+
+    lateinit var itemRepo: ItemRepository
 
     @Pointcut("execution(public toker.panel.entity.Item *(..)) && " +
             "@annotation(toker.panel.annotation.DefaultItemValue)")
-    fun getting() {
-    }
+    fun getting() { }
 
     @Around("getting()")
-    @Throws(Throwable::class)
     fun aroundGetting(joinPoint: ProceedingJoinPoint): Item? {
         val value = joinPoint.proceed() as Item?
         if (value == null) {
@@ -31,8 +26,7 @@ class DefaultItemValueInterceptor {
             try {
                 val getter = type.getDeclaredMethod(joinPoint.signature.name)
                 return itemRepo!!.getOne(getter.getAnnotation(DefaultItemValue::class.java).itemId)
-            } catch (ignored: NoSuchMethodException) {
-            }
+            } catch (ignored: NoSuchMethodException) { }
         }
         return value
     }

@@ -7,9 +7,9 @@ import toker.panel.annotation.DefaultStringValue
 
 @Aspect
 class DefaultStringValueInterceptor {
-    @Pointcut("execution(public String *(..)) && @annotation(toker.panel.annotation.DefaultStringValue)")
-    fun getting() {
-    }
+    @Pointcut("execution(public String *(..)) && " +
+            "@annotation(toker.panel.annotation.DefaultStringValue)")
+    fun getting() { }
 
     @Throws(Throwable::class)
     fun aroundGetting(joinPoint: ProceedingJoinPoint): String? {

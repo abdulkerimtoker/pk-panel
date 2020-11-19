@@ -18,6 +18,8 @@ class AdminController(
         private val authorityRepository: PanelUserAuthorityRepository,
         private val authorityAssignmentRepository: PanelUserAuthorityAssignmentRepository,
         private val adminInvitationRepository: AdminInvitationRepository,
+        private val adminPermissionsRepository: AdminPermissionsRepository,
+        private val serverRepository: ServerRepository,
         private val panelUserService: PanelUserService
 ) {
 
@@ -91,4 +93,18 @@ class AdminController(
 
     @PutMapping("/api/invitation/{code}")
     fun useInvitation(@PathVariable code: String) = panelUserService.useInvitation(code)
+
+    @GetMapping("/api/ig-perms")
+    @JsonView(AdminPermissions.View.None::class)
+    fun perms() = adminPermissionsRepository.findAllByServerId(SelectedServerId)
+
+    @PutMapping("/api/ig-perms")
+    fun savePerms(@RequestBody perms: AdminPermissions) {
+        perms.server = serverRepository.getOne(SelectedServerId)
+        adminPermissionsRepository.saveAndFlush(perms)
+    }
+
+    @DeleteMapping("/api/ig-perms/{uniqueId}")
+    fun revokePerms(@PathVariable uniqueId: Int) = adminPermissionsRepository.findByServerIdAndUniqueId(SelectedServerId, uniqueId)
+            .ifPresent{ adminPermissionsRepository.delete(it) }
 }

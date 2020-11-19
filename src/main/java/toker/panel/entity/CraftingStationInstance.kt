@@ -15,7 +15,10 @@ class CraftingStationInstance(
         var name: String? = null,
 
         @ManyToOne
-        @JoinColumns(JoinColumn(name = "station_index", referencedColumnName = "index", nullable = false), JoinColumn(name = "station_server_id", referencedColumnName = "server_id", nullable = false))
+        @JoinColumns(
+                JoinColumn(name = "station_index", referencedColumnName = "index", nullable = false),
+                JoinColumn(name = "station_server_id", referencedColumnName = "server_id", nullable = false)
+        )
         @JsonView(View.CraftingStation::class)
         var craftingStation: CraftingStation? = null
 ) {

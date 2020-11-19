@@ -7,9 +7,11 @@ import org.springframework.context.annotation.ImportResource
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
+import toker.panel.aop.Test
 import toker.panel.authentication.EndedSessions
 import toker.panel.entity.PanelUserSession
 import toker.panel.entity.PanelUserSession_
+import toker.panel.entity.Player
 import toker.panel.repository.BaseRepository
 import java.io.File
 import java.io.FileInputStream
@@ -26,13 +28,16 @@ import javax.persistence.criteria.Root
 class PanelApplication(private val sessionRepo: BaseRepository<PanelUserSession?, Int>) : CommandLineRunner {
 
     override fun run(vararg args: String) {
-        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, query: CriteriaQuery<*>?, builder: CriteriaBuilder -> builder.equal(root.get(PanelUserSession_.isEnded), true) }
+        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, _, builder: CriteriaBuilder ->
+            builder.equal(root.get(PanelUserSession_.isEnded), true) }
         EndedSessions.endSessions(endedSessions.stream().map { it!!.id }.collect(Collectors.toList()))
+        Test.sea()
     }
 
     @Scheduled(fixedDelay = 5 * 1000)
     fun endSessionsPeriodically() {
-        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, query: CriteriaQuery<*>?, builder: CriteriaBuilder -> builder.equal(root.get(PanelUserSession_.isEnded), true) }
+        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, _, builder: CriteriaBuilder ->
+            builder.equal(root.get(PanelUserSession_.isEnded), true) }
         EndedSessions.endSessions(endedSessions.stream().map { it!!.id }.collect(Collectors.toList()))
     }
 

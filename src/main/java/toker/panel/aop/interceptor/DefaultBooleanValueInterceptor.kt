@@ -8,9 +8,9 @@ import toker.panel.annotation.DefaultBooleanValue
 
 @Aspect
 class DefaultBooleanValueInterceptor {
+
     @Pointcut("execution(public Boolean *(..)) && @annotation(toker.panel.annotation.DefaultBooleanValue)")
-    fun getting() {
-    }
+    fun getting() { }
 
     @Around("getting()")
     @Throws(Throwable::class)
