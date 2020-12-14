@@ -2,20 +2,23 @@ package toker.panel.service
 
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.stereotype.Service
-import toker.panel.entity.Server
-import toker.panel.entity.ServerConfiguration
+import toker.panel.entity.*
+import toker.panel.repository.FactionRepository
 import toker.panel.repository.ServerConfigurationRepository
 import toker.panel.repository.ServerRepository
+import toker.panel.repository.ServerStartupCommandRepository
 import java.io.File
 import java.util.*
 import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.JoinType
 import javax.persistence.criteria.Root
 
 @Service
 class ServerService(private val serverRepository: ServerRepository,
-                    private val serverConfigurationRepository: ServerConfigurationRepository) {
+                    private val serverConfigurationRepository: ServerConfigurationRepository,
+                    private val serverStartupCommandRepository: ServerStartupCommandRepository,
+                    private val factionRepository: FactionRepository) {
+
     @Throws(ChangeSetPersister.NotFoundException::class)
     fun getServer(serverId: Int?, vararg with: String?): Server {
         return serverRepository.findOne { root: Root<Server?>, _, builder: CriteriaBuilder ->
@@ -38,11 +41,22 @@ class ServerService(private val serverRepository: ServerRepository,
         return serverConfigurationRepository.findAllByServerId(serverId)
     }
 
-    fun getMapDir(server: Server): File {
+    fun getModuleDir(server: Server): File {
         val exe = File(server.exePath!!)
         val serverDir = File(exe.parent)
         val modulesDir = File(serverDir, "Modules")
-        val moduleDir = File(modulesDir, server.moduleName!!)
-        return File(moduleDir, "SceneObj")
+        return File(modulesDir, server.moduleName!!)
     }
+
+    fun getMapDir(server: Server): File {
+        return File(getModuleDir(server), "SceneObj")
+    }
+
+    fun getStartupCommands(serverId: Int): List<ServerStartupCommand> {
+        return serverStartupCommandRepository.findAll { root, _, builder ->
+            builder.equal(root.get(ServerStartupCommand_.server).get(Server_.id), serverId)
+        }
+    }
+
+    fun getFactions(serverId: Int): List<Faction> = factionRepository.findAllByServerId(serverId)
 }

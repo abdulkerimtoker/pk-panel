@@ -1,22 +1,20 @@
 package toker.panel.service
 
 import org.springframework.data.crossstore.ChangeSetPersister
-import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import toker.panel.bean.SelectedServerId
 import toker.panel.entity.*
 import toker.panel.repository.*
 import toker.panel.util.Constants
-import java.lang.reflect.InvocationTargetException
 import java.sql.Timestamp
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
-import java.util.function.Predicate
 import java.util.stream.Collectors
 import javax.persistence.criteria.*
 import javax.persistence.metamodel.PluralAttribute
+import kotlin.collections.LinkedHashSet
 
 @Service
 class PlayerService(private val playerRepository: PlayerRepository,
@@ -31,6 +29,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
                     private val startingItemRepo: StartingItemRepository,
                     private val proficiencyRepo: LanguageProficiencyRepository,
                     private val languageRepo: LanguageRepository,
+                    private val ipRecordRepository: IpRecordRepository,
                     private val serverService: ServerService) {
 
     fun getPlayer(id: Int): Optional<Player> {
@@ -246,5 +245,50 @@ class PlayerService(private val playerRepository: PlayerRepository,
 
     fun revokeLanguageProficiency(playerId: Int, languageId: Int) {
         proficiencyRepo.deleteByPlayerIdAndLanguageId(playerId, languageId)
+    }
+
+    fun getAltCharacters(guid: Int, serverId: Int): List<Player> {
+        val guids = findAltGuids(guid, serverId)
+        return playerRepository.findAll { root, _, builder ->
+            val join = root.join(Player_.faction).join(Faction_.server)
+            val inClause = builder.`in`(root.get(Player_.uniqueId))
+            guids.forEach { inClause.value(it) }
+            builder.and(
+                inClause,
+                builder.equal(join.get(Server_.id), serverId)
+            )
+        }
+    }
+
+    fun findAltGuids(guid: Int, serverId: Int, set: MutableSet<Int> = LinkedHashSet()): MutableSet<Int> {
+        set.add(guid)
+
+        val ips = ipRecordRepository.findAll { root, _, builder ->
+            val join = root.join(IpRecord_.server)
+            builder.and(
+                builder.equal(root.get(IpRecord_.uniqueId), guid),
+                builder.equal(join.get(Server_.id), serverId)
+            )
+        }.stream()
+            .map { it.ipAddress }
+            .collect(Collectors.toSet())
+
+        val guids = ipRecordRepository.findAll { root, _, builder ->
+            val join = root.join(IpRecord_.server)
+            val inClause = builder.`in`(root.get(IpRecord_.ipAddress))
+            ips.forEach { inClause.value(it) }
+            builder.and(
+                inClause,
+                builder.equal(join.get(Server_.id), serverId)
+            )
+        }.stream()
+            .map { it.uniqueId }
+            .collect(Collectors.toSet())
+
+        guids.forEach {
+            if (!set.contains(it)) findAltGuids(it!!, serverId, set)
+        }
+
+        return set
     }
 }

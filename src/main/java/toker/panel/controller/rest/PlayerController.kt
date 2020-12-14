@@ -5,6 +5,7 @@ import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
+import toker.panel.bean.SelectedServerId
 import toker.panel.entity.*
 import toker.panel.entity.NoticeBoardAccess.View.Board
 import toker.panel.service.PlayerService
@@ -100,4 +101,8 @@ class PlayerController(private val playerService: PlayerService) {
         playerService.revokeLanguageProficiency(playerId, languageId)
         return languageProficiencies(playerId)
     }
+
+    @GetMapping("/api/player/{guid}/altAccounts")
+    @JsonView(Player.View.None::class)
+    fun altAccounts(@PathVariable guid: Int) = playerService.getAltCharacters(guid, SelectedServerId)
 }

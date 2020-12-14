@@ -1,17 +1,22 @@
 package toker.panel.service
 
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import toker.panel.entity.Server
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
 @Service
 class LogService {
+
     private val pattern = Pattern.compile("[\\w _\\-\\[\\]:()]{3,128}")
+    private val dateFormat = SimpleDateFormat("server_log_dd_MM_YY.txt")
+
     fun getLogFileNames(server: Server): Array<String>? {
         val serverFolder = File(File(server.exePath!!).parent)
         val logFolder = File(serverFolder, "logs")
@@ -22,6 +27,19 @@ class LogService {
         val serverFolder = File(File(server.exePath!!).parent)
         val logFolder = File(serverFolder, "logs")
         return File(logFolder, fileName)
+    }
+
+    fun getLogArchiveFolder(server: Server): File {
+        val serverFolder = File(File(server.exePath!!).parent)
+        val archiveFolder = File(serverFolder, "archived-logs")
+        if (!archiveFolder.exists())
+            archiveFolder.mkdir()
+        return archiveFolder
+    }
+
+    @Scheduled(fixedDelay = 1000 * 60)
+    fun archiveLogFiles() {
+
     }
 
     fun searchLogFile(log: File, vararg words: String): String {

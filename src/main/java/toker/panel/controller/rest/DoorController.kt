@@ -12,13 +12,15 @@ import toker.panel.entity.pk.DoorPK
 import toker.panel.repository.DoorKeyRepository
 import toker.panel.repository.DoorRepository
 import toker.panel.service.DoorService
+import toker.panel.service.PlayerService
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Root
 
 @RestController
 class DoorController(private val doorService: DoorService,
                      private val doorRepository: DoorRepository,
-                     private val doorKeyRepository: DoorKeyRepository) {
+                     private val doorKeyRepository: DoorKeyRepository,
+                     private val playerService: PlayerService) {
 
     @GetMapping("/api/door/{doorId}")
     @JsonView(Door.View.None::class)

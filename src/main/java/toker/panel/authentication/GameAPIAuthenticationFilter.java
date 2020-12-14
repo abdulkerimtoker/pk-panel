@@ -29,9 +29,7 @@ public class GameAPIAuthenticationFilter extends BasicAuthenticationFilter {
         String serverKey = request.getParameter("authkey");
         if (serverKey != null) {
             Server server = serverService.getServerByKey(serverKey);
-            if (server != null) {
-                SecurityContextHolder.getContext().setAuthentication(new GameAPIAuthentication(server));
-            }
+            SecurityContextHolder.getContext().setAuthentication(new GameAPIAuthentication(server));
         }
         chain.doFilter(request, response);
     }
