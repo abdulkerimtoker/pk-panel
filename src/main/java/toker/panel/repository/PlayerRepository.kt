@@ -1,9 +1,14 @@
 package toker.panel.repository
 
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.repository.Lock
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import toker.panel.entity.Player
+import java.util.*
 import javax.persistence.LockModeType
+import javax.transaction.Transactional
 
 interface PlayerRepository : BaseRepository<Player, Int> {
     @Query("SELECT p FROM Player p " +
@@ -14,6 +19,22 @@ interface PlayerRepository : BaseRepository<Player, Int> {
             ")" +
             "AND p.faction.server = ?2")
     fun likeSearch(likeString: String, server: Int): List<Player>
-    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    override fun <S : Player> saveAndFlush(s: S): S
+
+    @Query("""
+        UPDATE Player p
+        SET p.woundTime = current_timestamp, p.woundDuration = :duration, p.servedWoundTime = 0
+        WHERE p.id = :id
+    """)
+    @Modifying
+    @Transactional
+    fun wound(@Param("id") id: Int, @Param("duration") duration: Int)
+
+    @Query("""
+        UPDATE Player p
+        SET p.servedWoundTime = p.servedWoundTime + :millis, p.lastLogTime = current_timestamp
+        WHERE p.id = :id
+    """)
+    @Modifying
+    @Transactional
+    fun serveWoundTime(@Param("id") id: Int, @Param("millis") millis: Int)
 }

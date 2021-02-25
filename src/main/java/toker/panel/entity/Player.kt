@@ -2,6 +2,7 @@ package toker.panel.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
+import org.hibernate.annotations.DynamicUpdate
 import toker.panel.annotation.DefaultFactionValue
 import toker.panel.annotation.DefaultItemValue
 import toker.panel.annotation.DefaultTroopValue
@@ -12,6 +13,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
+@DynamicUpdate
 @Table(name = "player")
 class Player(
         @get:Id
@@ -192,17 +194,13 @@ class Player(
         var woundDuration: Int = 0,
 
         @get:Column(name = "served_wound_time", nullable = false)
-        var servedWoundTime: Int = 0,
+        var servedWoundTime: Long = 0,
 
         @get:Column(name = "treatment_time")
         var treatmentTime: Timestamp? = null,
 
         @get:Column(name = "last_log_time")
-        var lastLogTime: Timestamp? = null,
-
-        @get:Version
-        @get:Column(name = "version", nullable = false)
-        var version: Int? = null
+        var lastLogTime: Timestamp? = null
 ) {
     @get:OneToMany(mappedBy = "player")
     @JsonIgnore

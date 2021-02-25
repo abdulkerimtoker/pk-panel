@@ -2,6 +2,7 @@ package toker.panel.controller.gameapi;
 
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import toker.panel.entity.*;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @RestController
+@Transactional
 public class PlayerGameController {
 
     private PlayerService playerService;
@@ -86,17 +88,13 @@ public class PlayerGameController {
             player.setAmmo_2(ammo2);
             player.setAmmo_3(ammo3);
 
-            if (player.getLastLogTime() != null) {
-                long diffMilli = Timestamp.from(Instant.now()).getTime()
-                        - player.getLastLogTime().getTime();
-                long diffMin = TimeUnit.MINUTES.convert(diffMilli, TimeUnit.MILLISECONDS);
-                player.setServedWoundTime(player.getServedWoundTime() + (int)diffMin);
-            }
-            else {
-                player.setLastLogTime(Timestamp.from(Instant.now()));
-            }
+            player = playerService.savePlayer(player);
 
-            playerService.savePlayer(player);
+            Timestamp now = Timestamp.from(Instant.now());
+            if (player.getLastLogTime() != null && player.isWounded() && player.getLastLogTime().before(now)) {
+                long diffMilli = now.getTime() - player.getLastLogTime().getTime();
+                playerService.serveWoundTime(player.getId(), (int)diffMilli);
+            }
         });
     }
 
@@ -201,7 +199,7 @@ public class PlayerGameController {
 
         if (player.getTreatmentTime() == null ||
                 player.getTreatmentTime().before(player.getWoundTime())) {
-            boolean wounded = player.getServedWoundTime() < player.getWoundDuration() * 60;
+            boolean wounded = TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()) < player.getWoundDuration() * 60;
             return String.format("%d|%d", playerid, wounded ? 1 : 0);
         }
 
@@ -226,10 +224,10 @@ public class PlayerGameController {
 
         if (player.getTreatmentTime() == null ||
                 player.getTreatmentTime().before(player.getWoundTime())) {
-            boolean wounded = player.getServedWoundTime() < player.getWoundDuration() * 60;
+            boolean wounded = TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()) < player.getWoundDuration() * 60;
             if (wounded) {
                 return String.format("%d|1|%d", playerid,
-                        player.getWoundDuration() * 60 - player.getServedWoundTime());
+                        player.getWoundDuration() * 60 - TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()));
             }
             return String.format("%d|0", playerid);
         }
@@ -307,8 +305,7 @@ public class PlayerGameController {
     }
 
     @GetMapping("/gameapi/inventoryput")
-    public void inventoryPut(String playername, int slot,
-                             int item, int ammo) {
+    public void inventoryPut(String playername, int slot, int item, int ammo) {
         Server server = (Server)SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
         int finalSlot = slot + 1;
@@ -391,6 +388,11 @@ public class PlayerGameController {
         }
 
         return String.format("%d|<Wrong slot>", playerid);
+    }
+
+    @GetMapping("/gameapi/inspectdesc")
+    public String inspectDescription(String name, int playerid, int th) {
+        return getDescription(name, playerid, th);
     }
 
     @GetMapping("/gameapi/setdescription")

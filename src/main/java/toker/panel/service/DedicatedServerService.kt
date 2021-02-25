@@ -15,20 +15,23 @@ import javax.annotation.PreDestroy
 @Service
 class DedicatedServerService(private val serverRepository: ServerRepository,
                              private val messagingTemplate: SimpMessagingTemplate) {
+
     private val processMap: MutableMap<Int?, Process?> = HashMap()
     @Throws(IOException::class)
     fun startServer(server: Server) {
         if (isServerUp(server)) {
             shutdownServer(server)
         }
-        val wseFile = File(server.wsePath)
-        val exeFile = File(server.exePath)
+        val exeFile = File(server.exePath!!)
         val serverFolder = File(exeFile.parent)
+
         val configFile = File(serverFolder, "config.txt")
         val writer = FileWriter(configFile)
         for (serverCommand in server.startupCommands!!) {
-            writer.write(String.format("%s %s", serverCommand.command, serverCommand.value))
-            writer.write(System.lineSeparator())
+            if (!serverCommand.command!!.contains("start") && !serverCommand.command!!.contains("port")) {
+                writer.write(String.format("%s %s", serverCommand.command, serverCommand.value))
+                writer.write(System.lineSeparator())
+            }
         }
         writer.write("set_server_ban_list_file banlist.txt")
         writer.write(System.lineSeparator())
@@ -42,6 +45,7 @@ class DedicatedServerService(private val serverRepository: ServerRepository,
         writer.write(System.lineSeparator())
         writer.flush()
         writer.close()
+
         val cmds: MutableList<String?> = LinkedList()
         if (server.useScreen != null && server.useScreen!!) {
             cmds.addAll(Arrays.asList(*String.format("screen -d -m -S %s", server.name).split(" ").toTypedArray()))
@@ -56,10 +60,10 @@ class DedicatedServerService(private val serverRepository: ServerRepository,
         cmds.add("config.txt")
         cmds.add("-m")
         cmds.add(server.moduleName)
+
         val pb = ProcessBuilder(cmds)
         processMap[server.id] = pb.start()
-        messagingTemplate.convertAndSend(String.format("/channel/%d/state", server.id),
-                "starting_up")
+        messagingTemplate.convertAndSend(String.format("/channel/%d/state", server.id), "starting_up")
     }
 
     fun shutdownServer(server: Server) {

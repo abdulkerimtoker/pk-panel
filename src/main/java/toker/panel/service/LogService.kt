@@ -14,13 +14,15 @@ import java.util.stream.Collectors
 @Service
 class LogService {
 
-    private val pattern = Pattern.compile("[\\w _\\-\\[\\]:()]{3,128}")
-    private val dateFormat = SimpleDateFormat("server_log_dd_MM_YY.txt")
+    private val searchPattern = Pattern.compile("[\\w _\\-\\[\\]:()]{3,128}")
+    private val fileNamePattern = Pattern.compile("server_log_(?<day>\\d{2})_(?<month>\\d{2})_(?<year>\\d{2})\\.txt")
+    private val dateFormat = SimpleDateFormat("dd MM YY")
 
-    fun getLogFileNames(server: Server): Array<String>? {
+    fun getLogFileNames(server: Server): Array<String> {
         val serverFolder = File(File(server.exePath!!).parent)
         val logFolder = File(serverFolder, "logs")
-        return logFolder.list()
+        val list = logFolder.list()
+        return list ?: emptyArray()
     }
 
     fun getLogFile(server: Server, fileName: String): File {
@@ -45,7 +47,7 @@ class LogService {
     fun searchLogFile(log: File, vararg words: String): String {
         val wordSet = Arrays.stream(words)
                 .map { obj: String -> obj.toLowerCase() }
-                .filter { word: String -> pattern.matcher(word).matches() }
+                .filter { word: String -> searchPattern.matcher(word).matches() }
                 .collect(Collectors.toSet())
         val sb = StringBuilder(4096)
         try {

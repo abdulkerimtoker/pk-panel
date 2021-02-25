@@ -12,6 +12,8 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 import java.util.stream.Collectors
+import javax.persistence.EntityManager
+import javax.persistence.LockModeType
 import javax.persistence.criteria.*
 import javax.persistence.metamodel.PluralAttribute
 import kotlin.collections.LinkedHashSet
@@ -30,14 +32,15 @@ class PlayerService(private val playerRepository: PlayerRepository,
                     private val proficiencyRepo: LanguageProficiencyRepository,
                     private val languageRepo: LanguageRepository,
                     private val ipRecordRepository: IpRecordRepository,
-                    private val serverService: ServerService) {
+                    private val serverService: ServerService,
+                    private val entityManager: EntityManager) {
 
     fun getPlayer(id: Int): Optional<Player> {
         return playerRepository.findById(id)
     }
 
     fun getPlayer(name: String?, serverId: Int): Optional<Player> {
-        return playerRepository.findOne { root: Root<Player>, _, builder: CriteriaBuilder ->
+        return playerRepository.findOne { root: Root<Player>, query, builder: CriteriaBuilder ->
             val join: Join<Player, Faction> = root.join(Player_.faction)
             builder.and(
                     builder.equal(root.get(Player_.name), name),
@@ -131,16 +134,18 @@ class PlayerService(private val playerRepository: PlayerRepository,
     }
 
     fun woundPlayer(player: Player) {
+        entityManager.lock(player, LockModeType.PESSIMISTIC_READ)
         var woundDuration = 48
         val conf = serverService.getServerConfiguration(
                 player.faction!!.server!!.id!!, "CONF_WOUND_TIME").orElse(null)
         if (conf != null) {
             woundDuration = conf.value!!.toInt()
         }
-        player.woundDuration = woundDuration
-        player.servedWoundTime = 0
-        player.woundTime = Timestamp.from(Instant.now())
-        savePlayer(player)
+        playerRepository.wound(player.id!!, woundDuration)
+    }
+
+    fun serveWoundTime(playerId: Int, millis: Int) {
+        playerRepository.serveWoundTime(playerId, millis)
     }
 
     fun treatPlayer(player: Player, patient: Player): Boolean {

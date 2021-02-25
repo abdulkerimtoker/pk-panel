@@ -1,5 +1,6 @@
 package toker.panel.service
 
+import org.springframework.context.annotation.Profile
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.security.core.context.SecurityContextHolder
@@ -22,6 +23,7 @@ class BanService(private val banRepository: BanRepository,
                  private val playerRepository: PlayerRepository,
                  private val panelUserRepository: PanelUserRepository,
                  private val serverRepository: ServerRepository) {
+
     @Scheduled(fixedDelay = 1000 * 30)
     @Throws(IOException::class)
     fun refreshBanList() {

@@ -67,6 +67,7 @@ class PanelApplication(private val sessionRepo: BaseRepository<PanelUserSession?
                 }
             }
             SpringApplication.run(PanelApplication::class.java, *args)
+            val x = 0
         }
     }
 }

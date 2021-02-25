@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.web.bind.annotation.*
 import toker.panel.bean.SelectedServerId
-import toker.panel.entity.Door
-import toker.panel.entity.DoorKey
-import toker.panel.entity.DoorKey_
-import toker.panel.entity.Door_
+import toker.panel.entity.*
 import toker.panel.entity.pk.DoorPK
 import toker.panel.repository.DoorKeyRepository
 import toker.panel.repository.DoorRepository
@@ -35,7 +32,12 @@ class DoorController(private val doorService: DoorService,
     @JsonView(DoorKey.View.Player::class)
     fun doorKeys(@PathVariable index: Int): List<DoorKey> = doorKeyRepository.findAll { 
         root: Root<DoorKey>, _, builder: CriteriaBuilder ->
-        builder.equal(root.get(DoorKey_.door).get(Door_.index), index)
+        val joinDoor = root.join(DoorKey_.door)
+        val joinServer = joinDoor.join(Door_.server)
+        builder.and(
+            builder.equal(joinDoor.get(Door_.index), index),
+            builder.equal(joinServer.get(Server_.id), SelectedServerId)
+        )
     }
 
     @GetMapping("/api/door")

@@ -27,12 +27,13 @@ class LogController(private val logService: LogService,
                     private val serverService: ServerService,
                     private val tokenRepository: DownloadTokenRepository,
                     private val panelUserRepository: PanelUserRepository) {
-    private val secureRandom = SecureRandom() //threadsafe
+
+    private val secureRandom = SecureRandom() // thread safe
     private val base64Encoder = Base64.getUrlEncoder()
 
-    @Throws(ChangeSetPersister.NotFoundException::class)
     @GetMapping("/api/log/list")
-    fun getLogFiles(): Array<String>? {
+    @Throws(ChangeSetPersister.NotFoundException::class)
+    fun getLogFiles(): Array<String> {
         val server = serverService.getServer(SelectedServerId)
         return logService.getLogFileNames(server)
     }
@@ -42,8 +43,7 @@ class LogController(private val logService: LogService,
     fun getLogFile(@PathVariable fileName: String): DownloadToken? {
         val server = serverService.getServer(SelectedServerId)
         val log = logService.getLogFile(server, fileName)
-        val auth = SecurityContextHolder.getContext()
-                .authentication as JWTOpenIDAuthenticationToken
+        val auth = SecurityContextHolder.getContext().authentication as JWTOpenIDAuthenticationToken
         if (log.exists()) {
             val token = DownloadToken()
             token.file = log.absolutePath
