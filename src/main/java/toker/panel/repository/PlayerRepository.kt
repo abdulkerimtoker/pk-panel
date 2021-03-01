@@ -22,19 +22,10 @@ interface PlayerRepository : BaseRepository<Player, Int> {
 
     @Query("""
         UPDATE Player p
-        SET p.woundTime = current_timestamp, p.woundDuration = :duration, p.servedWoundTime = 0
+        SET p.woundTime = current_timestamp, p.woundDuration = :duration
         WHERE p.id = :id
     """)
     @Modifying
     @Transactional
     fun wound(@Param("id") id: Int, @Param("duration") duration: Int)
-
-    @Query("""
-        UPDATE Player p
-        SET p.servedWoundTime = p.servedWoundTime + :millis, p.lastLogTime = current_timestamp
-        WHERE p.id = :id
-    """)
-    @Modifying
-    @Transactional
-    fun serveWoundTime(@Param("id") id: Int, @Param("millis") millis: Int)
 }

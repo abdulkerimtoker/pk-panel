@@ -10,6 +10,7 @@ import toker.panel.util.Constants
 import java.sql.Timestamp
 import java.time.Instant
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.persistence.*
 
 @Entity
@@ -193,9 +194,6 @@ class Player(
         @get:Column(name = "wound_duration", nullable = false)
         var woundDuration: Int = 0,
 
-        @get:Column(name = "served_wound_time", nullable = false)
-        var servedWoundTime: Long = 0,
-
         @get:Column(name = "treatment_time")
         var treatmentTime: Timestamp? = null,
 
@@ -225,12 +223,14 @@ class Player(
     @get:Transient
     val isWounded: Boolean
         get() {
-            if (woundTime == null) return false
-            if (treatmentTime == null || treatmentTime!!.before(woundTime)) {
-                return servedWoundTime < woundDuration * 60
-            }
+            if (woundTime == null)
+                return false
+
+            if (treatmentTime == null || treatmentTime!!.before(woundTime))
+                return true
+
             val calendar = Calendar.getInstance()
-            calendar.time = woundTime
+            calendar.time = treatmentTime
             calendar.add(Calendar.HOUR, woundDuration)
             return calendar.toInstant().isAfter(Instant.now())
         }

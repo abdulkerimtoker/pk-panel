@@ -88,13 +88,7 @@ public class PlayerGameController {
             player.setAmmo_2(ammo2);
             player.setAmmo_3(ammo3);
 
-            player = playerService.savePlayer(player);
-
-            Timestamp now = Timestamp.from(Instant.now());
-            if (player.getLastLogTime() != null && player.isWounded() && player.getLastLogTime().before(now)) {
-                long diffMilli = now.getTime() - player.getLastLogTime().getTime();
-                playerService.serveWoundTime(player.getId(), (int)diffMilli);
-            }
+            playerService.savePlayer(player);
         });
     }
 
@@ -188,26 +182,9 @@ public class PlayerGameController {
     @GetMapping("/gameapi/checkwound")
     public String checkWound(int playerid, String name)
             throws ChangeSetPersister.NotFoundException {
-        Server server = (Server)SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        Player player = playerService.getPlayer(name, server.getId())
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-
-        if (player.getWoundTime() == null) {
-            return String.format("%d|%d", playerid, 0);
-        }
-
-        if (player.getTreatmentTime() == null ||
-                player.getTreatmentTime().before(player.getWoundTime())) {
-            boolean wounded = TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()) < player.getWoundDuration() * 60;
-            return String.format("%d|%d", playerid, wounded ? 1 : 0);
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(player.getTreatmentTime());
-        calendar.add(Calendar.HOUR, player.getWoundDuration());
-        boolean wounded = calendar.toInstant().isAfter(Instant.now());
-        return String.format("%d|%d", playerid, wounded ? 1 : 0);
+        Server server = (Server)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Player player = playerService.getPlayer(name, server.getId()).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return String.format("%d|%d", playerid, player.isWounded() ? 1 : 0);
     }
 
     @GetMapping("/gameapi/checkwoundduration")
@@ -219,16 +196,6 @@ public class PlayerGameController {
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         if (player.getWoundTime() == null) {
-            return String.format("%d|0", playerid);
-        }
-
-        if (player.getTreatmentTime() == null ||
-                player.getTreatmentTime().before(player.getWoundTime())) {
-            boolean wounded = TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()) < player.getWoundDuration() * 60;
-            if (wounded) {
-                return String.format("%d|1|%d", playerid,
-                        player.getWoundDuration() * 60 - TimeUnit.MILLISECONDS.toMinutes(player.getServedWoundTime()));
-            }
             return String.format("%d|0", playerid);
         }
 

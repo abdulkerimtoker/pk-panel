@@ -13,6 +13,7 @@ import toker.panel.service.BoardService
 
 @RestController
 class BoardController(private val boardService: BoardService) {
+
     @GetMapping("/api/board")
     @JsonView(NoticeBoard.View.None::class)
     fun boards(): List<NoticeBoard> {

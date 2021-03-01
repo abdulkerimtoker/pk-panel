@@ -18,9 +18,9 @@ class LetterController(
 ) {
 
     @GetMapping("/gameapi/createletter")
-    fun create(playerid: Int, lettertitle: String): String {
+    fun create(playerid: Int, lettertitle: String, language: String): String {
         val server = SecurityContextHolder.getContext().authentication.principal as Server
-        var letter = Letter(server = server, language = languageRepository.getOne(1), title = lettertitle)
+        var letter = Letter(server = server, language = languageRepository.findByNameIgnoreCase(language).get(), title = lettertitle)
         letter = letterRepository.saveAndFlush(letter)
         return "$playerid|${letter.id}|You created a letter with the title: $lettertitle"
     }
@@ -46,6 +46,7 @@ class LetterController(
             val partsCount = floor((it.length / lineLimit).toDouble()).toInt()
             if (it.length < lineLimit) {
                 sb.append("|[$it")
+                lineCount++
             }
             else {
                 for (i in 0 until partsCount) {
@@ -57,7 +58,7 @@ class LetterController(
             }
         }
         sb.append("|$lineCount")
-        sb.append("|${letter.language.id}")
+        sb.append("|${letter.language.id!! - 1}")
 
         return sb.toString()
     }
@@ -71,7 +72,7 @@ class LetterController(
             return "-1"
         }
 
-        return "$playerid|$letterid|${letter.title} [${letter.sealState.text}]"
+        return "$playerid|Letter ID: $letterid, Title: ${letter.title} [${letter.sealState.text}] [${letter.language.name}]"
     }
 
     @GetMapping("/gameapi/appendtoletter")

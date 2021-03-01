@@ -17,7 +17,10 @@ class NoticeBoardAccess(
         var isOwner: Boolean? = false,
 
         @ManyToOne
-        @JoinColumns(JoinColumn(name = "board_index", referencedColumnName = "index", nullable = false), JoinColumn(name = "board_server_id", referencedColumnName = "server_id", nullable = false))
+        @JoinColumns(
+                JoinColumn(name = "board_index", referencedColumnName = "index", nullable = false),
+                JoinColumn(name = "board_server_id", referencedColumnName = "server_id", nullable = false)
+        )
         @JsonView(Board::class)
         var board: NoticeBoard? = null,
 

@@ -32,8 +32,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
                     private val proficiencyRepo: LanguageProficiencyRepository,
                     private val languageRepo: LanguageRepository,
                     private val ipRecordRepository: IpRecordRepository,
-                    private val serverService: ServerService,
-                    private val entityManager: EntityManager) {
+                    private val serverService: ServerService) {
 
     fun getPlayer(id: Int): Optional<Player> {
         return playerRepository.findById(id)
@@ -134,7 +133,6 @@ class PlayerService(private val playerRepository: PlayerRepository,
     }
 
     fun woundPlayer(player: Player) {
-        entityManager.lock(player, LockModeType.PESSIMISTIC_READ)
         var woundDuration = 48
         val conf = serverService.getServerConfiguration(
                 player.faction!!.server!!.id!!, "CONF_WOUND_TIME").orElse(null)
@@ -142,10 +140,6 @@ class PlayerService(private val playerRepository: PlayerRepository,
             woundDuration = conf.value!!.toInt()
         }
         playerRepository.wound(player.id!!, woundDuration)
-    }
-
-    fun serveWoundTime(playerId: Int, millis: Int) {
-        playerRepository.serveWoundTime(playerId, millis)
     }
 
     fun treatPlayer(player: Player, patient: Player): Boolean {
@@ -179,7 +173,6 @@ class PlayerService(private val playerRepository: PlayerRepository,
                                 (finalHealingConstant + finalTierMultiplier * professionAssignment.tier!!)
                         patient.treatmentTime = Timestamp.from(Instant.now())
                         patient.woundDuration = newWoundDuration
-                        patient.servedWoundTime = 0
                         savePlayer(patient)
                         treated.set(true)
                     }
