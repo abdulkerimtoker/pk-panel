@@ -9,10 +9,14 @@ import toker.panel.bean.SelectedServerId
 import toker.panel.entity.*
 import toker.panel.entity.NoticeBoardAccess.View.Board
 import toker.panel.service.PlayerService
+import toker.panel.service.BoardService
 import javax.persistence.OptimisticLockException
 
 @RestController
-class PlayerController(private val playerService: PlayerService) {
+class PlayerController(
+    private val playerService: PlayerService,
+    private val boardService: BoardService
+    ) {
     internal interface PlayerView : Player.View.Faction, Player.View.Troop, Player.View.Items
 
     @GetMapping("/api/player/{playerId}")
@@ -63,6 +67,12 @@ class PlayerController(private val playerService: PlayerService) {
     @JsonView(Board::class)
     fun boardAccesses(@PathVariable playerId: Int): List<NoticeBoardAccess> {
         return playerService.getPlayerBoardAccesses(playerId)
+    }
+
+    @PutMapping("/api/player/boardAccess")
+    @JsonView(Board::class)
+    fun saveBoardAccess(@RequestBody boardAccess: NoticeBoardAccess?): NoticeBoardAccess {
+        return boardService.saveBoardAccess(boardAccess!!)
     }
 
     @GetMapping("/api/player/{playerId}/professionAssignments")

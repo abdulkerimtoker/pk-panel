@@ -8,11 +8,11 @@ plugins {
 
     id 'idea'
 
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id "org.jetbrains.kotlin.plugin.spring" version "1.4.10"
-    id "org.jetbrains.kotlin.plugin.jpa" version "1.4.10"
-    id "org.jetbrains.kotlin.kapt" version "1.4.10"
-    id "org.jetbrains.kotlin.plugin.noarg" version "1.4.10"
+    id 'org.jetbrains.kotlin.jvm' version '1.4.32'
+    id "org.jetbrains.kotlin.plugin.spring" version "1.4.32"
+    id "org.jetbrains.kotlin.plugin.jpa" version "1.4.32"
+    id "org.jetbrains.kotlin.kapt" version "1.4.32"
+    id "org.jetbrains.kotlin.plugin.noarg" version "1.4.32"
 }
 
 group = 'toker.warbandscripts'
@@ -52,7 +52,7 @@ dependencies {
 
     implementation 'org.aspectj:aspectjrt:1.9.6'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    runtime 'org.jetbrains.kotlin:kotlin-reflect:1.4.10'
+    runtime 'org.jetbrains.kotlin:kotlin-reflect:1.4.32'
 }
 
 compileKotlin {
@@ -68,11 +68,4 @@ compileTestKotlin {
 
 kapt {
     useBuildCache = true
-}
-
-idea {
-    module {
-        sourceDirs += files('build/generated/source/kapt/main', 'build/generated/source/kaptKotlin/main')
-        generatedSourceDirs += files('build/generated/source/kapt/main', 'build/generated/source/kaptKotlin/main')
-    }
 }

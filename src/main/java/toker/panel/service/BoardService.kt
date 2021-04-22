@@ -1,6 +1,7 @@
 package toker.panel.service
 
 import org.springframework.stereotype.Service
+import toker.panel.bean.SelectedServerId
 import toker.panel.entity.NoticeBoard
 import toker.panel.entity.NoticeBoardAccess
 import toker.panel.repository.NoticeBoadAccessRepository
@@ -8,11 +9,11 @@ import toker.panel.repository.NoticeBoardRepository
 
 @Service
 class BoardService(private val noticeBoardRepository: NoticeBoardRepository,
-                   private val noticeBoadAccessRepository: NoticeBoadAccessRepository) {
+                   private val noticeBoardAccessRepository: NoticeBoadAccessRepository) {
     val allBoards: List<NoticeBoard>
-        get() = noticeBoardRepository.findAll()
+        get() = noticeBoardRepository.findAllByServerId(SelectedServerId)
 
     fun saveBoardAccess(boardAccess: NoticeBoardAccess): NoticeBoardAccess {
-        return noticeBoadAccessRepository.saveAndFlush(boardAccess)
+        return noticeBoardAccessRepository.saveAndFlush(boardAccess)
     }
 }
