@@ -5,7 +5,7 @@ import toker.panel.authentication.JWTOpenIDAuthenticationToken
 
 val SelectedServerId: Int
     get() {
-        val token = SecurityContextHolder.getContext().authentication
-                as JWTOpenIDAuthenticationToken
+        val auth = SecurityContextHolder.getContext().authentication ?: return -1
+        val token = auth as JWTOpenIDAuthenticationToken
         return token.selectedServerId
     }

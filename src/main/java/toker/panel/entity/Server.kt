@@ -2,7 +2,6 @@ package toker.panel.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonView
-import toker.panel.annotation.DefaultStringValue
 import toker.panel.entity.Server.View.StartupCommands
 import javax.persistence.*
 
@@ -25,7 +24,6 @@ class Server(
         var key: String? = null,
 
         @Column(name = "exe_path")
-        @DefaultStringValue("sead")
         @JsonIgnore
         var exePath: String? = null,
 

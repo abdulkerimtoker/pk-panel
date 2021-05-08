@@ -3,44 +3,26 @@ package toker.panel
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.context.annotation.ImportResource
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
-import org.springframework.data.web.config.EnableSpringDataWebSupport
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
-import toker.panel.aop.Test
 import toker.panel.authentication.EndedSessions
 import toker.panel.entity.PanelUserSession
 import toker.panel.entity.PanelUserSession_
-import toker.panel.entity.Player
 import toker.panel.repository.BaseRepository
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
 import java.util.stream.Collectors
 import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.Root
 
 @SpringBootApplication
-@ImportResource("classpath*:injections.xml")
-@EnableJpaRepositories
 @EnableScheduling
-class PanelApplication(private val sessionRepo: BaseRepository<PanelUserSession?, Int>) : CommandLineRunner {
-
-    override fun run(vararg args: String) {
-        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, _, builder: CriteriaBuilder ->
-            builder.equal(root.get(PanelUserSession_.isEnded), true) }
-        EndedSessions.endSessions(endedSessions.stream().map { it!!.id }.collect(Collectors.toList()))
-        Test.sea()
-    }
-
-    @Scheduled(fixedDelay = 5 * 1000)
-    fun endSessionsPeriodically() {
-        val endedSessions = sessionRepo.findAll { root: Root<PanelUserSession?>, _, builder: CriteriaBuilder ->
-            builder.equal(root.get(PanelUserSession_.isEnded), true) }
-        EndedSessions.endSessions(endedSessions.stream().map { it!!.id }.collect(Collectors.toList()))
-    }
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+class PanelApplication {
 
     companion object {
         @Throws(Exception::class)
@@ -67,8 +49,8 @@ class PanelApplication(private val sessionRepo: BaseRepository<PanelUserSession?
                     return
                 }
             }
+
             SpringApplication.run(PanelApplication::class.java, *args)
-            val x = 0
         }
     }
 }

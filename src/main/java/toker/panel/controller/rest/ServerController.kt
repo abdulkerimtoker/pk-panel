@@ -50,9 +50,9 @@ class ServerController(private val authService: AuthService,
         file.transferTo(File(serverService.getModuleDir(server), file.originalFilename!!))
     }
 
-    @GetMapping("/api/servers/{serverId}/startupCommands")
+    @GetMapping("/api/servers/startupCommands")
     @JsonView(ServerStartupCommand.View.None::class)
-    fun startupCommands(@PathVariable serverId: Int) = serverService.getStartupCommands(serverId)
+    fun startupCommands() = serverService.getStartupCommands(SelectedServerId)
 
     @PostMapping("/api/servers/startupCommands")
     fun setStartupCommand(@RequestBody command: ServerStartupCommand) {

@@ -16,7 +16,7 @@ import javax.persistence.OptimisticLockException
 class PlayerController(
     private val playerService: PlayerService,
     private val boardService: BoardService
-    ) {
+) {
     internal interface PlayerView : Player.View.Faction, Player.View.Troop, Player.View.Items
 
     @GetMapping("/api/player/{playerId}")
@@ -43,7 +43,8 @@ class PlayerController(
 
     @ExceptionHandler(OptimisticLockException::class)
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Wrong version")
-    fun versionConflict() { }
+    fun versionConflict() {
+    }
 
     @GetMapping("/api/player/{playerId}/inventory")
     fun inventory(@PathVariable playerId: Int): Inventory? {
@@ -52,8 +53,7 @@ class PlayerController(
 
     @PutMapping("/api/inventory/{inventoryId}")
     @PreAuthorize("@authService.canModifyPlayer(@playerService.getInventory(#inventoryId).player.id)")
-    fun inventorySlot(@PathVariable inventoryId: Int,
-                      @RequestBody inventorySlot: InventorySlot): InventorySlot {
+    fun inventorySlot(@PathVariable inventoryId: Int, @RequestBody inventorySlot: InventorySlot): InventorySlot {
         return playerService.updateInventorySlot(inventoryId, inventorySlot)
     }
 
@@ -82,7 +82,7 @@ class PlayerController(
     }
 
     interface PlayerCraftingRequestView : CraftingRequest.View.CraftingRecipe,
-            CraftingRequest.View.CraftingStationInstance, CraftingRecipe.View.Item
+        CraftingRequest.View.CraftingStationInstance, CraftingRecipe.View.Item
 
     @GetMapping("/api/player/{playerId}/craftingRequests")
     @JsonView(PlayerCraftingRequestView::class)
@@ -98,16 +98,20 @@ class PlayerController(
 
     @PostMapping("/api/player/{playerId}/languageProficiencies/{languageId}")
     @JsonView(LanguageProficiency.View.Language::class)
-    fun assignLanguageProficiency(@PathVariable playerId: Int,
-                                  @PathVariable languageId: Int): List<LanguageProficiency> {
+    fun assignLanguageProficiency(
+        @PathVariable playerId: Int,
+        @PathVariable languageId: Int
+    ): List<LanguageProficiency> {
         playerService.assignLanguageProficiency(playerId, languageId)
         return languageProficiencies(playerId)
     }
 
     @DeleteMapping("/api/player/{playerId}/languageProficiencies/{languageId}")
     @JsonView(LanguageProficiency.View.Language::class)
-    fun revokeLanguageProficiency(@PathVariable playerId: Int,
-                                  @PathVariable languageId: Int): List<LanguageProficiency> {
+    fun revokeLanguageProficiency(
+        @PathVariable playerId: Int,
+        @PathVariable languageId: Int
+    ): List<LanguageProficiency> {
         playerService.revokeLanguageProficiency(playerId, languageId)
         return languageProficiencies(playerId)
     }

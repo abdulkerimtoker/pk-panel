@@ -6,7 +6,6 @@ import org.hibernate.annotations.DynamicUpdate
 import toker.panel.bean.SelectedServerId
 import toker.panel.entity.pk.FactionPK
 import toker.panel.repository.BaseRepository
-import toker.panel.repository.getInstance
 import toker.panel.util.Constants
 import java.sql.Timestamp
 import java.time.Instant

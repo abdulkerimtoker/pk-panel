@@ -52,10 +52,10 @@ class LogService {
         val sb = StringBuilder(4096)
         try {
             BufferedReader(FileReader(log)).use { reader ->
-                var row: String
+                var row: String?
                 while (reader.readLine().also { row = it } != null) {
-                    if (row.length > 12) {
-                        val lowerCaseRow = row.split(" - ", limit = 2)[1].toLowerCase()
+                    if (row!!.length > 12) {
+                        val lowerCaseRow = row!!.split(" - ", limit = 2)[1].toLowerCase()
                         if (wordSet.stream().anyMatch { s: String -> lowerCaseRow.contains(s) }) {
                             sb.append(row)
                             sb.append(System.lineSeparator())

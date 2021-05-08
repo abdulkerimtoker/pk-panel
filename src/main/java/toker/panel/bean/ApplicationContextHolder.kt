@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
 
-@Component
+@Component("applicationContextGetter")
 class ApplicationContextHolder : ApplicationContextAware {
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         toker.panel.bean.applicationContext = applicationContext
