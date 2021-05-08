@@ -8,9 +8,7 @@ import toker.panel.repository.PanelUserRepository
 
 val CurrentUser: PanelUser
     get() {
-        val token = SecurityContextHolder.getContext().authentication
-                as JWTOpenIDAuthenticationToken
-        val repository = ApplicationContext
-                .getBean<PanelUserRepository>(PanelUserRepository::class)
+        val token = SecurityContextHolder.getContext().authentication as JWTOpenIDAuthenticationToken
+        val repository = ApplicationContext.getBean<PanelUserRepository>(PanelUserRepository::class)
         return repository.findByClaimedIdentity(token.details as String)
     }

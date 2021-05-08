@@ -1,7 +1,6 @@
 package toker.panel.entity
 
 import com.fasterxml.jackson.annotation.JsonView
-import toker.panel.annotation.DefaultBooleanValue
 import toker.panel.entity.pk.AdminPermissionsPK
 import javax.persistence.*
 
@@ -19,81 +18,62 @@ class AdminPermissions(
         @JsonView(View.Server::class)
         var server: Server? = null,
         
-        @Column(name = "panel", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var panel: Boolean? = null,
+        @Column(name = "panel", nullable = false)
+        var panel: Boolean? = false,
 
-        @Column(name = "gold", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var gold: Boolean? = null,
+        @Column(name = "gold", nullable = false)
+        var gold: Boolean? = false,
 
-        @Column(name = "kick", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var kick: Boolean? = null,
+        @Column(name = "kick", nullable = false)
+        var kick: Boolean? = false,
 
-        @Column(name = "temporary_ban", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var temporaryBan: Boolean? = null,
+        @Column(name = "temporary_ban", nullable = false)
+        var temporaryBan: Boolean? = false,
 
-        @Column(name = "permanent_ban", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var permanentBan: Boolean? = null,
+        @Column(name = "permanent_ban", nullable = false)
+        var permanentBan: Boolean? = false,
 
-        @Column(name = "kill_fade", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var killFade: Boolean? = null,
+        @Column(name = "kill_fade", nullable = false)
+        var killFade: Boolean? = false,
 
-        @Column(name = "can_freeze", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var freeze: Boolean? = null,
+        @Column(name = "can_freeze", nullable = false)
+        var freeze: Boolean? = false,
 
-        @Column(name = "teleport_self", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var teleportSelf: Boolean? = null,
+        @Column(name = "teleport_self", nullable = false)
+        var teleportSelf: Boolean? = false,
 
-        @Column(name = "admin_items", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var adminItems: Boolean? = null,
+        @Column(name = "admin_items", nullable = false)
+        var adminItems: Boolean? = false,
 
-        @Column(name = "heal_self", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var healSelf: Boolean? = null,
+        @Column(name = "heal_self", nullable = false)
+        var healSelf: Boolean? = false,
 
-        @Column(name = "godlike_troop", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var godlikeTroop: Boolean? = null,
+        @Column(name = "godlike_troop", nullable = false)
+        var godlikeTroop: Boolean? = false,
 
-        @Column(name = "ships", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var ships: Boolean? = null,
+        @Column(name = "ships", nullable = false)
+        var ships: Boolean? = false,
 
-        @Column(name = "announce", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var announce: Boolean? = null,
+        @Column(name = "announce", nullable = false)
+        var announce: Boolean? = false,
 
-        @Column(name = "override_poll", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var overridePoll: Boolean? = null,
+        @Column(name = "override_poll", nullable = false)
+        var overridePoll: Boolean? = false,
 
-        @Column(name = "all_items", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var allItems: Boolean? = null,
+        @Column(name = "all_items", nullable = false)
+        var allItems: Boolean? = false,
 
-        @Column(name = "mute", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var mute: Boolean? = null,
+        @Column(name = "mute", nullable = false)
+        var mute: Boolean? = false,
 
-        @Column(name = "animals", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var animals: Boolean? = null,
+        @Column(name = "animals", nullable = false)
+        var animals: Boolean? = false,
 
-        @Column(name = "join_factions", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var joinFactions: Boolean? = null,
+        @Column(name = "join_factions", nullable = false)
+        var joinFactions: Boolean? = false,
 
-        @Column(name = "factions", nullable = true)
-        @get:DefaultBooleanValue(false)
-        var factions: Boolean? = null
+        @Column(name = "factions", nullable = false)
+        var factions: Boolean? = false
 ) {
         override fun equals(other: Any?): Boolean {
                 if (this === other) return true

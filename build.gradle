@@ -4,8 +4,6 @@ plugins {
 
     id 'java'
 
-    id "io.freefair.aspectj.post-compile-weaving" version "5.2.1"
-
     id 'idea'
 
     id 'org.jetbrains.kotlin.jvm' version '1.4.32'
