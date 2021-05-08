@@ -39,4 +39,8 @@ class InventorySlot(
         result = 31 * result + (inventory?.hashCode() ?: 0)
         return result
     }
+
+    interface View {
+        interface None
+    }
 }

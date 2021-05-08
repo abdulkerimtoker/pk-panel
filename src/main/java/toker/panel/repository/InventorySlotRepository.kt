@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 import toker.panel.entity.Inventory
 import toker.panel.entity.InventorySlot
 import toker.panel.entity.Item
+import toker.panel.entity.pk.InventorySlotPK
 import java.util.*
 
-interface InventorySlotRepository : BaseRepository<InventorySlot, Int> {
+interface InventorySlotRepository : BaseRepository<InventorySlot, InventorySlotPK> {
     @Modifying
     @Transactional
     @Query("UPDATE InventorySlot SET item = :item, ammo = :ammo " +

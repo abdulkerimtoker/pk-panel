@@ -12,25 +12,28 @@ class Log(
         @Column(name = "id")
         var id: Int? = null,
 
-        @Column(name = "target_id")
-        var targetId: Int? = null,
+        @ManyToOne
+        @JoinColumn(name = "server_id", referencedColumnName = "id", nullable = false)
+        var server: Server? = null,
 
         @ManyToOne
         @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
         var user: PanelUser? = null,
 
         @Column(name = "type", nullable = false)
-        @Enumerated(EnumType.ORDINAL)
+        @Enumerated(EnumType.STRING)
         var type: Type? = null,
 
         @Column(name = "time", nullable = false)
         var time: Timestamp? = Timestamp.from(Instant.now()),
 
-        @Column(name = "data", length = 4096)
+        @Column(name = "data", length = 65536)
         var data: String? = null
 ) {
     enum class Type {
-        LOG_FETCHING
+        LOG_FETCHING,
+        PLAYER_UPDATE,
+        INVENTORY_SLOT_UPDATE
     }
 
     override fun equals(other: Any?): Boolean {

@@ -13,26 +13,20 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
+import org.springframework.stereotype.Component
 import toker.panel.entity.Log
 import toker.panel.entity.PanelUser
+import toker.panel.repository.BaseRepository
 import java.util.*
 import javax.inject.Inject
 import javax.persistence.criteria.CriteriaQuery
 
 @Aspect
-class LogFetchingLogging {
-    private var userRepo: PanelUserRepository? = null
-    private var logRepo: LogRepository? = null
-    @Inject
-    fun setUserRepo(userRepo: PanelUserRepository?) {
-        this.userRepo = userRepo
-    }
-
-    @Inject
-    fun setLogRepo(logRepo: LogRepository?) {
-        this.logRepo = logRepo
-    }
-
+@Component
+class LogFetchingLogging(
+    private val userRepo: PanelUserRepository,
+    private val logRepo: LogRepository
+) {
     @Pointcut("target(toker.panel.controller.rest.LogController) && " +
             "execution(* searchLogFile(String, String[])) && args(fileName, words)")
     fun logFetching(fileName: String?, words: Array<String?>?) {
@@ -42,7 +36,7 @@ class LogFetchingLogging {
     fun beforeLogFetching(fileName: String?, words: Array<String>?) {
         val auth = SecurityContextHolder.getContext()
                 .authentication as JWTOpenIDAuthenticationToken
-        val user = userRepo!!.findOne { root: Root<PanelUser?>, _, builder: CriteriaBuilder -> builder.equal(root.get(PanelUser_.claimedIdentity), auth.details) }
+        val user = userRepo.findOne { root: Root<PanelUser?>, _, builder: CriteriaBuilder -> builder.equal(root.get(PanelUser_.claimedIdentity), auth.details) }
                 .orElseThrow()
         val mapper = ObjectMapper()
         val node = mapper.createObjectNode()
@@ -55,6 +49,6 @@ class LogFetchingLogging {
         panelLog.type = Log.Type.LOG_FETCHING
         panelLog.user = user
         panelLog.data = node.toString()
-        logRepo!!.save(panelLog)
+        logRepo.save(panelLog)
     }
 }
