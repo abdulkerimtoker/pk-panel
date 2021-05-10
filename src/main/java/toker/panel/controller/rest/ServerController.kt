@@ -64,14 +64,4 @@ class ServerController(private val authService: AuthService,
     fun removeStartupCommand(@PathVariable command: String) {
         serverStartupCommandRepository.deleteById(ServerStartupCommandPK(server = SelectedServerId, command = command))
     }
-
-    @GetMapping("/api/servers/factions")
-    @JsonView(Faction.View.None::class)
-    fun factions() = serverService.getFactions(SelectedServerId)
-
-    @PutMapping("/api/servers/factions")
-    fun saveFaction(@RequestBody faction: Faction) {
-        faction.server = serverRepository.getOne(SelectedServerId)
-        factionRepository.saveAndFlush(faction)
-    }
 }
