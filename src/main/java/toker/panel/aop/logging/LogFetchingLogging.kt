@@ -14,9 +14,12 @@ import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.annotation.Pointcut
 import org.springframework.stereotype.Component
+import toker.panel.bean.CurrentUser
+import toker.panel.bean.SelectedServerId
 import toker.panel.entity.Log
 import toker.panel.entity.PanelUser
 import toker.panel.repository.BaseRepository
+import toker.panel.repository.ServerRepository
 import java.util.*
 import javax.inject.Inject
 import javax.persistence.criteria.CriteriaQuery
@@ -25,30 +28,24 @@ import javax.persistence.criteria.CriteriaQuery
 @Component
 class LogFetchingLogging(
     private val userRepo: PanelUserRepository,
-    private val logRepo: LogRepository
+    private val logRepo: LogRepository,
+    private val serverRepository: ServerRepository
 ) {
     @Pointcut("target(toker.panel.controller.rest.LogController) && " +
             "execution(* searchLogFile(String, String[])) && args(fileName, words)")
     fun logFetching(fileName: String?, words: Array<String?>?) {
     }
 
+    data class LogFetching(val logFile: String, val words: Array<String>)
+
     @Before("logFetching(fileName, words)")
     fun beforeLogFetching(fileName: String?, words: Array<String>?) {
-        val auth = SecurityContextHolder.getContext()
-                .authentication as JWTOpenIDAuthenticationToken
-        val user = userRepo.findOne { root: Root<PanelUser?>, _, builder: CriteriaBuilder -> builder.equal(root.get(PanelUser_.claimedIdentity), auth.details) }
-                .orElseThrow()
-        val mapper = ObjectMapper()
-        val node = mapper.createObjectNode()
-        node.put("logFile", fileName)
-        node.put("serverId", auth.selectedServerId)
-        val wordsNode = mapper.createArrayNode()
-        Arrays.stream(words).filter { word: String -> !word.isBlank() }.forEach { v: String? -> wordsNode.add(v) }
-        node.set<JsonNode>("words", wordsNode)
-        val panelLog = Log()
-        panelLog.type = Log.Type.LOG_FETCHING
-        panelLog.user = user
-        panelLog.data = node.toString()
-        logRepo.save(panelLog)
+        val fetching = LogFetching(fileName!!, words!!)
+        val writer = ObjectMapper().writer()
+        logRepo.saveAndFlush(Log(
+            server = serverRepository.getOne(SelectedServerId),
+            user = CurrentUser, type = Log.Type.LOG_FETCHING,
+            data = writer.writeValueAsString(fetching)
+        ))
     }
 }
