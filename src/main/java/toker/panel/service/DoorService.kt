@@ -11,9 +11,10 @@ import toker.panel.repository.PlayerRepository
 import java.util.*
 
 @Service
-class DoorService(private val doorRepository: DoorRepository,
-                  private val doorKeyRepository: DoorKeyRepository,
-                  private val playerRepository: PlayerRepository) {
+class DoorService(
+    private val doorRepository: DoorRepository,
+    private val doorKeyRepository: DoorKeyRepository
+) {
     fun getDoor(doorId: DoorPK): Optional<Door> {
         return doorRepository.findById(doorId)
     }

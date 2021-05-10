@@ -14,31 +14,33 @@ import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Root
 
 @RestController
-class DoorController(private val doorService: DoorService,
-                     private val doorRepository: DoorRepository,
-                     private val doorKeyRepository: DoorKeyRepository,
-                     private val playerService: PlayerService) {
+class DoorController(
+    private val doorService: DoorService,
+    private val doorRepository: DoorRepository,
+    private val doorKeyRepository: DoorKeyRepository,
+    private val playerService: PlayerService
+) {
 
     @GetMapping("/api/door/{doorId}")
     @JsonView(Door.View.None::class)
     @Throws(ChangeSetPersister.NotFoundException::class)
     fun door(@PathVariable doorId: Int): Door {
         return doorService.getDoor(DoorPK(doorId, SelectedServerId))
-                .orElseThrow { ChangeSetPersister.NotFoundException() }
+            .orElseThrow { ChangeSetPersister.NotFoundException() }
     }
 
 
     @GetMapping("/api/door/{index}/keys")
     @JsonView(DoorKey.View.Player::class)
-    fun doorKeys(@PathVariable index: Int): List<DoorKey> = doorKeyRepository.findAll { 
-        root: Root<DoorKey>, _, builder: CriteriaBuilder ->
-        val joinDoor = root.join(DoorKey_.door)
-        val joinServer = joinDoor.join(Door_.server)
-        builder.and(
-            builder.equal(joinDoor.get(Door_.index), index),
-            builder.equal(joinServer.get(Server_.id), SelectedServerId)
-        )
-    }
+    fun doorKeys(@PathVariable index: Int): List<DoorKey> =
+        doorKeyRepository.findAll { root: Root<DoorKey>, _, builder: CriteriaBuilder ->
+            val joinDoor = root.join(DoorKey_.door)
+            val joinServer = joinDoor.join(Door_.server)
+            builder.and(
+                builder.equal(joinDoor.get(Door_.index), index),
+                builder.equal(joinServer.get(Server_.id), SelectedServerId)
+            )
+        }
 
     @GetMapping("/api/door")
     @JsonView(Door.View.None::class)
@@ -50,7 +52,7 @@ class DoorController(private val doorService: DoorService,
     @JsonView(Door.View.None::class)
     fun door(@RequestBody door: Door, @PathVariable index: Int): Door {
         val newState = doorService.getDoor(DoorPK(index = index, server = SelectedServerId))
-                .orElseThrow { ChangeSetPersister.NotFoundException() }
+            .orElseThrow { ChangeSetPersister.NotFoundException() }
         newState.name = door.name
         newState.locked = door.locked
         return doorRepository.saveAndFlush(newState)

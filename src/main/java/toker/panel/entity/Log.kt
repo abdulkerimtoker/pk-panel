@@ -33,7 +33,12 @@ class Log(
     enum class Type {
         LOG_FETCHING,
         PLAYER_UPDATE,
-        INVENTORY_SLOT_UPDATE
+        INVENTORY_SLOT_UPDATE,
+        BOARD_ACCESS_GRANT,
+        LANGUAGE_PROFICIENCY_GRANT,
+        LANGUAGE_PROFICIENCY_REVOKE,
+        DOOR_KEY_GRANT,
+        DOOR_KEY_REVOKE
     }
 
     override fun equals(other: Any?): Boolean {

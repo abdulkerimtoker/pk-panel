@@ -89,7 +89,7 @@ class PanelUserService(private val panelUserRepository: PanelUserRepository,
 
     fun createInvitation(): AdminInvitation = adminInvitationRepository.saveAndFlush(AdminInvitation(
             code = UUID.randomUUID().toString().toUpperCase(),
-            inviter = CurrentUser,
+            inviter = CurrentUser!!,
             server = serverRepository.getOne(SelectedServerId)
     ))
 

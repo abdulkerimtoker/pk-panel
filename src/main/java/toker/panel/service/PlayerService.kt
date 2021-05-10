@@ -4,6 +4,7 @@ import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.stereotype.Service
 import toker.panel.bean.SelectedServerId
 import toker.panel.entity.*
+import toker.panel.entity.pk.LanguageProficiencyPK
 import toker.panel.repository.*
 import toker.panel.util.Constants
 import java.sql.Timestamp
@@ -242,7 +243,7 @@ class PlayerService(private val playerRepository: PlayerRepository,
     }
 
     fun revokeLanguageProficiency(playerId: Int, languageId: Int) {
-        proficiencyRepo.deleteByPlayerIdAndLanguageId(playerId, languageId)
+        proficiencyRepo.deleteById(LanguageProficiencyPK(playerId, languageId))
     }
 
     fun getAltCharacters(guid: Int, serverId: Int): List<Player> {

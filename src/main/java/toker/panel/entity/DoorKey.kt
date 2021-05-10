@@ -29,6 +29,7 @@ class DoorKey(
     interface View {
         interface Player
         interface Door
+        interface PlayerAndDoor : Player, Door
     }
 
     override fun equals(other: Any?): Boolean {
